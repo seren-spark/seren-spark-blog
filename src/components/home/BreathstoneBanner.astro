@@ -1,0 +1,604 @@
+---
+const baseImage = '/media/breathstone-base.jpg';
+const flowerImage = '/media/breathstone-flowers.jpg';
+// Both layers are 1448 × 1086 — keep in sync with IMG_W / IMG_H in the script.
+const imgW = 1448;
+const imgH = 1086;
+---
+
+<section class="stone-banner" id="top" aria-labelledby="stone-title" data-stone-banner>
+  <div
+    class="stone-scene"
+    aria-hidden="true"
+    data-stone-scene
+    data-base={baseImage}
+    data-flower={flowerImage}
+  >
+    <img
+      class="stone-layer stone-base"
+      src={baseImage}
+      width={imgW}
+      height={imgH}
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+    />
+    <svg
+      class="stone-layer stone-flower"
+      viewBox={`0 0 ${imgW} ${imgH}`}
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      data-stone-flower
+    >
+      <defs>
+        <radialGradient id="bloom-edge" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="white" stop-opacity="1" />
+          <stop offset="22%" stop-color="white" stop-opacity="0.95" />
+          <stop offset="48%" stop-color="white" stop-opacity="0.55" />
+          <stop offset="78%" stop-color="white" stop-opacity="0.18" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </radialGradient>
+        <mask id="bloom-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={imgW} height={imgH}>
+          <rect x="0" y="0" width={imgW} height={imgH} fill="black" />
+          <g data-bloom-points></g>
+        </mask>
+      </defs>
+      <image
+        href={flowerImage}
+        xlink:href={flowerImage}
+        x="0"
+        y="0"
+        width={imgW}
+        height={imgH}
+        mask="url(#bloom-mask)"
+      />
+    </svg>
+  </div>
+
+  <h1 id="stone-title">SEREN SPARK<span class="visually-hidden"> — seren-spark‘s blog</span></h1>
+
+  <div class="stone-caption">
+    <p>THOUGHTS TAKE ROOT.</p>
+    <span>让知识沉淀，让灵感生长。</span>
+  </div>
+  <a class="stone-explore" href="#main-content">探索博客 <span aria-hidden="true">↓</span></a>
+  <button class="stone-motion" type="button" data-stone-motion hidden aria-label="播放背景动画">播放背景</button>
+</section>
+
+<style>
+  .stone-banner {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    height: max(42rem, 100svh);
+    max-height: 76rem;
+    overflow: hidden;
+    background: #f2eade;
+    color: #14150f;
+    touch-action: pan-y;
+  }
+
+  .stone-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* source aspect ratio (1448 / 1086) — matches IMG_W / IMG_H */
+    --scene-fit: 1.3333;
+  }
+  .stone-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* both images must stay pixel-aligned — never translate or scale a single layer */
+    transform: none;
+    will-change: transform;
+  }
+  .stone-base { z-index: 1; }
+  .stone-flower { z-index: 2; }
+  /* flower layer is empty until JS populates the bloom-points group */
+  .stone-banner[data-no-motion] .stone-flower { display: none; }
+
+  h1 {
+    position: absolute;
+    z-index: 3;
+    top: clamp(7.5rem, 16vh, 13rem);
+    left: 0;
+    width: 100%;
+    margin: 0;
+    color: #080a07;
+    font-family: 'Bodoni MT', Didot, 'Times New Roman', serif;
+    font-size: clamp(5rem, 12.7vw, 15rem);
+    font-weight: 400;
+    line-height: .92;
+    letter-spacing: -.065em;
+    text-align: center;
+    white-space: nowrap;
+    /* title is purely visual: never block pointer flow through to the scene */
+    pointer-events: none;
+  }
+  .stone-banner :is(h1, .stone-caption) { pointer-events: none; }
+
+  .stone-caption,
+  .stone-explore,
+  .stone-motion {
+    position: absolute;
+    z-index: 4;
+    font-family: 'Avenir Next', 'Microsoft YaHei', sans-serif;
+  }
+  .stone-caption {
+    left: clamp(1.5rem, 4vw, 5rem);
+    bottom: 3rem;
+    padding: .9rem 1.2rem;
+    border-left: 1px solid #303a26;
+    background: #f6efe1c9;
+    backdrop-filter: blur(12px);
+  }
+  .stone-caption p { margin: 0 0 .5rem; font-size: .7rem; letter-spacing: .16em; }
+  .stone-caption span { font-size: .78rem; }
+  .stone-explore {
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+    min-height: 44px;
+    padding: .6rem 1.3rem;
+    border: 1px solid #f8f4e7b3;
+    border-radius: 2rem;
+    background: #f8f4e7db;
+    color: #202818;
+    text-decoration: none;
+    font-size: .8rem;
+    backdrop-filter: blur(12px);
+    transition: background .2s;
+  }
+  .stone-explore:hover { background: #fffaf0; }
+  .stone-explore span { font-size: 1.2rem; }
+  .stone-motion {
+    right: clamp(1.5rem, 4vw, 5rem);
+    bottom: 3rem;
+    min-height: 44px;
+    padding: .6rem 1rem;
+    border: 1px solid #49503b66;
+    border-radius: 2rem;
+    background: #f6efe1d9;
+    color: #26301f;
+    cursor: pointer;
+    font-size: .7rem;
+  }
+  .stone-motion[hidden] { display: none; }
+  .stone-banner :is(a, button):focus-visible { outline: 2px solid #263d26; outline-offset: 5px; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (max-width: 700px) {
+    .stone-banner { height: max(40rem, 100svh); }
+    h1 { top: 9rem; font-size: 12.8vw; letter-spacing: -.07em; }
+    .stone-caption { left: 1.25rem; bottom: 6rem; padding: .7rem .85rem; }
+    .stone-caption p { font-size: .58rem; }
+    .stone-caption span { font-size: .72rem; }
+    .stone-explore { left: 1.25rem; bottom: 1.5rem; transform: none; }
+    .stone-motion { right: 1.25rem; bottom: 1.5rem; }
+  }
+</style>
+
+<style is:global>
+  body:has(.stone-banner) .site-header {
+    position: absolute;
+    inset: 0 0 auto;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+    color: #161a11;
+  }
+  body:has(.stone-banner) .header-inner { width: calc(100% - 4rem); max-width: none; min-height: 6rem; }
+  body:has(.stone-banner) .brand { color: #15190f; }
+  body:has(.stone-banner) .brand-mark { border: 0; color: #15190f; font-size: 2.3rem; font-weight: 700; }
+  body:has(.stone-banner) .brand-copy { display: none; }
+  body:has(.stone-banner) .site-nav {
+    flex: 0 1 auto;
+    align-self: center;
+    margin-inline: auto;
+    padding: .15rem 1.6rem;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    border: 1px solid #62584424;
+    border-radius: 3rem;
+    background: #f9f1e740;
+    backdrop-filter: blur(12px);
+  }
+  body:has(.stone-banner) .nav-link { min-height: 44px; color: #34382c; }
+  body:has(.stone-banner) .nav-link:hover { color: #000; }
+  body:has(.stone-banner) .nav-link::after { display: none; }
+  body:has(.stone-banner) .header-status { padding: .75rem 1rem; border: 1px solid #62584424; border-radius: 3rem; color: #34382c; background: #f9f1e750; }
+  @media (max-width: 800px) {
+    body:has(.stone-banner) .header-inner { width: calc(100% - 2.5rem); flex-wrap: wrap; gap: .4rem; padding-block: .7rem; }
+    body:has(.stone-banner) .header-status { display: flex; margin-left: auto; }
+    body:has(.stone-banner) .site-nav { order: 3; flex-basis: 100%; justify-content: space-between; margin: .5rem 0 0; padding: .1rem .8rem; gap: .65rem; overflow-x: auto; }
+    body:has(.stone-banner) .nav-link { flex-shrink: 0; font-size: .68rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body:has(.stone-banner) { scroll-behavior: auto; }
+  }
+</style>
+
+<script>
+  /**
+   * Breathstone banner interaction.
+   *
+   * Two images (`stone-base` + `stone-flower`) live in pixel-perfect alignment.
+   * `stone-flower` lives inside an SVG <image> whose alpha mask is built at
+   * runtime from radial-gradient circles. A pointer event updates target
+   * coordinates; a single rAF loop lerps the head circle toward that target
+   * and ages a list of trail points until they fade to invisible.
+   */
+  type BreathPoint = {
+    node: SVGCircleElement;
+    svgX: number;
+    svgY: number;
+    radius: number;
+    peak: number;
+    age: number;
+    ttl: number;
+    apexRadius: number;
+  };
+
+  const IMG_W = 1448;
+  const IMG_H = 1086;
+  const IMG_AR = IMG_W / IMG_H;
+
+  // Animation knobs ----------------------------------------------------------------
+  /** Keep the reveal head centered on the latest pointer sample. */
+  const HEAD_LERP = 1;
+  /** Head circle base radius (px) before the entry burst grows it. */
+  const HEAD_RADIUS_IDLE = 16;
+  /** Head circle radius (px) once the entry burst has fully expanded. */
+  const HEAD_RADIUS_PEAK = 90;
+  /** Entry burst duration (ms) for the radius to ease from idle → peak. */
+  const BURST_DURATION_MS = 520;
+  /** Head fade-in duration (ms) when pointer enters. */
+  const HEAD_FADE_IN_MS = 130;
+  /** Head fade-out duration (ms) once pointer leaves the banner. */
+  const HEAD_FADE_OUT_MS = 1100;
+  /** Trail point base radius (px). */
+  const TRAIL_RADIUS_IDLE = 14;
+  /** Trail point radius (px) the trail grows to as it ages. */
+  const TRAIL_RADIUS_PEAK = 72;
+  /** Trail point lifetime (ms). After this the trail is removed. */
+  const TRAIL_TTL_MS = 950;
+  /** Trail point starting alpha. */
+  const TRAIL_ALPHA_START = 0.92;
+  /** Maximum trail points kept alive at once. Older ones shed first. */
+  const TRAIL_CAP = 36;
+  /** Throttle: minimum pointer movement (px) between trail spawns. */
+  const TRAIL_MIN_DISTANCE = 6;
+  // -------------------------------------------------------------------------------
+
+  const banner = document.querySelector<HTMLElement>('[data-stone-banner]');
+  const scene = banner?.querySelector<HTMLElement>('[data-stone-scene]');
+  const flowerSvg = scene?.querySelector<SVGSVGElement>('[data-stone-flower]');
+  const pointGroup = flowerSvg?.querySelector<SVGGElement>('[data-bloom-points]');
+
+  if (banner && scene && flowerSvg && pointGroup) {
+    const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+    const coarseQuery = matchMedia('(pointer: coarse)');
+    const hoverCapable =
+      matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(any-pointer: fine)').matches;
+    const supportsScript = !motionQuery.matches && !coarseQuery.matches && hoverCapable;
+    if (!supportsScript) {
+      banner.setAttribute('data-no-motion', '');
+    }
+
+    const ns = 'http://www.w3.org/2000/svg';
+    const svgPoint = document.createElementNS(ns, 'circle');
+    svgPoint.setAttribute('fill', 'url(#bloom-edge)');
+
+    const head = document.createElementNS(ns, 'circle');
+    head.setAttribute('id', 'bloom-head');
+    head.setAttribute('fill', 'url(#bloom-edge)');
+    head.setAttribute('cx', '0');
+    head.setAttribute('cy', '0');
+    head.setAttribute('r', String(HEAD_RADIUS_IDLE));
+    head.setAttribute('opacity', '0');
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let headR = HEAD_RADIUS_IDLE;
+    let headAlpha = 0;
+    let pointerActive = false;
+    let lastPointerEnterAt = 0;
+    let lastPointerLeaveAt = 0;
+    let lastTrailX = 0;
+    let lastTrailY = 0;
+
+    const trail: BreathPoint[] = [];
+    let pendingSpawn: { x: number; y: number } | null = null;
+
+    /** Viewport-px → SVG user unit, accounting for object-cover alignment. */
+    function geometry() {
+      const rect = scene!.getBoundingClientRect();
+      const rectAR = rect.width / rect.height;
+      let scale: number;
+      let offsetX: number;
+      let offsetY: number;
+      if (rectAR > IMG_AR) {
+        scale = rect.width / IMG_W;
+        offsetX = 0;
+        offsetY = (rect.height - IMG_H * scale) / 2;
+      } else {
+        scale = rect.height / IMG_H;
+        offsetX = (rect.width - IMG_W * scale) / 2;
+        offsetY = 0;
+      }
+      return { rect, scale, offsetX, offsetY };
+    }
+
+    function pointerToSvg(clientX: number, clientY: number): [number, number] {
+      const { rect, scale, offsetX, offsetY } = geometry();
+      const x = (clientX - rect.left - offsetX) / scale;
+      const y = (clientY - rect.top - offsetY) / scale;
+      return [x, y];
+    }
+
+    function pxRadiusToSvg(px: number, scale: number): number {
+      return px / scale;
+    }
+
+    function spawnTrail(svgX: number, svgY: number): void {
+      const { scale } = geometry();
+      const node = svgPoint.cloneNode(false) as SVGCircleElement;
+      node.setAttribute('cx', String(svgX));
+      node.setAttribute('cy', String(svgY));
+      node.setAttribute('r', String(pxRadiusToSvg(TRAIL_RADIUS_IDLE, scale)));
+      node.setAttribute('opacity', String(TRAIL_ALPHA_START));
+      pointGroup!.appendChild(node);
+      trail.push({
+        node,
+        svgX,
+        svgY,
+        radius: pxRadiusToSvg(TRAIL_RADIUS_IDLE, scale),
+        peak: pxRadiusToSvg(TRAIL_RADIUS_PEAK, scale),
+        age: 0,
+        ttl: TRAIL_TTL_MS,
+        apexRadius: pxRadiusToSvg(TRAIL_RADIUS_PEAK, scale),
+      });
+      while (trail.length > TRAIL_CAP) {
+        const dropped = trail.shift();
+        dropped?.node.remove();
+      }
+    }
+
+    function setHeadAttrs(x: number, y: number, r: number, alpha: number) {
+      head.setAttribute('cx', String(x));
+      head.setAttribute('cy', String(y));
+      head.setAttribute('r', String(r));
+      head.setAttribute('opacity', String(Math.max(0, Math.min(1, alpha))));
+    }
+
+    function ensureHead() {
+      if (!head.isConnected) pointGroup!.appendChild(head);
+    }
+
+    function cubicBezier(p1x: number, p1y: number, p2x: number, p2y: number) {
+      const ax = 3 * p1x - 3 * p2x + 1;
+      const bx = -6 * p1x + 3 * p2x;
+      const cx = 3 * p1x;
+      const ay = 3 * p1y - 3 * p2y + 1;
+      const by = -6 * p1y + 3 * p2y;
+      const cy = 3 * p1y;
+      function sampleX(t: number) { return ((ax * t + bx) * t + cx) * t; }
+      function sampleY(t: number) { return ((ay * t + by) * t + cy) * t; }
+      function xDeriv(t: number) { return (3 * ax * t + 2 * bx) * t + cx; }
+      return function ease(progress: number): number {
+        let t = progress;
+        for (let i = 0; i < 8; i++) {
+          const x = sampleX(t) - progress;
+          if (Math.abs(x) < 0.0005) return sampleY(t);
+          const d = xDeriv(t);
+          if (Math.abs(d) < 0.0001) break;
+          t -= x / d;
+          if (t < 0) t = 0;
+          if (t > 1) t = 1;
+        }
+        return sampleY(t);
+      };
+    }
+
+    const burstEase = cubicBezier(0.16, 1, 0.3, 1);
+    const fadeIn = cubicBezier(0.22, 1, 0.36, 1);
+    const fadeOut = cubicBezier(0.4, 0, 0.7, 0.2);
+
+    let rafId = 0;
+    let running = false;
+
+    function tick(now: number) {
+      if (!running) return;
+      rafId = requestAnimationFrame(tick);
+
+      const { scale } = geometry();
+      if (!scale) return;
+
+      if (pendingSpawn) {
+        const dx = pendingSpawn.x - lastTrailX;
+        const dy = pendingSpawn.y - lastTrailY;
+        if (Math.hypot(dx, dy) >= TRAIL_MIN_DISTANCE) {
+          spawnTrail(pendingSpawn.x, pendingSpawn.y);
+          lastTrailX = pendingSpawn.x;
+          lastTrailY = pendingSpawn.y;
+        }
+        pendingSpawn = null;
+      }
+
+      // Lerp the head toward the latest target.
+      currentX += (targetX - currentX) * HEAD_LERP;
+      currentY += (targetY - currentY) * HEAD_LERP;
+
+      // Entry-burst radius: 0–BURST_DURATION_MS ease HEAD_RADIUS_IDLE → HEAD_RADIUS_PEAK.
+      if (pointerActive && lastPointerEnterAt) {
+        const elapsed = now - lastPointerEnterAt;
+        const p = Math.min(1, elapsed / BURST_DURATION_MS);
+        headR = HEAD_RADIUS_IDLE + (HEAD_RADIUS_PEAK - HEAD_RADIUS_IDLE) * burstEase(p);
+      } else {
+        headR = HEAD_RADIUS_PEAK;
+      }
+
+      // Head alpha fades in on enter, fades out after the pointer leaves.
+      if (pointerActive) {
+        if (lastPointerEnterAt) {
+          const elapsed = now - lastPointerEnterAt;
+          const p = Math.min(1, elapsed / HEAD_FADE_IN_MS);
+          headAlpha = fadeIn(p);
+        } else {
+          headAlpha = 1;
+        }
+      } else {
+        const elapsed = now - lastPointerLeaveAt;
+        if (elapsed <= HEAD_FADE_OUT_MS) {
+          const p = Math.min(1, elapsed / HEAD_FADE_OUT_MS);
+          headAlpha = 1 - fadeOut(p);
+        } else {
+          headAlpha = 0;
+        }
+      }
+
+      if (headAlpha > 0.001) {
+        ensureHead();
+        setHeadAttrs(currentX, currentY, pxRadiusToSvg(headR, scale), headAlpha);
+      } else if (head.isConnected) {
+        head.setAttribute('opacity', '0');
+      }
+
+      // Age trail points and remove expired ones.
+      for (let i = trail.length - 1; i >= 0; i--) {
+        const p = trail[i];
+        p.age += 16.6667;
+        if (p.age >= p.ttl) {
+          p.node.remove();
+          trail.splice(i, 1);
+          continue;
+        }
+        const pNorm = p.age / p.ttl;
+        // Ease-out for radius growth: small at birth, swells outward.
+        const growT = Math.min(1, p.age / 320);
+        const growE = 1 - Math.pow(1 - growT, 3);
+        const radius = p.radius + (p.apexRadius - p.radius) * growE;
+        // Alpha eases to zero by end of life (slight ease-in to keep it visible early).
+        const alpha = (1 - pNorm) * (1 - pNorm * 0.35) * TRAIL_ALPHA_START;
+        p.node.setAttribute('r', String(radius));
+        p.node.setAttribute('opacity', String(Math.max(0, alpha)));
+      }
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      const initial = geometry();
+      if (initial.rect.width && initial.rect.height) {
+        currentX = targetX = (IMG_W / 2) * initial.scale + initial.offsetX * 0;
+        currentY = targetY = (IMG_H / 2) * initial.scale + initial.offsetY * 0;
+        // express in SVG user units (assume centered cursor on enter)
+        currentX = targetX = IMG_W / 2;
+        currentY = targetY = IMG_H / 2;
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      running = false;
+      cancelAnimationFrame(rafId);
+      trail.forEach((p) => p.node.remove());
+      trail.length = 0;
+      if (head.isConnected) {
+        head.setAttribute('opacity', '0');
+      }
+    }
+
+    function flushAfterResize() {
+      const [cx, cy] = pointerToSvg(
+        scene!.getBoundingClientRect().left + scene!.getBoundingClientRect().width / 2,
+        scene!.getBoundingClientRect().top + scene!.getBoundingClientRect().height / 2,
+      );
+      currentX = targetX = cx;
+      currentY = targetY = cy;
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      const [x, y] = pointerToSvg(event.clientX, event.clientY);
+      targetX = x;
+      targetY = y;
+      pendingSpawn = { x, y };
+      if (!pointerActive) {
+        pointerActive = true;
+        lastPointerEnterAt = performance.now();
+        headAlpha = 0;
+        lastTrailX = x;
+        lastTrailY = y;
+      }
+    }
+
+    function onPointerLeave() {
+      if (!pointerActive) return;
+      pointerActive = false;
+      lastPointerLeaveAt = performance.now();
+    }
+
+    async function bootstrap() {
+      const baseImg = scene!.querySelector<HTMLImageElement>('.stone-base');
+      const flowerImg = flowerSvg!.querySelector<SVGImageElement>('image');
+      const promises: Promise<unknown>[] = [];
+      if (baseImg?.decode) promises.push(baseImg.decode().catch(() => undefined));
+      if (flowerImg) {
+        // SVG <image> doesn't expose decode(); load through an HTMLImageElement fallback.
+        const probe = new Image();
+        probe.decoding = 'async';
+        probe.src = flowerSvg!.dataset.flowerUrl ?? (scene as HTMLElement).dataset.flower ?? '';
+        if (probe.decode) promises.push(probe.decode().catch(() => undefined));
+      }
+      await Promise.all(promises);
+
+      if (supportsScript) {
+        start();
+        scene!.addEventListener('pointermove', onPointerMove, { passive: true });
+        scene!.addEventListener('pointerenter', onPointerMove, { passive: true });
+        scene!.addEventListener('pointerleave', onPointerLeave, { passive: true });
+        scene!.addEventListener('pointerdown', onPointerMove, { passive: true });
+
+        let resizeFrame = 0;
+        const handleResize = () => {
+          if (resizeFrame) cancelAnimationFrame(resizeFrame);
+          resizeFrame = requestAnimationFrame(() => {
+            flushAfterResize();
+          });
+        };
+        window.addEventListener('resize', handleResize, { passive: true });
+        window.addEventListener('orientationchange', handleResize, { passive: true });
+
+        window.addEventListener('pagehide', () => {
+          scene!.removeEventListener('pointermove', onPointerMove);
+          scene!.removeEventListener('pointerenter', onPointerMove);
+          scene!.removeEventListener('pointerleave', onPointerLeave);
+          scene!.removeEventListener('pointerdown', onPointerMove);
+          window.removeEventListener('resize', handleResize);
+          window.removeEventListener('orientationchange', handleResize);
+          stop();
+        });
+      } else {
+        // Reduced motion / coarse pointer: keep flower layer hidden.
+        banner!.setAttribute('data-no-motion', '');
+      }
+    }
+
+    bootstrap();
+
+    // Stand-alone "play background" toggle was wired to the old image stack.
+    // Hide it cleanly when no longer needed.
+    const motionToggle = banner!.querySelector<HTMLButtonElement>('[data-stone-motion]');
+    if (motionToggle) motionToggle.hidden = true;
+  }
+</script>
+</content>
+</invoke>

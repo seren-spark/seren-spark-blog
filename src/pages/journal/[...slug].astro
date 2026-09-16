@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 4);
+---
+
+<SiteLayout title={entry.data.title} active="journal" description={entry.data.description}>
+  <div class="article-layout">
+    <article class="article-page">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">博客 / {entry.data.occurredAt.getUTCFullYear()}</p>
+          <h1 class="page-title">{entry.data.title}</h1>
+          <div class="article-meta">
+            <time datetime={entry.data.occurredAt.toISOString()}>
+              {entry.data.occurredAt.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+            </time>
+            <span>原始发布日期</span>
+            {entry.data.sourceUrl && <a href={entry.data.sourceUrl} target="_blank" rel="noreferrer">来源：{entry.data.sourceName ?? 'CSDN'}</a>}
+          </div>
+        </div>
+        <a class="back-link" href="/journal/">返回博客 &lt;</a>
+      </div>
+      <div class="prose"><Content /></div>
+    </article>
+
+    {tocHeadings.length > 0 && (
+      <aside class="article-toc" aria-label="文章目录">
+        <div class="article-toc-heading"><span>文章目录</span><small>{tocHeadings.length} 个章节</small></div>
+        <nav>
+          <ol>
+            {tocHeadings.map((heading) => (
+              <li class:list={[`toc-depth-${heading.depth}`]}>
+                <a href={`#${heading.slug}`} data-toc-target={heading.slug}>{heading.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    )}
+  </div>
+  <script is:inline>
+    const initArticleEnhancements = () => {
+      document.querySelectorAll('.article-page .prose img').forEach((image) => {
+        image.setAttribute('referrerpolicy', 'no-referrer');
+      });
+
+      const toc = document.querySelector('.article-toc');
+      if (!toc || toc.dataset.ready) return;
+      toc.dataset.ready = 'true';
+      const links = [...toc.querySelectorAll('[data-toc-target]')];
+      const sections = links
+        .map((link) => document.getElementById(link.dataset.tocTarget ?? ''))
+        .filter(Boolean);
+      if (!('IntersectionObserver' in window) || sections.length === 0) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!visible) return;
+        links.forEach((link) => link.classList.toggle('is-active', link.dataset.tocTarget === visible.target.id));
+      }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 1] });
+      sections.forEach((section) => observer.observe(section));
+    };
+    initArticleEnhancements();
+    document.addEventListener('astro:page-load', initArticleEnhancements);
+  </script>
+</SiteLayout>

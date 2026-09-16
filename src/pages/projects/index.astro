@@ -1,0 +1,27 @@
+---
+import { getProjectEntries } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const projects = await getProjectEntries();
+---
+
+<SiteLayout title="项目档案" active="projects" description="记录 Seren Spark Blog 的项目实践。">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">项目档案 / 持续进行中</p>
+      <h1 class="page-title">项目档案</h1>
+      <p class="page-lede">把做过的东西留下来：从动手的起点，到交付后的复盘，项目也是学习发生的现场。</p>
+    </div>
+  </div>
+  {projects.length > 0 ? (
+    <div class="project-grid">
+      {projects.map((project, index) => (
+        <a class="project-card" href={`/projects/${project.id}/`}>
+          <span class="card-index">0{index + 1} / PROJECT</span>
+          <span class="card-title">{project.data.title}</span>
+          <span class="card-meta">状态：{project.data.status} ↗</span>
+        </a>
+      ))}
+    </div>
+  ) : <p class="empty-message">还没有项目档案。</p>}
+</SiteLayout>

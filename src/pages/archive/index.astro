@@ -1,0 +1,28 @@
+---
+import { getJournalArchive } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const archive = await getJournalArchive();
+---
+
+<SiteLayout title="年度归档" active="archive" description="按年份回看 Seren Spark Blog 的长期积累。">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">年度归档 / 按年份查看</p>
+      <h1 class="page-title">年度归档</h1>
+      <p class="page-lede">把每一段经历放回它原本的年份，回看知识如何从一个瞬间长成长期参考。</p>
+    </div>
+    <a class="back-link" href="/journal/">查看全部博客 &gt;</a>
+  </div>
+  {archive.size > 0 ? (
+    <div class="archive-grid">
+      {[...archive.entries()].map(([year, entries], index) => (
+        <a class="archive-card" href={`/archive/${year}/`}>
+          <span class="card-index">0{index + 1} / YEAR</span>
+          <span class="card-title">{year}</span>
+          <span class="card-meta">{entries.length} 篇博客 &gt;</span>
+        </a>
+      ))}
+    </div>
+  ) : <p class="empty-message">还没有可归档的日志。</p>}
+</SiteLayout>

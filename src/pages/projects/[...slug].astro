@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<SiteLayout title={project.data.title} active="projects" description={project.data.description}>
+  <article class="article-page">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">PROJECT / {project.data.status}</p>
+        <h1 class="page-title">{project.data.title}</h1>
+        <div class="article-meta">
+          <span>项目状态：{project.data.status}</span>
+          {project.data.startedAt && <span>始于 {project.data.startedAt.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</span>}
+        </div>
+      </div>
+      <a class="back-link" href="/projects/">返回项目列表 ↩</a>
+    </div>
+    <div class="prose"><Content /></div>
+  </article>
+</SiteLayout>

@@ -1,0 +1,88 @@
+---
+import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
+import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
+import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
+
+const { sidebar } = Astro.locals.starlightRoute;
+const pathname = Astro.url.pathname;
+type SidebarEntry = (typeof sidebar)[number];
+
+const scopes = [
+  { labels: ['页面开发', 'Docsify'], prefix: '/page-development/docsify/' },
+  { labels: ['页面开发', 'VuePress'], prefix: '/page-development/vuepress/' },
+  { labels: ['页面开发', '评论系统'], prefix: '/page-development/comments/' },
+  { labels: ['应用', '必备应用'], prefix: '/applications/app-list/' },
+  { labels: ['应用', 'Chrome 扩展'], prefix: '/applications/chrome/' },
+  { labels: ['应用', 'ChatGPT'], prefix: '/applications/chatgpt/' },
+  { labels: ['应用', '工具笔记'], prefix: '/applications/app-notes/' },
+  { labels: ['应用', '平面设计'], prefix: '/applications/design/' },
+  { labels: ['专业知识', '软件工程'], prefix: '/professional/software-engineering/' },
+  { labels: ['专业知识', '计算机网络'], prefix: '/professional/computer-network/' },
+  { labels: ['基础', '三剑客'], prefix: '/frontend/html-css-js/' },
+  { labels: ['基础', '三剑客'], prefix: '/frontend/html-css/' },
+  { labels: ['基础', '三剑客'], prefix: '/frontend/javascript/' },
+  { labels: ['CSS 提高', 'Less / SCSS'], prefix: '/frontend/css-advanced/' },
+  { labels: ['CSS 提高', 'Less / SCSS'], prefix: '/frontend/less/' },
+  { labels: ['CSS 提高', 'Less / SCSS'], prefix: '/frontend/scss/' },
+  { labels: ['CSS 提高', 'Tailwind CSS'], prefix: '/frontend/tailwind/' },
+  { labels: ['JavaScript 提高', 'ES6'], prefix: '/frontend/javascript-advanced/es6/' },
+  { labels: ['JavaScript 提高', 'AJAX'], prefix: '/frontend/javascript-advanced/ajax/' },
+  { labels: ['JavaScript 提高', 'ECharts'], prefix: '/frontend/javascript-advanced/echarts/' },
+  { labels: ['JavaScript 提高', 'Webpack'], prefix: '/frontend/javascript-advanced/webpack/' },
+  { labels: ['JavaScript 提高', 'TypeScript'], prefix: '/frontend/typescript/' },
+  { labels: ['框架', 'Vue'], prefix: '/frontend/vue/' },
+  { labels: ['框架', 'UniApp'], prefix: '/frontend/uniapp/' },
+  { labels: ['框架', 'React'], prefix: '/frontend/react/' },
+  { labels: ['其它', 'Electron'], prefix: '/applications/electron/' },
+  { labels: ['服务端', 'Node.js'], prefix: '/backend/nodejs/' },
+  { labels: ['服务端', 'Linux'], prefix: '/backend/linux/' },
+  { labels: ['服务端', 'MySQL'], prefix: '/backend/database/mysql/' },
+  { labels: ['服务端', 'MongoDB'], prefix: '/backend/database/mongodb/' },
+  { labels: ['服务端', '部署与运维', '静态部署'], prefix: '/backend/deploy/static/' },
+  { labels: ['服务端', '部署与运维', 'GitHub 部署'], prefix: '/backend/deploy/github/' },
+  { labels: ['服务端', '部署与运维', 'Cloudflare'], prefix: '/backend/deploy/cloudflare/' },
+  { labels: ['服务端', '部署与运维', 'DNS 托管'], prefix: '/backend/deploy/dns/' },
+  { labels: ['服务端', '部署与运维', 'VPS'], prefix: '/backend/deploy/vps/' },
+  { labels: ['工具', 'Git'], prefix: '/tools/git/' },
+  { labels: ['工具', '代码规范'], prefix: '/tools/lint/' },
+  { labels: ['工具', '效率工具', '在线工具'], prefix: '/tools/efficiency/online-tools/' },
+  { labels: ['工具', '效率工具', '书签脚本'], prefix: '/tools/efficiency/bookmark-scripts/' },
+  { labels: ['页面开发'], prefix: '/page-development/' },
+  { labels: ['应用'], prefix: '/applications/' },
+  { labels: ['专业知识'], prefix: '/professional/' },
+  { labels: ['服务端'], prefix: '/backend/' },
+  { labels: ['工具'], prefix: '/tools/' },
+  { labels: ['笔记'], prefix: '/notes/' },
+  { labels: ['前端'], prefix: '/frontend/' },
+] as const;
+
+const activeScope = scopes.find((scope) => pathname.startsWith(scope.prefix));
+const findEntry = (entries: SidebarEntry[], labels: readonly string[]): SidebarEntry | undefined => {
+  let currentEntries = entries;
+  let currentEntry: SidebarEntry | undefined;
+
+  for (const label of labels) {
+    currentEntry = currentEntries.find((entry) => entry.label === label);
+    if (!currentEntry) return undefined;
+    currentEntries = currentEntry.type === 'group' ? currentEntry.entries : [];
+  }
+
+  return currentEntry;
+};
+const activeEntry = activeScope
+  ? findEntry(sidebar, activeScope.labels)
+  : sidebar.find((entry) => entry.label === '知识库');
+const scopedSidebar = activeEntry
+  ? activeEntry.type === 'group'
+    ? activeEntry.entries
+    : [activeEntry]
+  : sidebar;
+---
+
+<SidebarPersister>
+  <SidebarSublist sublist={scopedSidebar} />
+</SidebarPersister>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>

@@ -1,0 +1,42 @@
+---
+import type { ContentRecord } from '../../lib/content-model';
+import type { TagIndexItem } from '../../lib/content-queries';
+import { getTagIndex } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const tags = await getTagIndex();
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props as { tag: TagIndexItem };
+
+function contentHref(entry: ContentRecord): string {
+  if (entry.collection === 'journal') return `/journal/${entry.id}`;
+  if (entry.collection === 'projects') return `/projects/${entry.id}`;
+  return `/${entry.id}`;
+}
+---
+
+<SiteLayout title={tag.label} active="tags" description={`标签 ${tag.label} 下的内容。`}>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">TAG / COLLECTION</p>
+      <h1 class="page-title">{tag.label}</h1>
+      <p class="page-lede">这个标签连接了 {tag.count} 篇内容。</p>
+    </div>
+    <a class="back-link" href="/tags/">返回全部标签 ↩</a>
+  </div>
+  <ul class="content-list">
+    {tag.entries.map((entry) => (
+      <li>
+        <span class="list-meta">{entry.collection}</span>
+        <a href={contentHref(entry)}>{String(entry.data.title ?? entry.id)}</a>
+        <span class="list-meta">查看 ↗</span>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>

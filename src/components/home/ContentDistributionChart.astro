@@ -1,0 +1,114 @@
+---
+interface Props {
+  stats: {
+    notes: number;
+    journal: number;
+    projects: number;
+  };
+}
+
+const { stats } = Astro.props;
+const total = Math.max(stats.notes + stats.journal + stats.projects, 1);
+const segments = [
+  { label: '知识笔记', value: stats.notes, color: '#5470c6' },
+  { label: '博客', value: stats.journal, color: '#91cc75' },
+  { label: '项目档案', value: stats.projects, color: '#fac858' },
+].map((item) => ({
+  ...item,
+  percent: (item.value / total) * 100,
+  displayPercent: Math.round((item.value / total) * 100),
+}));
+const chartLabel = segments.map((item) => `${item.label} ${item.displayPercent}%`).join('，');
+---
+
+<div class="distribution-card" data-distribution-card>
+  <div class="distribution-chart" data-distribution-chart role="img" aria-label={chartLabel}>
+    <div class="distribution-center"><span>内容</span><strong>构成</strong></div>
+  </div>
+  <ul class="distribution-legend" aria-label="内容比例图例">
+    {segments.map((segment) => (
+      <li data-chart-segment data-percent={segment.percent} data-display-percent={segment.displayPercent} data-color={segment.color}>
+        <span class="legend-dot" style={`--legend-color:${segment.color}`} aria-hidden="true"></span>
+        <span class="legend-label">{segment.label}<small>{String(segment.value).padStart(2, '0')} ITEMS</small></span>
+        <strong class="legend-percent" aria-hidden="true"><span data-chart-number></span><sup>%</sup></strong>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .distribution-card { display: grid; grid-template-columns: minmax(9rem, .9fr) minmax(11rem, 1.1fr); gap: clamp(1rem, 2.5vw, 2rem); align-items: center; min-height: clamp(15rem, 31svh, 17rem); padding: clamp(1rem, 1.7vw, 1.4rem); border: 1px solid rgba(9,45,64,.13); background: rgba(255,255,255,.76); }
+  .distribution-chart { position: relative; display: grid; width: min(100%, 13.5rem); aspect-ratio: 1; margin-inline: auto; place-items: center; border-radius: 50%; background: #eef1f5; box-shadow: inset 0 0 0 1px rgba(9,45,64,.07), 0 1rem 2.5rem rgba(9,45,64,.08); transform: rotate(-90deg); }
+  .distribution-chart::before { position: absolute; width: 62%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.98); box-shadow: 0 0 0 1px rgba(9,45,64,.13); content: ''; }
+  .distribution-center { position: relative; z-index: 1; display: grid; gap: .12rem; color: #748591; text-align: center; transform: rotate(90deg); }
+  .distribution-center span { font-size: .58rem; letter-spacing: .18em; }
+  .distribution-center strong { color: #092d40; font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: 1.25rem; font-weight: 500; letter-spacing: -.05em; }
+  .distribution-legend { display: grid; gap: .12rem; margin: 0; padding: 0; list-style: none; }
+  .distribution-legend li { display: grid; grid-template-columns: .55rem minmax(0, 1fr) auto; gap: .72rem; align-items: center; padding: .8rem 0; border-bottom: 1px solid rgba(9,45,64,.09); }
+  .distribution-legend li:last-child { border-bottom: 0; }
+  .legend-dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--legend-color); box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--legend-color) 15%, transparent); }
+  .legend-label { display: grid; gap: .16rem; color: #092d40; font-size: .78rem; }
+  .legend-label small, .legend-percent sup { color: #748591; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .11em; text-transform: uppercase; }
+  .legend-label small { font-size: .46rem; }
+  .legend-percent { min-width: 3.2rem; color: #092d40; font-family: 'Iowan Old Style', 'Palatino Linotype', serif; font-size: 1.75rem; font-weight: 500; letter-spacing: -.07em; line-height: 1; text-align: right; opacity: 0; transform: translateY(.35rem); transition: opacity .35s ease, transform .35s ease; }
+  .legend-percent sup { margin-left: .1rem; font-size: .4em; font-weight: 400; letter-spacing: .02em; }
+  .distribution-card.is-counting .legend-percent { opacity: 1; transform: none; }
+  @media (max-width: 30rem) { .distribution-card { grid-template-columns: 1fr; } .distribution-chart { width: min(70vw, 12rem); } }
+  @media (prefers-reduced-motion: reduce) { .legend-percent { transition: none; } }
+</style>
+
+<script>
+  const setupDistributionCharts = () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.querySelectorAll<HTMLElement>('[data-distribution-card]').forEach((card) => {
+      if (card.dataset.ready === 'true') return;
+      const chart = card.querySelector<HTMLElement>('[data-distribution-chart]');
+      const segments = Array.from(card.querySelectorAll<HTMLElement>('[data-chart-segment]')).map((element) => ({
+        color: element.dataset.color ?? '#5470c6',
+        percent: Number(element.dataset.percent) || 0,
+        displayPercent: Number(element.dataset.displayPercent) || 0,
+        number: element.querySelector<HTMLElement>('[data-chart-number]'),
+      }));
+      if (!chart || segments.length === 0) return;
+      card.dataset.ready = 'true';
+
+      const render = (progress: number) => {
+        let cursor = 0;
+        const colorStops = segments.map((segment) => {
+          const start = cursor;
+          cursor += segment.percent * progress;
+          return `${segment.color} ${start}% ${cursor}%`;
+        });
+        colorStops.push(`#eef1f5 ${cursor}% 100%`);
+        chart.style.background = `conic-gradient(${colorStops.join(', ')})`;
+        segments.forEach((segment) => {
+          if (segment.number) segment.number.textContent = String(Math.round(segment.displayPercent * progress));
+        });
+      };
+
+      const play = () => {
+        card.classList.add('is-counting');
+        if (prefersReducedMotion) return render(1);
+        const startedAt = performance.now();
+        const drawFrame = (now: number) => {
+          const elapsed = Math.min(1, (now - startedAt) / 1500);
+          render(1 - Math.pow(1 - elapsed, 3));
+          if (elapsed < 1) requestAnimationFrame(drawFrame);
+        };
+        requestAnimationFrame(drawFrame);
+      };
+
+      render(0);
+      const observer = new IntersectionObserver(([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        play();
+      }, { threshold: .35 });
+      observer.observe(card);
+    });
+  };
+
+  setupDistributionCharts();
+  document.addEventListener('astro:page-load', setupDistributionCharts);
+</script>

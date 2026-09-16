@@ -1,0 +1,44 @@
+---
+import { getJournalEntries } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const entries = await getJournalEntries();
+---
+
+<SiteLayout title="博客" active="journal" description="按真实发布日期整理的博客文章。">
+  <div class="page-heading">
+    <div>
+      <h3 class="page-title">博客</h3>
+      <p class="page-lede">把技术实践、学习过程和阶段性的想法整理在一起</p>
+    </div>
+    <a class="back-link" href="/archive/">按年份查看 &gt;</a>
+  </div>
+  {entries.length > 0 ? (
+    <div class="journal-cards">
+      {entries.map((entry) => (
+        <a class="journal-card" href={`/journal/${entry.id}/`}>
+          {entry.data.coverImage && (
+            <img class="card-cover" src={entry.data.coverImage} alt={entry.data.title} />
+          )}
+          <div class="card-body">
+            <h2 class="card-title">{entry.data.title}</h2>
+            {entry.data.description && <p class="card-desc">{entry.data.description}</p>}
+            <div class="card-meta">
+              <time datetime={entry.data.occurredAt.toISOString()}>
+                {entry.data.occurredAt.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+              </time>
+              {entry.data.tags && entry.data.tags.length > 0 && (
+                <span class="card-tags">
+                  {entry.data.tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </span>
+              )}
+            </div>
+          </div>
+          <span class="card-source">{entry.data.sourceName ?? '博客'}</span>
+        </a>
+      ))}
+    </div>
+  ) : <p class="empty-message">还没有博客文章。</p>}
+</SiteLayout>

@@ -1,0 +1,517 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro';
+import { Icon } from '@astrojs/starlight/components';
+import { knowledgeNavigation } from '../../lib/knowledge-navigation';
+
+const pathname = Astro.url.pathname;
+const { hasSidebar } = Astro.locals.starlightRoute;
+const normalizePath = (href: string) => href.split('#')[0];
+const isItemActive = (item: (typeof knowledgeNavigation)[number]) => {
+  if (item.match) return item.match.some((prefix) => pathname.startsWith(prefix));
+  const target = normalizePath(item.href);
+  if (target === '/knowledge/') return pathname === target;
+  return pathname === target || pathname.startsWith(target);
+};
+const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
+  if (pathname === normalizePath(entry.href)) return true;
+  if (entry.groups) return entry.groups.some((group) => group.items.some(isItemActive));
+  return isItemActive(entry);
+};
+---
+
+<div class="knowledge-header">
+  <a class="knowledge-brand" href="/knowledge/" aria-label="返回知识库首页">
+    <svg class="brand-mark" aria-hidden="true" viewBox="0 0 92 52">
+      <defs>
+        <linearGradient id="brand-arc" x1="5" y1="8" x2="86" y2="45" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#7456c8" />
+          <stop offset="1" stop-color="#10a69d" />
+        </linearGradient>
+      </defs>
+      <path d="M5 15C32 2 63 4 86 18" fill="none" stroke="url(#brand-arc)" stroke-width="2.6" stroke-linecap="round" />
+      <path d="M14 43 45 13 26 45M24 44l22-31-10 33M35 45l12-32-2 34M46 47l2-34 8 32M56 45l-7-32 17 28M66 41 50 13l26 21M76 34 50 13l34 11" fill="none" stroke="#4630aa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M46 13c5 11 10 15 17 15 5 0 9-3 13-8 2 6 6 10 10 12" fill="none" stroke="#5937b8" stroke-width="3" stroke-linecap="round" />
+    </svg>
+    <span>seren-spark</span>
+    <i class="brand-status" aria-hidden="true"></i>
+  </a>
+
+  <div class="knowledge-search"><Search /></div>
+
+  <nav class="knowledge-nav" aria-label="知识库分类">
+    {knowledgeNavigation.map((entry) => entry.groups ? (
+      <details class:list={['nav-menu', { active: isEntryActive(entry) }]} data-nav-menu>
+        <summary aria-label={`${entry.label}分类菜单`}>
+          <Icon name={entry.icon} />
+          <span>{entry.label}</span>
+          <Icon class="nav-caret" name="down-caret" />
+        </summary>
+        <div class="nav-dropdown">
+          {entry.groups.map((group) => (
+            <section class="nav-dropdown-group" aria-label={group.label}>
+              <p>{group.label}</p>
+              {group.items.map((item) => (
+                <a
+                  href={item.href}
+                  class:list={{ active: isItemActive(item) }}
+                  aria-current={isItemActive(item) ? 'page' : undefined}
+                >
+                  <Icon name={item.icon} />
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </section>
+          ))}
+        </div>
+      </details>
+    ) : (
+      <a
+        class:list={['nav-link', { active: isEntryActive(entry) }]}
+        href={entry.href}
+        aria-current={isEntryActive(entry) ? 'page' : undefined}
+      >
+        <Icon name={entry.icon} />
+        <span>{entry.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="knowledge-tools">
+    <a class="tool-button" href="https://github.com/" target="_blank" rel="noreferrer" aria-label="打开 GitHub">
+      <Icon name="github" />
+    </a>
+    <button class="tool-button theme-button" type="button" data-knowledge-theme-toggle aria-label="切换到夜间模式" title="切换到夜间模式">
+      <svg class="theme-icon theme-icon-moon" aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M20.4 15.3A8.5 8.5 0 0 1 8.7 3.6 8.5 8.5 0 1 0 20.4 15.3Z" />
+      </svg>
+      <svg class="theme-icon theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+{hasSidebar && (
+  <button
+    class="sidebar-collapse-toggle"
+    type="button"
+    data-sidebar-collapse-toggle
+    aria-controls="starlight__sidebar"
+    aria-expanded="true"
+    aria-label="收起侧边栏"
+    title="收起侧边栏"
+  >
+    <span data-sidebar-collapse-icon aria-hidden="true">‹</span>
+  </button>
+)}
+
+<script>
+  const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-nav-menu]'));
+
+  for (const menu of menus) {
+    menu.addEventListener('toggle', () => {
+      if (!menu.open) return;
+      for (const other of menus) {
+        if (other !== menu) other.open = false;
+      }
+    });
+  }
+
+  document.addEventListener('pointerdown', (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    for (const menu of menus) {
+      if (!menu.contains(target)) menu.open = false;
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const openMenu = menus.find((menu) => menu.open);
+    if (!openMenu) return;
+    openMenu.open = false;
+    openMenu.querySelector<HTMLElement>('summary')?.focus();
+  });
+
+  const themeStorageKey = 'starlight-theme';
+
+  const setupThemeToggle = () => {
+    const themeToggle = document.querySelector<HTMLButtonElement>('[data-knowledge-theme-toggle]');
+    if (!themeToggle || themeToggle.dataset.themeReady === 'true') return;
+
+    const syncThemeToggle = () => {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      const label = isDark ? '切换到日间模式' : '切换到夜间模式';
+      themeToggle.setAttribute('aria-label', label);
+      themeToggle.title = label;
+    };
+
+    themeToggle.dataset.themeReady = 'true';
+    syncThemeToggle();
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = nextTheme;
+      document.documentElement.style.colorScheme = nextTheme;
+      try {
+        localStorage.setItem(themeStorageKey, nextTheme);
+      } catch {}
+      document.querySelectorAll<HTMLButtonElement>('starlight-theme-select button').forEach((button) => {
+        button.dataset.theme = nextTheme;
+      });
+      syncThemeToggle();
+    });
+  };
+
+  const sidebarStorageKey = 'seren-spark:knowledge-sidebar-collapsed';
+
+  const setupSidebarCollapse = () => {
+    const sidebarToggle = document.querySelector<HTMLButtonElement>('[data-sidebar-collapse-toggle]');
+    if (!sidebarToggle || sidebarToggle.dataset.collapseReady === 'true') return;
+
+    const applySidebarState = (collapsed: boolean) => {
+      document.documentElement.toggleAttribute('data-knowledge-sidebar-collapsed', collapsed);
+      sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+      sidebarToggle.setAttribute('aria-label', collapsed ? '展开侧边栏' : '收起侧边栏');
+      sidebarToggle.title = collapsed ? '展开侧边栏' : '收起侧边栏';
+      const icon = sidebarToggle.querySelector<HTMLElement>('[data-sidebar-collapse-icon]');
+      if (icon) icon.textContent = collapsed ? '›' : '‹';
+    };
+
+    let sidebarCollapsed = false;
+    try {
+      sidebarCollapsed = localStorage.getItem(sidebarStorageKey) === 'true';
+    } catch {}
+    applySidebarState(sidebarCollapsed);
+
+    sidebarToggle.dataset.collapseReady = 'true';
+    sidebarToggle.addEventListener('click', () => {
+      const nextState = !document.documentElement.hasAttribute('data-knowledge-sidebar-collapsed');
+      applySidebarState(nextState);
+      try {
+        localStorage.setItem(sidebarStorageKey, String(nextState));
+      } catch {}
+    });
+  };
+
+  setupSidebarCollapse();
+  setupThemeToggle();
+  document.addEventListener('astro:page-load', setupSidebarCollapse);
+  document.addEventListener('astro:page-load', setupThemeToggle);
+</script>
+
+<style>
+  .knowledge-header {
+    display: grid;
+    grid-template-columns: var(--sl-sidebar-width) 14.5rem max-content max-content minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.72rem;
+    height: 100%;
+    width: 100%;
+  }
+
+  .knowledge-brand {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.62rem;
+    color: #263746;
+    font-size: 1.36rem;
+    font-weight: 650;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    width: 4.55rem;
+    height: 2.7rem;
+    flex: 0 0 auto;
+  }
+
+  .brand-status {
+    width: 0.8rem;
+    height: 0.8rem;
+    flex: 0 0 auto;
+    border: 2px solid #d7e1e6;
+    border-right-color: #8fa8b3;
+    border-radius: 50%;
+  }
+
+  .knowledge-search { min-width: 0; }
+
+  .knowledge-nav {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.02rem;
+    overflow: visible;
+  }
+
+  .nav-link,
+  .nav-menu > summary {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.34rem;
+    min-height: 2.8rem;
+    border-radius: 0.38rem;
+    color: #6d6f71;
+    cursor: pointer;
+    font-size: 0.96rem;
+    font-weight: 520;
+    line-height: 1;
+    padding: 0.64rem 0.48rem;
+    text-decoration: none;
+    transition: color 150ms ease, background-color 150ms ease;
+    white-space: nowrap;
+  }
+
+  .nav-menu {
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .nav-menu > summary {
+    list-style: none;
+    user-select: none;
+  }
+
+  .nav-menu > summary::-webkit-details-marker { display: none; }
+
+  .nav-link :global(svg),
+  .nav-menu > summary :global(svg) { font-size: 1rem; }
+
+  .nav-menu > summary .nav-caret {
+    margin-left: -0.18rem;
+    font-size: 0.7rem;
+    transition: transform 160ms ease;
+  }
+
+  .nav-menu[open] > summary .nav-caret { transform: rotate(180deg); }
+
+  .nav-link:hover,
+  .nav-link.active,
+  .nav-menu > summary:hover,
+  .nav-menu.active > summary,
+  .nav-menu[open] > summary {
+    background: #f3f5f5;
+    color: #263746;
+  }
+
+  .nav-dropdown {
+    position: absolute;
+    z-index: 100;
+    top: calc(100% + 0.1rem);
+    left: 0;
+    display: grid;
+    width: max-content;
+    min-width: 13rem;
+    max-width: 18rem;
+    gap: 0.95rem;
+    padding: 1.12rem 0.75rem;
+    border: 1px solid #e5e8e8;
+    border-radius: 0.72rem;
+    background: #fff;
+    box-shadow: 0 0.7rem 1.6rem rgb(31 47 55 / 14%);
+  }
+
+  .nav-dropdown-group {
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .nav-dropdown-group p {
+    margin: 0 0 0.28rem;
+    padding: 0 0.62rem;
+    color: #888b8d;
+    font-family: Georgia, 'Noto Serif SC', serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  .nav-dropdown-group a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.25rem;
+    border-radius: 0.48rem;
+    color: #666b6f;
+    font-size: 0.96rem;
+    line-height: 1.3;
+    padding: 0.42rem 0.62rem;
+    text-decoration: none;
+    transition: background-color 140ms ease, color 140ms ease;
+  }
+
+  .nav-dropdown-group a :global(svg) {
+    width: 1.06rem;
+    flex: 0 0 auto;
+    color: #697174;
+    font-size: 1.06rem;
+  }
+
+  .nav-dropdown-group a:hover {
+    background: #f5f6f7;
+    color: #263746;
+  }
+
+  .nav-dropdown-group a.active {
+    background: #eceff1;
+    box-shadow: inset 3px 0 #68757d;
+    color: #263746;
+  }
+
+  .nav-dropdown-group a:hover :global(svg),
+  .nav-dropdown-group a.active :global(svg) { color: #4f5d65; }
+
+  .knowledge-tools {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-self: start;
+    gap: 0.1rem;
+    margin-left: 0.15rem;
+    padding-left: 0.55rem;
+    border-left: 1px solid #e4e8e9;
+  }
+
+  .tool-button,
+  .theme-button {
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    min-width: 0;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #6d6f71;
+    cursor: pointer;
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+
+  .tool-button { font-size: 1.4rem; text-decoration: none; }
+  .tool-button:hover,
+  .theme-button:hover { background: #f3f5f5; color: #263746; }
+
+  .theme-icon {
+    display: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  :global([data-theme='light']) .theme-icon-moon,
+  :global([data-theme='dark']) .theme-icon-sun { display: block; }
+
+  .sidebar-collapse-toggle { display: none; }
+
+  :global([data-theme='dark']) .knowledge-brand,
+  :global([data-theme='dark']) .nav-link,
+  :global([data-theme='dark']) .nav-menu > summary,
+  :global([data-theme='dark']) .tool-button,
+  :global([data-theme='dark']) .nav-link:hover,
+  :global([data-theme='dark']) .nav-link.active,
+  :global([data-theme='dark']) .nav-menu > summary:hover,
+  :global([data-theme='dark']) .nav-menu.active > summary,
+  :global([data-theme='dark']) .nav-menu[open] > summary { color: #edf2f4; }
+
+  :global([data-theme='dark']) .nav-dropdown {
+    border-color: #354044;
+    background: #1c2529;
+    box-shadow: 0 0.7rem 1.8rem rgb(0 0 0 / 32%);
+  }
+
+  :global([data-theme='dark']) .nav-dropdown-group p { color: #9ba5a9; }
+  :global([data-theme='dark']) .nav-dropdown-group a { color: #d3d9dc; }
+  :global([data-theme='dark']) .nav-dropdown-group a:hover {
+    background: #273136;
+    color: #f1f4f5;
+  }
+
+  :global([data-theme='dark']) .nav-dropdown-group a.active {
+    background: #303a40;
+    box-shadow: inset 3px 0 #aeb8bd;
+    color: #f1f4f5;
+  }
+
+  :global([data-theme='dark']) .nav-dropdown-group a:hover :global(svg),
+  :global([data-theme='dark']) .nav-dropdown-group a.active :global(svg) { color: #e1e7e9; }
+  :global([data-theme='dark']) .nav-link:hover,
+  :global([data-theme='dark']) .nav-link.active,
+  :global([data-theme='dark']) .nav-menu > summary:hover,
+  :global([data-theme='dark']) .nav-menu.active > summary,
+  :global([data-theme='dark']) .nav-menu[open] > summary { background: #202a2f; }
+  :global([data-theme='dark']) .knowledge-tools { border-left-color: #354044; }
+  :global([data-theme='dark']) .tool-button:hover { background: #283237; color: #fff; }
+
+  @media (min-width: 50rem) {
+    .sidebar-collapse-toggle {
+      position: fixed;
+      z-index: calc(var(--sl-z-index-menu) + 1);
+      top: calc(var(--sl-nav-height) + 0.75rem);
+      left: calc(var(--sl-sidebar-width) - 0.825rem);
+      display: grid;
+      width: 1.65rem;
+      height: 1.65rem;
+      min-width: 0;
+      padding: 0;
+      place-items: center;
+      border: 1px solid var(--sl-color-hairline);
+      border-radius: 50%;
+      color: var(--sl-color-gray-2);
+      background: var(--sl-color-black);
+      box-shadow: 0 2px 8px rgb(9 45 64 / 9%);
+      cursor: pointer;
+      transition: left 180ms ease, color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .sidebar-collapse-toggle:hover {
+      color: var(--sl-color-orange-high);
+      box-shadow: 0 4px 12px rgb(9 45 64 / 14%);
+    }
+
+    .sidebar-collapse-toggle span {
+      margin-top: -0.12rem;
+      font-family: Georgia, serif;
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    :global(html[data-knowledge-sidebar-collapsed]) .sidebar-collapse-toggle {
+      left: 0.675rem;
+    }
+  }
+
+  @media (max-width: 105rem) {
+    .knowledge-header { grid-template-columns: 17rem minmax(11rem, 14rem) minmax(0, 1fr) auto; }
+    .nav-link,
+    .nav-menu > summary { font-size: 0.9rem; padding-inline: 0.38rem; }
+  }
+
+  @media (max-width: 74rem) {
+    .knowledge-header { grid-template-columns: max-content minmax(12rem, 1fr) auto; }
+    .knowledge-nav { display: none; }
+  }
+
+  @media (max-width: 50rem) {
+    .knowledge-header { display: flex; justify-content: space-between; gap: 0.65rem; }
+    .brand-mark { width: 3rem; }
+    .knowledge-brand { font-size: 1.05rem; }
+    .brand-status { display: none; }
+    .knowledge-search { margin-left: auto; }
+    .knowledge-tools { display: none; }
+  }
+
+  @media (max-width: 32rem) {
+    .knowledge-brand span { display: none; }
+  }
+</style>

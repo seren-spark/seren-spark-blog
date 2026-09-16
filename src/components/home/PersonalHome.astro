@@ -1,0 +1,535 @@
+---
+import type { HomeData } from '../../lib/content-queries';
+import type { TimelineEvent } from '../../lib/content-model';
+import { icons } from '@iconify-json/ri';
+
+interface Props {
+  home: HomeData;
+}
+
+const { home } = Astro.props;
+const blogs = home.timeline;
+const pageSize = 6;
+const pageCount = Math.ceil(blogs.length / pageSize);
+
+const categories = [
+  { label: '知识笔记', count: home.stats.notes, href: '/getting-started/' },
+  { label: '博客', count: home.stats.journal, href: '/journal/' },
+  { label: '项目档案', count: home.stats.projects, href: '/projects/' },
+];
+
+const tags = ['知识库', '学习', 'Astro', 'Starlight', 'Markdown', '写作'];
+
+const profileLinks = [
+  { label: 'GitHub', icon: 'github-fill', href: 'https://github.com/seren-spark' },
+  { label: '邮箱', icon: 'mail-line', href: 'mailto:serendipity_r@163.com' },
+  { label: '微信', icon: 'wechat-fill', href: '' },
+  { label: 'QQ', icon: 'qq-fill', href: 'https://wpa.qq.com/msgrd?v=3&uin=2843306836&site=qq&menu=yes' },
+];
+
+function eventHref(event: TimelineEvent): string {
+  if (event.collection === 'docs') return '/' + event.id + '/';
+  return '/' + (event.collection === 'journal' ? 'journal' : 'projects') + '/' + event.id + '/';
+}
+
+function collectionLabel(collection: TimelineEvent['collection']): string {
+  const labels: Record<TimelineEvent['collection'], string> = {
+    docs: '知识笔记',
+    journal: '博客',
+    projects: '项目档案',
+  };
+  return labels[collection];
+}
+
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'UTC',
+  }).format(date).replaceAll('/', '.');
+}
+
+function blogDescription(event: TimelineEvent): string {
+  if (event.collection === 'journal') return '记录学习过程中的思考、实践和阶段性收获。';
+  if (event.collection === 'projects') return '从想法到实现的项目记录与持续进展。';
+  return '长期维护的知识笔记与内容索引。';
+}
+
+function blogTags(event: TimelineEvent): string[] {
+  if (event.collection === 'journal') return ['学习', '记录'];
+  if (event.collection === 'projects') return ['Astro', '项目'];
+  return ['知识库', '整理'];
+}
+
+const now = new Date();
+const calendarYear = now.getUTCFullYear();
+const calendarMonth = now.getUTCMonth();
+const monthLabel = calendarYear + ' 年 ' + (calendarMonth + 1) + ' 月';
+const firstWeekday = new Date(Date.UTC(calendarYear, calendarMonth, 1)).getUTCDay();
+const daysInMonth = new Date(Date.UTC(calendarYear, calendarMonth + 1, 0)).getUTCDate();
+const calendarCells = [
+  ...Array.from({ length: firstWeekday }, () => null),
+  ...Array.from({ length: daysInMonth }, (_, index) => index + 1),
+];
+---
+
+<main class="personal-home" id="top">
+  <header class="personal-nav">
+    <a class="personal-brand" href="#top" aria-label="返回个人主页">
+      <span class="brand-seal">s</span>
+      <span class="brand-copy">
+        <span class="brand-title">seren-spark<span class="brand-dot">.</span></span>
+        <small>个人知识档案</small>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="个人主页导航">
+      <a class="active" href="/about/">个人主页</a>
+      <a href="/getting-started/">知识库</a>
+      <a href="/journal/">博客</a>
+      <a href="/projects/">项目档案</a>
+      <a href="/archive/">年度归档</a>
+    </nav>
+    <a class="nav-action" href="/archive/">浏览全部记录 <span>&gt;</span></a>
+  </header>
+
+  <section class="personal-hero card" id="overview">
+    <video class="hero-video" autoplay loop muted playsinline preload="metadata" aria-hidden="true">
+      <source src="https://cdn.moji.com/websrc/video/autumn20190924.mp4" type="video/mp4" />
+    </video>
+
+    <div class="hero-meta"><span>个人主页</span><span>更新于 {calendarYear}</span></div>
+    <div class="hero-content">
+      <div>
+        <h1>记录思考，也记录<br /><em>正在成为的自己。</em></h1>
+        <p>文章、项目、学习和日常想法，都在这里留下可以回看的痕迹。</p>
+      </div>
+    </div>
+    <div class="hero-status"><i></i><span>持续记录中</span><small>让每一次留下都成为下一次出发的坐标</small></div>
+  </section>
+
+  <div class="personal-layout">
+    <aside class="personal-sidebar" aria-label="个人信息和站点组件">
+      <section class="profile-card card">
+        <div class="profile-cover" aria-hidden="true"></div>
+        <div class="profile-avatar" aria-hidden="true">
+          <span class="avatar-ring ring-a"></span>
+          <span class="avatar-ring ring-b"></span>
+          <strong>SS</strong>
+        </div>
+        <p class="side-kicker">个人资料</p>
+        <h2 class="typewriter-name">Seren Spark</h2>
+        <p class="profile-bio">独立开发者 · 长期记录者</p>
+        <div class="profile-links" aria-label="个人链接">
+          {profileLinks.map(({ label, icon, href }) => {
+            const Tag = href ? 'a' : 'button';
+            const tooltip = label === 'QQ' ? 'QQ：2843306836' : label;
+            return (
+              <Tag
+                class="profile-social"
+                href={href || undefined}
+                type={href ? undefined : 'button'}
+                target={href.startsWith('https://') ? '_blank' : undefined}
+                rel={href.startsWith('https://') ? 'noreferrer' : undefined}
+                aria-label={label}
+                popovertarget={href ? undefined : 'profile-wechat'}
+                aria-describedby={'profile-social-' + icon}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.icons[icon].body} />
+                <span class="social-tooltip" role="tooltip" id={'profile-social-' + icon}>{tooltip}</span>
+              </Tag>
+            );
+          })}
+        </div>
+        <div class="wechat-contact" id="profile-wechat" popover>
+          <p>微信号</p>
+          <strong>HBR_0714</strong>
+          <button type="button" data-copy-wechat>复制微信号</button>
+          <span class="copy-status" data-wechat-status role="status"></span>
+        </div>
+        <p class="profile-signature">把想法放进时间里，让有用的东西慢慢长出来。</p>
+        <dl class="profile-stats">
+          <div><dt>内容节点</dt><dd>{home.stats.total}</dd></div>
+          <div><dt>项目档案</dt><dd>{home.stats.projects}</dd></div>
+        </dl>
+      </section>
+
+      <section class="card side-card music-card">
+        <div class="side-heading"><span>音乐</span><span class="side-mark">播放中</span></div>
+        <div class="music-main">
+          <span class="music-disc">♪</span>
+          <div><strong>专注进行时</strong><small>一段适合慢慢思考的旋律</small></div>
+        </div>
+        <div class="music-progress"><span></span></div>
+        <div class="music-time"><span>01:28</span><span>03:42</span></div>
+        <div class="music-controls"><span>↶</span><span>◀</span><b>▶</b><span>▶</span><span>↷</span></div>
+      </section>
+
+      <section class="card side-card">
+        <div class="side-heading"><span>分类</span><span class="side-mark">{home.stats.total}</span></div>
+        <div class="category-list">
+          {categories.map((category) => (
+            <a href={category.href}><span>{category.label}</span><b>{category.count}</b></a>
+          ))}
+          <a href="/archive/"><span>全部记录</span><b>{home.stats.total}</b></a>
+        </div>
+      </section>
+
+      <section class="card side-card tags-card">
+        <div class="side-heading"><span>标签</span><span class="side-mark">索引</span></div>
+        <div class="tag-list">
+          {tags.map((tag, index) => <a class:list={[`tag-pastel-${index % 6}`]} href="/tags/">{tag}</a>)}
+        </div>
+      </section>
+    </aside>
+
+    <section class="main-column" aria-label="最近博客">
+      <div class="blog-toolbar">
+        <a class="toolbar-home" href="/about/" aria-label="个人主页">⌂</a>
+        <a class="toolbar-chip is-active" href="/archive/">全部 {home.stats.total}</a>
+        <a class="toolbar-chip" href="/getting-started/">知识 {home.stats.notes}</a>
+        <a class="toolbar-chip" href="/journal/">博客 {home.stats.journal}</a>
+        <a class="toolbar-chip" href="/projects/">项目 {home.stats.projects}</a>
+      </div>
+
+      <div class="blog-heading">
+        <div><p class="side-kicker">最近的博客</p></div>
+        <a href="/archive/">查看全部 <span>↗</span></a>
+      </div>
+
+      <div class="blog-list">
+        {blogs.length ? blogs.map((event, index) => (
+          <a class:list={['blog-card', { 'blog-card-accent': index === 1 }]} href={eventHref(event)} data-blog-card data-page-index={index} hidden={index >= pageSize}>
+            <div class="blog-card-content">
+              <div class="blog-meta"><span>{collectionLabel(event.collection)}</span><time>{formatDate(event.date)}</time></div>
+              <h3>{event.title}</h3>
+              <p>{blogDescription(event)}</p>
+              <div class="blog-bottom">
+                <div class="blog-tags">{blogTags(event).map((tag) => <span>#{tag}</span>)}</div>
+                <span class="blog-open">打开文章 <b>↗</b></span>
+              </div>
+            </div>
+            <span class="blog-arrow">›</span>
+          </a>
+        )) : <p class="empty-message">还没有博客记录，新的文章会出现在这里。</p>}
+      </div>
+      {pageCount > 1 && (
+        <nav class="blog-pagination" data-blog-pagination aria-label="博客列表分页">
+          <button type="button" data-page-prev disabled>上一页</button>
+          <span data-page-status>第 1 / {pageCount} 页</span>
+          <button type="button" data-page-next>下一页</button>
+        </nav>
+      )}
+    </section>
+
+    <aside class="explore-column" aria-label="站点统计和日历">
+      <section class="card side-card stats-card">
+        <div class="side-heading"><span>站点统计</span><span class="side-mark">概览</span></div>
+        <div class="site-stats">
+          <div><span class="stat-icon">▤</span><span>文章</span><b>{home.stats.total}</b></div>
+          <div><span class="stat-icon">□</span><span>分类</span><b>4</b></div>
+          <div><span class="stat-icon">◇</span><span>标签</span><b>{tags.length}</b></div>
+          <div><span class="stat-icon">≋</span><span>最近活动</span><b>{blogs.length}<small> 条</small></b></div>
+        </div>
+      </section>
+
+      <section class="card side-card calendar-card" id="calendar">
+        <div class="side-heading"><span>记录日历</span><span class="side-mark">{calendarYear}</span></div>
+        <div class="calendar-head"><button type="button" aria-label="上个月">‹</button><strong>{monthLabel}</strong><button type="button" aria-label="下个月">›</button></div>
+        <div class="calendar-grid">
+          {['日', '一', '二', '三', '四', '五', '六'].map((weekday) => <span class="calendar-weekday">{weekday}</span>)}
+          {calendarCells.map((day) => day ? <span class:list={['calendar-day', { today: day === now.getUTCDate() }]}>{day}</span> : <span class="calendar-empty"></span>)}
+        </div>
+      </section>
+
+      <section class="card side-card archive-tip">
+        <p class="side-kicker">继续探索</p>
+        <strong>沿着日期，<br />回看留下的内容。</strong>
+        <a href="/archive/">进入年度归档 <span>↗</span></a>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="personal-footer">
+    <span>© 2026 seren-spark</span>
+    <span>个人知识档案 / 中文界面</span>
+  </footer>
+</main>
+
+<script>
+  const copyWechat = document.querySelector<HTMLButtonElement>('[data-copy-wechat]');
+  const wechatStatus = document.querySelector<HTMLElement>('[data-wechat-status]');
+  copyWechat?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('HBR_0714');
+      if (wechatStatus) wechatStatus.textContent = '已复制';
+    } catch {
+      if (wechatStatus) wechatStatus.textContent = '请长按或选中微信号复制';
+    }
+  });
+
+  const personalNav = document.querySelector<HTMLElement>('.personal-nav');
+  const personalHero = document.querySelector<HTMLElement>('.personal-hero');
+
+  if (personalNav && personalHero) {
+    const syncNavigationVisibility = () => {
+      personalNav.classList.toggle(
+        'is-over-content',
+        personalHero.getBoundingClientRect().bottom <= personalNav.offsetHeight,
+      );
+    };
+
+    syncNavigationVisibility();
+    window.addEventListener('scroll', syncNavigationVisibility, { passive: true });
+    window.addEventListener('resize', syncNavigationVisibility);
+  }
+
+  const pagination = document.querySelector<HTMLElement>('[data-blog-pagination]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-blog-card]')];
+  if (pagination && cards.length > 0) {
+    const pageSize = 6;
+    const pageCount = Math.ceil(cards.length / pageSize);
+    let currentPage = 1;
+    const previous = pagination.querySelector<HTMLButtonElement>('[data-page-prev]');
+    const next = pagination.querySelector<HTMLButtonElement>('[data-page-next]');
+    const status = pagination.querySelector<HTMLElement>('[data-page-status]');
+
+    const renderPage = () => {
+      cards.forEach((card, index) => {
+        card.hidden = index < (currentPage - 1) * pageSize || index >= currentPage * pageSize;
+      });
+      if (previous) previous.disabled = currentPage === 1;
+      if (next) next.disabled = currentPage === pageCount;
+      if (status) status.textContent = `第 ${currentPage} / ${pageCount} 页`;
+    };
+
+    previous?.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage -= 1;
+        renderPage();
+      }
+    });
+    next?.addEventListener('click', () => {
+      if (currentPage < pageCount) {
+        currentPage += 1;
+        renderPage();
+      }
+    });
+    renderPage();
+  }
+</script>
+<style>
+  :global(:root) {
+    --personal-body: var(--font-sans, Inter, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif);
+    --personal-display: Inter, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --personal-paper: #fff;
+    --personal-background-pattern: linear-gradient(90deg, rgba(60, 10, 30, .05) 3%, transparent 0), linear-gradient(1turn, rgba(60, 10, 30, .05) 3%, transparent 0);
+    --personal-paper-deep: #eef1f4;
+    --personal-ink: #092d40;
+    --personal-muted: #738391;
+    --personal-line: rgba(9, 45, 64, .10);
+    --personal-orange: #0b1f2a;
+    --personal-orange-soft: #edf1f3;
+    --personal-blue-soft: #f0f3f5;
+    --personal-shadow: 0 8px 20px rgba(9, 45, 64, .06), 0 1px 3px rgba(9, 45, 64, .04);
+  }
+
+  .personal-home { min-height: 100vh; color: var(--personal-ink); background-color: var(--personal-paper); background-image: var(--personal-background-pattern); background-size: 20px 20px; font-family: var(--font-sans, Inter, "Noto Sans SC", sans-serif); }
+  .personal-nav, .personal-layout, .personal-footer { width: min(calc(100% - 4rem), 88rem); margin: 0 auto; }
+  .personal-nav { position: sticky; top: 0; z-index: 20; min-height: 4.1rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: -4.1rem; padding: 0 1.1rem; border-radius: 0 0 .7rem .7rem; color: #fff; background: rgba(9, 45, 64, .14); box-shadow: 0 4px 12px rgba(9, 45, 64, .06); backdrop-filter: blur(10px); transition: color .25s ease, transform .25s ease, background-color .25s ease, box-shadow .25s ease; }
+  .personal-nav.is-over-content { color: var(--personal-ink); background: rgba(255, 255, 255, .95); box-shadow: 0 4px 12px rgba(9, 45, 64, .08); }
+  .personal-brand { display: inline-flex; align-items: center; gap: .65rem; color: inherit; text-decoration: none; }
+  .brand-seal { display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-family: Georgia, serif; font-size: 1.05rem; font-style: italic; }
+  .personal-brand > span:last-child { display: flex; flex-direction: column; gap: .12rem; }
+  .brand-title { display: inline-flex; align-items: baseline; font-family: "Baskerville", "Palatino Linotype", Georgia, serif; font-size: 1.18rem; font-style: italic; font-weight: 600; letter-spacing: -.055em; line-height: 1; }
+  .brand-dot { color: var(--personal-orange); }
+  .personal-brand small { margin-top: .12rem; color: var(--personal-muted); font-family: var(--font-sans, sans-serif); font-size: .54rem; letter-spacing: .1em; }
+  .desktop-nav { display: flex; align-items: center; gap: 1.7rem; }
+  .desktop-nav a, .nav-action { color: var(--personal-muted); text-decoration: none; font-size: .72rem; transition: color .2s ease; }
+  .desktop-nav a:hover, .desktop-nav a.active, .nav-action:hover { color: var(--personal-orange); }
+  .personal-nav:not(.is-over-content) .desktop-nav a, .personal-nav:not(.is-over-content) .nav-action { color: rgba(255, 255, 255, .88); }
+  .personal-nav:not(.is-over-content) .personal-brand small { color: rgba(255, 255, 255, .7); }
+  .personal-nav:not(.is-over-content) .brand-dot, .personal-nav:not(.is-over-content) .nav-action span { color: #fff; }
+  .personal-nav:not(.is-over-content) .desktop-nav a:hover, .personal-nav:not(.is-over-content) .desktop-nav a.active, .personal-nav:not(.is-over-content) .nav-action:hover { color: #fff; }
+  .desktop-nav a.active { position: relative; }
+  .desktop-nav a.active::after { content: ''; position: absolute; left: 50%; bottom: -1.55rem; width: .25rem; height: .25rem; border-radius: 50%; background: var(--personal-orange); transform: translateX(-50%); }
+  .personal-nav:not(.is-over-content) .desktop-nav a.active::after { background: #fff; }
+  .nav-action { display: inline-flex; align-items: center; gap: .4rem; }
+  .nav-action span, .hero-link span, .blog-heading a span, .blog-open b, .archive-tip a span { color: var(--personal-orange); font-size: 1rem; }
+  .nav-action span { font-size: .9rem; }
+
+  .card { border: 0; border-radius: .7rem; background: #fff; box-shadow: var(--personal-shadow); transition: transform .24s ease, box-shadow .24s ease; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(9, 45, 64, .10), 0 3px 8px rgba(9, 45, 64, .05); }
+  .personal-hero:hover { transform: none; }
+  .personal-hero { position: relative; width: min(calc(100% - 4rem), 88rem); height: clamp(24rem, 75vh, 52rem); min-height: 0; display: flex; flex-direction: column; justify-content: space-between; margin: 0 auto; overflow: hidden; border-radius: 1rem; padding: 1.35rem 1.75rem calc(15vh + 1.25rem); color: #fff; background: #06283a url('/media/breathstone-base.jpg') center 48% / cover no-repeat; }
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-video { z-index: 0; object-fit: cover; object-position: center; }
+
+  .personal-hero > :not(.hero-video) { position: relative; z-index: 1; }
+  .hero-meta, .hero-content, .hero-status, .blog-heading, .blog-meta, .blog-bottom, .music-time, .music-controls, .calendar-head { display: flex; align-items: center; justify-content: space-between; }
+  .hero-meta { color: rgba(255, 255, 255, .76); font-size: .58rem; letter-spacing: .1em; }
+  .hero-content { align-items: end; gap: 2rem; }
+  .hero-content h1 { margin: 1.25rem 0 .6rem; font-family: Georgia, "Songti SC", serif; font-size: clamp(1.8rem, 2.5vw, 2.65rem); font-weight: 400; letter-spacing: -.06em; line-height: 1.25; }
+  .hero-content h1 em { color: #fff; font-style: normal; }
+  .hero-content p { margin: 0; color: rgba(255, 255, 255, .74); font-size: .75rem; line-height: 1.8; }
+  .hero-link { flex: 0 0 auto; padding-bottom: .45rem; color: #fff; text-decoration: none; font-size: .65rem; transition: transform .2s, color .2s; } .hero-link:hover { color: var(--personal-orange-soft); transform: translateX(3px); }
+  .hero-status { justify-content: flex-start; gap: .5rem; margin-top: 1.05rem; padding-top: .75rem; border-top: 1px solid rgba(255, 255, 255, .24); color: rgba(255, 255, 255, .8); font-size: .6rem; }
+  .hero-status i { width: .42rem; height: .42rem; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .23rem rgba(255, 255, 255, .18); }
+  .hero-status small { margin-left: .4rem; color: rgba(255, 255, 255, .64); }
+
+  .personal-layout { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(13rem, 15rem) minmax(0, 1fr) minmax(14rem, 17rem); gap: 1.35rem; align-items: start; margin-top: -15vh; padding: 1.35rem 0 4rem; }
+  .personal-sidebar, .explore-column { display: grid; align-content: start; gap: 1rem; position: sticky; top: 1.4rem; }
+  .main-column { min-width: 0; }
+  .profile-card { padding: 0 1.1rem 1.15rem; text-align: center; }
+  .profile-cover { height: 8rem; margin-inline: -1.1rem; border-radius: .7rem .7rem 0 0; background-image: linear-gradient(to bottom, transparent 50%, #fff 100%), url('/media/liuyan.jpg'); background-position: center, center 35%; background-size: cover; }
+  .profile-avatar { position: relative; display: grid; width: 4.5rem; height: 4.5rem; place-items: center; margin: -2.25rem auto 1rem; overflow: hidden; border: 3px solid #fff; border-radius: 50%; background: var(--personal-blue-soft); box-shadow: inset 0 0 0 1px rgba(9, 45, 64, .05); }
+  .profile-avatar strong { position: relative; z-index: 1; color: var(--personal-ink); font-family: Georgia, serif; font-size: 1.45rem; font-weight: 400; letter-spacing: .08em; }
+  .avatar-ring { position: absolute; border: 1px solid rgba(6, 40, 58, .18); border-radius: 50%; transform: rotate(-28deg); }
+  .ring-a { width: 4.8rem; height: 2rem; }
+  .ring-b { width: 2rem; height: 4.8rem; transform: rotate(30deg); }
+  .side-kicker { margin: 0; color: var(--personal-orange); font-size: .6rem; letter-spacing: .12em; line-height: 1.5; }
+  .profile-card h2 { margin: .35rem 0 .28rem; font-family: Georgia, "Songti SC", serif; font-size: 1.65rem; font-weight: 400; letter-spacing: -.04em; }
+  .typewriter-name { display: inline-block; width: 0; max-width: 100%; overflow: hidden; white-space: nowrap; vertical-align: bottom; border-right: .12rem solid var(--personal-orange); animation: name-typing 1.7s steps(11, end) .25s forwards, cursor-blink .75s step-end infinite; }
+  @keyframes name-typing { from { width: 0; } to { width: 7.2em; } }
+  @keyframes cursor-blink { 50% { border-color: transparent; } }
+  .profile-bio { margin: 0; color: var(--personal-muted); font-size: .68rem; line-height: 1.7; }
+  .profile-links { display: flex; justify-content: center; gap: .5rem; margin-top: 1rem; }
+  .profile-social { position: relative; display: grid; flex: 0 0 36px; width: 36px; height: 36px; place-items: center; padding: 0; border: 0; border-radius: 50%; color: var(--personal-muted); background: var(--personal-paper); box-shadow: 0 2px 8px rgba(9, 45, 64, .05); text-decoration: none; cursor: pointer; transition: color .2s, background .2s, box-shadow .2s; }
+  .profile-social:hover, .profile-social:focus-visible { color: var(--personal-ink); background: var(--personal-orange-soft); box-shadow: 0 4px 10px rgba(11, 31, 42, .12); }
+  .profile-social:focus-visible { outline: 2px solid var(--personal-muted); outline-offset: 3px; }
+  .wechat-contact { width: min(17rem, calc(100vw - 2rem)); margin: auto; padding: 1.5rem; border: 1px solid var(--personal-line); border-radius: 8px; color: var(--personal-ink); background: var(--personal-paper); box-shadow: var(--personal-shadow); font-family: var(--personal-body); text-align: center; }
+  .wechat-contact::backdrop { background: rgba(0, 0, 0, .16); }
+  .wechat-contact p { margin: 0 0 .5rem; color: var(--personal-muted); font-size: .8rem; }
+  .wechat-contact strong { display: block; font-size: 1.25rem; letter-spacing: 0; user-select: all; }
+  .wechat-contact button { display: block; margin: 1rem auto 0; padding: .5rem .85rem; border: 1px solid var(--personal-line); border-radius: 6px; color: var(--personal-ink); background: var(--personal-paper); cursor: pointer; font: inherit; font-size: .8rem; }
+  .wechat-contact button:hover { background: var(--personal-orange-soft); }
+  .copy-status { display: block; min-height: 1.5em; margin-top: .5rem; color: var(--personal-muted); font-size: .75rem; }
+  .social-tooltip { position: absolute; z-index: 5; bottom: calc(100% + 8px); left: 50%; width: max-content; max-width: 11rem; padding: .35rem .5rem; border: 1px solid var(--personal-line); border-radius: 4px; color: var(--personal-ink); background: var(--personal-paper); box-shadow: var(--personal-shadow); font-family: var(--personal-body); font-size: .7rem; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-align: center; visibility: hidden; opacity: 0; transform: translateX(-50%); pointer-events: none; }
+  .profile-social:hover .social-tooltip, .profile-social:focus-visible .social-tooltip { visibility: visible; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .profile-social { transition: none; } }
+  .profile-signature { margin: 1rem 0 .85rem; color: var(--personal-muted); font-family: Georgia, "Songti SC", serif; font-size: .75rem; line-height: 1.7; }
+  .profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin: .9rem 0 0; }
+  .profile-stats div + div { padding-left: .7rem; }
+  .profile-stats dt { color: var(--personal-muted); font-size: .55rem; }
+  .profile-stats dd { margin: .2rem 0 0; color: var(--personal-ink); font-family: Georgia, serif; font-size: 1.25rem; font-weight: 400; }
+
+  .side-card { padding: 1rem; }
+  .side-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: .9rem; color: var(--personal-muted); font-size: .65rem; letter-spacing: .08em; }
+  .side-mark { color: var(--personal-orange); font-size: .56rem; }
+  .music-main { display: flex; align-items: center; gap: .7rem; }
+  .music-disc { display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border-radius: .55rem; color: var(--personal-orange); background: var(--personal-orange-soft); font-size: 1.45rem; }
+  .music-main strong, .music-main small { display: block; }
+  .music-main strong { font-size: .72rem; font-weight: 500; }
+  .music-main small { max-width: 9rem; margin-top: .22rem; color: var(--personal-muted); font-size: .56rem; line-height: 1.5; }
+  .music-progress { height: .22rem; margin-top: 1rem; overflow: hidden; border-radius: 999px; background: var(--personal-paper-deep); }
+  .music-progress span { display: block; width: 42%; height: 100%; border-radius: inherit; background: var(--personal-orange); }
+  .music-time { margin-top: .35rem; color: var(--personal-muted); font-size: .52rem; }
+  .music-controls { justify-content: center; gap: 1rem; margin-top: .8rem; color: var(--personal-muted); font-size: .72rem; }
+  .music-controls b { display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; color: #fff; background: var(--personal-orange); font-size: .62rem; box-shadow: 0 4px 10px rgba(11, 31, 42, .16); }
+  .category-list { display: grid; gap: .22rem; }
+  .category-list a { display: flex; align-items: center; justify-content: space-between; padding: .45rem .5rem; border-radius: .4rem; color: var(--personal-ink); text-decoration: none; font-size: .68rem; transition: color .2s, background .2s, transform .2s; }
+  .category-list a:hover { color: var(--personal-orange); background: var(--personal-paper-deep); transform: translateX(2px); }
+  .category-list b { display: grid; min-width: 1.45rem; height: 1.45rem; place-items: center; border-radius: .4rem; color: var(--personal-orange); background: var(--personal-orange-soft); font-size: .62rem; font-weight: 500; }
+  .tags-card { padding-bottom: 1.15rem; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: .38rem; }
+  .tag-list a { padding: .35rem .55rem; border-radius: .4rem; color: var(--personal-ink); background: var(--personal-orange-soft); text-decoration: none; font-size: .6rem; transition: color .2s, background .2s, transform .2s, box-shadow .2s; }
+  .tag-list a.tag-pastel-0 { background: #f8ddd9; }
+  .tag-list a.tag-pastel-1 { background: #f7e8c8; }
+  .tag-list a.tag-pastel-2 { background: #e4efd8; }
+  .tag-list a.tag-pastel-3 { background: #e1e8f6; }
+  .tag-list a.tag-pastel-4 { background: #eee1f2; }
+  .tag-list a.tag-pastel-5 { background: #f6e4d3; }
+  .tag-list a:hover { color: #fff; background: var(--personal-orange); box-shadow: 0 4px 10px rgba(11, 31, 42, .14); transform: translateY(-2px); }
+
+  .blog-toolbar { display: flex; align-items: center; gap: .4rem; min-height: 2.55rem; padding: .32rem .45rem; overflow-x: auto; border-radius: .55rem; background: #fff; box-shadow: 0 4px 12px rgba(9, 45, 64, .05); }
+  .toolbar-home, .toolbar-chip { flex: 0 0 auto; color: var(--personal-muted); text-decoration: none; font-size: .6rem; }
+  .toolbar-home { display: grid; width: 1.85rem; height: 1.85rem; place-items: center; border-radius: .48rem; color: #fff; background: var(--personal-orange); font-size: .9rem; }
+  .toolbar-chip { padding: .4rem .58rem; border-radius: .4rem; background: #fff; transition: color .2s, background .2s, box-shadow .2s, transform .2s; }
+  .toolbar-chip:hover, .toolbar-chip.is-active { color: var(--personal-orange); background: var(--personal-orange-soft); box-shadow: 0 3px 8px rgba(11, 31, 42, .10); transform: translateY(-1px); }
+  .blog-heading { align-items: end; margin: 1.75rem 0 .85rem; }
+  .blog-heading h2 { margin: .3rem 0 0; font-family: Georgia, "Songti SC", serif; font-size: 1.85rem; font-weight: 400; letter-spacing: -.05em; }
+  .blog-heading a { color: var(--personal-muted); text-decoration: none; font-size: .62rem; }
+  .blog-heading a:hover { color: var(--personal-orange); }
+  .blog-list { display: grid; gap: .85rem; }
+  .blog-card[hidden] { display: none; }
+  .blog-pagination { display: flex; align-items: center; justify-content: flex-end; gap: .7rem; margin-top: 1.25rem; }
+  .blog-pagination button { min-width: 4.5rem; padding: .55rem .75rem; border: 0; border-radius: .55rem; color: var(--personal-ink); background: var(--personal-paper); box-shadow: 0 .45rem 1rem rgba(9, 45, 64, .07); cursor: pointer; font: inherit; font-size: .72rem; transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease; }
+  .blog-pagination button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 .65rem 1.15rem rgba(9, 45, 64, .1); }
+  .blog-pagination button:disabled { cursor: not-allowed; opacity: .4; }
+  .blog-pagination span { min-width: 5.2rem; color: var(--personal-muted); font-size: .7rem; text-align: center; }
+  .blog-card { position: relative; display: block; overflow: hidden; border-radius: .72rem; color: inherit; background: #fff; box-shadow: 0 8px 18px rgba(9, 45, 64, .06), 0 1px 4px rgba(9, 45, 64, .04); text-decoration: none; transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(9, 45, 64, .10), 0 3px 8px rgba(9, 45, 64, .05); }
+  .blog-card-accent { background: #fff; }
+  .blog-card-content { padding: 1.05rem 3.4rem 1rem 1.15rem; }
+  .blog-meta { color: var(--personal-muted); font-size: .58rem; }
+  .blog-meta span { color: var(--personal-orange); }
+  .blog-card h3 { margin: .62rem 0 .42rem; font-family: Georgia, "Songti SC", serif; font-size: 1.28rem; font-weight: 400; letter-spacing: -.04em; line-height: 1.3; }
+  .blog-card p { margin: 0; color: var(--personal-muted); font-size: .68rem; line-height: 1.75; }
+  .blog-bottom { align-items: end; margin-top: 1rem; }
+  .blog-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .blog-tags span { padding: .18rem .35rem; border-radius: .28rem; color: var(--personal-ink); background: #e8eef1; font-size: .56rem; }
+  .blog-tags span:nth-child(2n) { background: #f8e8cf; }
+  .blog-tags span:nth-child(3n) { background: #e3efd9; }
+  .blog-open { color: var(--personal-ink); font-size: .6rem; }
+  .blog-open b { margin-left: .2rem; font-weight: 400; }
+  .blog-arrow { position: absolute; top: .85rem; right: .8rem; display: grid; width: 1.75rem; height: calc(100% - 1.7rem); place-items: center; border-radius: .5rem; color: var(--personal-orange); background: rgba(255, 255, 255, .7); font-size: 1.75rem; transition: color .2s, background .2s, transform .2s; }
+  .blog-card:hover .blog-arrow { color: #fff; background: var(--personal-orange); transform: translateX(2px); }
+  .empty-message { padding: 2rem; color: var(--personal-muted); text-align: center; }
+
+  .site-stats { display: grid; gap: .15rem; }
+  .site-stats div { display: grid; grid-template-columns: 1.4rem 1fr auto; gap: .35rem; align-items: center; padding: .48rem .35rem; color: var(--personal-muted); font-size: .64rem; }
+  .site-stats b { color: var(--personal-ink); font-size: .72rem; font-weight: 600; }
+  .site-stats b small { color: var(--personal-muted); font-size: .55rem; font-weight: 400; }
+  .stat-icon { color: var(--personal-orange); font-size: .85rem; }
+  .calendar-head { margin: 1rem 0 .7rem; }
+  .calendar-head button { border: 0; color: var(--personal-muted); background: transparent; font-size: 1.05rem; cursor: pointer; }
+  .calendar-head button:hover { color: var(--personal-orange); }
+  .calendar-head strong { font-family: Georgia, "Songti SC", serif; font-size: 1.05rem; font-weight: 400; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .12rem; color: var(--personal-ink); font-size: .58rem; text-align: center; }
+  .calendar-weekday { padding-bottom: .3rem; color: var(--personal-muted); font-size: .52rem; }
+  .calendar-day, .calendar-empty { display: grid; min-height: 1.45rem; place-items: center; }
+  .calendar-day { border-radius: .35rem; }
+  .calendar-day.today { color: var(--personal-orange); background: var(--personal-orange-soft); font-weight: 600; box-shadow: 0 3px 8px rgba(11, 31, 42, .10); }
+  .archive-tip { background: #fff; }
+  .archive-tip strong { display: block; margin: 1rem 0; font-family: Georgia, "Songti SC", serif; font-size: 1.05rem; font-weight: 400; line-height: 1.6; }
+  .archive-tip a { color: var(--personal-ink); text-decoration: none; font-size: .62rem; }
+  .personal-footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0 1.6rem; color: var(--personal-muted); font-size: .58rem; box-shadow: 0 -2px 8px rgba(9, 45, 64, .025); }
+
+  /* 参考 imalun 的紧凑无衬线字面：标题更利落，中文阅读更接近组件化博客主题。 */
+  .personal-home { font-family: var(--personal-body); }
+  .personal-brand > span:last-child,
+  .hero-content h1,
+  .profile-card h2,
+  .blog-heading h2,
+  .blog-card h3,
+  .calendar-head strong,
+  .archive-tip strong { font-family: var(--personal-display); font-weight: 700; }
+  .profile-signature,
+  .profile-stats dd { font-family: var(--personal-display); }
+  @media (max-width: 70rem) {
+    .personal-layout { grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr); }
+    .explore-column { position: static; grid-column: 1 / -1; grid-template-columns: repeat(2, 1fr); align-items: start; }
+    .archive-tip { grid-column: 1 / -1; }
+  }
+  @media (max-width: 46rem) {
+    .personal-nav, .personal-hero, .personal-layout, .personal-footer { width: min(calc(100% - 1.5rem), 40rem); }
+    .personal-nav { min-height: 3.7rem; margin-bottom: -3.7rem; }
+    .desktop-nav { display: none; }
+    .personal-hero { height: clamp(24rem, 72vh, 34rem); border-radius: .8rem; padding: 1.1rem 1rem calc(8vh + .95rem); }
+    .hero-content { display: block; }
+    .hero-content h1 { margin-top: 1.2rem; font-size: clamp(1.65rem, 8vw, 2.2rem); }
+    .hero-link { display: inline-block; margin-top: 1rem; }
+    .hero-status small { display: none; }
+    .personal-layout { display: flex; flex-direction: column; gap: 1rem; margin-top: -8vh; padding-top: 1rem; }
+    .personal-sidebar, .explore-column { width: 100%; position: static; }
+    .profile-cover { height: 10rem; }
+    .explore-column { display: grid; grid-template-columns: 1fr; }
+    .personal-footer { flex-direction: column; }
+  }
+  @media (max-width: 28rem) {
+    .nav-action { display: none; }
+    .blog-card-content { padding-right: 3rem; }
+    .blog-card h3 { font-size: 1.12rem; }
+    .blog-bottom { align-items: start; flex-direction: column; gap: .55rem; }
+  }
+</style>

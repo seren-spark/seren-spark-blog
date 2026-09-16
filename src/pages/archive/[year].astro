@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getJournalArchive } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const archive = await getJournalArchive();
+  return [...archive.entries()].map(([year, entries]) => ({
+    params: { year: String(year) },
+    props: { year, entries },
+  }));
+}
+
+type Props = {
+  year: number;
+  entries: CollectionEntry<'journal'>[];
+};
+
+const { year, entries } = Astro.props as Props;
+---
+
+<SiteLayout title={`${year} 年归档`} active="archive" description={`${year} 年的博客归档。`}>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">ARCHIVE / YEAR {year}</p>
+      <h1 class="page-title">{year} 年</h1>
+      <p class="page-lede">这一年留下了 {entries.length} 条日志，按事情发生的日期排列。</p>
+    </div>
+    <a class="back-link" href="/archive/">返回全部归档 ↩</a>
+  </div>
+  <ul class="content-list">
+    {entries.map((entry) => (
+      <li>
+        <time datetime={entry.data.occurredAt.toISOString()}>
+          {entry.data.occurredAt.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+        </time>
+        <a href={`/journal/${entry.id}/`}>{entry.data.title}</a>
+        <span class="list-meta">博客</span>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>

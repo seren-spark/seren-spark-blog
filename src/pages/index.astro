@@ -1,0 +1,74 @@
+---
+import HomeDashboard from '../components/home/HomeDashboard.astro';
+import BreathstoneBanner from '../components/home/BreathstoneBanner.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+
+<SiteLayout title="seren-spark‘s blog" exactTitle active="home" description="Seren Spark 的个人知识档案与长期记录。">
+  <BreathstoneBanner slot="banner" />
+  <HomeDashboard />
+</SiteLayout>
+<style is:global>
+  /* 首页按 Hero、个人档案、开源项目、页脚四屏吸附，内容区内部保持自然阅读。 */
+  body:has(.stone-banner) {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  body:has(.stone-banner) :is(.stone-banner, [data-home-screen]) {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body:has(.stone-banner) {
+      scroll-behavior: auto;
+      scroll-snap-type: none;
+    }
+  }
+</style>
+
+<script>
+  const homeScroll = document.querySelector<HTMLElement>('.stone-banner');
+  const homeScreens = [
+    homeScroll,
+    ...Array.from(document.querySelectorAll<HTMLElement>('[data-home-screen]')),
+  ].filter((screen): screen is HTMLElement => Boolean(screen));
+  const motionReduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (homeScreens.length > 1) {
+    let locked = false;
+
+    const screenTop = (screen: HTMLElement) => screen.getBoundingClientRect().top + window.scrollY;
+    const nearestScreenIndex = () => {
+      const currentTop = window.scrollY;
+      return homeScreens.reduce((nearest, screen, index) => {
+        return Math.abs(screenTop(screen) - currentTop) < Math.abs(screenTop(homeScreens[nearest]) - currentTop) ? index : nearest;
+      }, 0);
+    };
+
+    const goTo = (index: number) => {
+      const target = homeScreens[Math.max(0, Math.min(homeScreens.length - 1, index))];
+      if (!target) return;
+      locked = true;
+      window.scrollTo({
+        top: screenTop(target),
+        behavior: motionReduced.matches ? 'auto' : 'smooth',
+      });
+      window.setTimeout(() => { locked = false; }, motionReduced.matches ? 80 : 850);
+    };
+
+    window.addEventListener('wheel', (event) => {
+      if (motionReduced.matches || locked || Math.abs(event.deltaY) < 12) return;
+
+      const currentIndex = nearestScreenIndex();
+      const targetIndex = currentIndex + (event.deltaY > 0 ? 1 : -1);
+      const currentDistance = Math.abs(screenTop(homeScreens[currentIndex]) - window.scrollY);
+
+      if (currentDistance < window.innerHeight * .45 && targetIndex >= 0 && targetIndex < homeScreens.length) {
+        event.preventDefault();
+        goTo(targetIndex);
+      }
+    }, { passive: false });
+  }
+</script>

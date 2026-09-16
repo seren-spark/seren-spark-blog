@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.astro/
+.npm-cache/
+.env
+.env.*
+!.env.example
+.workbuddy/
+.banner-reference.png
+.knowledge-before.jpg
+.knowledge-before.png
+.knowledge-review-mobile.png
+.knowledge-review.png

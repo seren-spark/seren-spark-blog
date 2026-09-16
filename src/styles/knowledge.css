@@ -1,0 +1,325 @@
+@layer starlight.base, starlight.core, starlight.content, celestia, knowledge;
+
+:root,
+::backdrop {
+  --sl-sidebar-width: 17rem;
+  --knowledge-toc-width: 15rem;
+  --knowledge-paper: #fff;
+  --knowledge-grid-line: rgb(60 10 30 / 5%);
+  --knowledge-ink: #193343;
+  --knowledge-muted-ink: #526575;
+  --knowledge-soft-border: rgb(25 51 67 / 14%);
+  --knowledge-code-surface: rgb(25 51 67 / 6%);
+  --sl-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --sl-content-width: 58rem;
+  --sl-content-gap-y: 1.15rem;
+  --sl-line-height: 1.85;
+  --sl-line-height-headings: 1.25;
+}
+
+:root[data-theme="dark"] {
+  --knowledge-paper: #11191d;
+  --knowledge-grid-line: rgb(187 208 217 / 5%);
+  --knowledge-ink: #e7eef1;
+  --knowledge-muted-ink: #b8c5ca;
+  --knowledge-soft-border: rgb(205 224 232 / 15%);
+  --knowledge-code-surface: rgb(205 224 232 / 8%);
+}
+
+@media (min-width: 50rem) {
+  html[data-knowledge-sidebar-collapsed] {
+    --sl-sidebar-width: 3rem;
+  }
+}
+
+/* Keep Celestia's native components; only tune column widths and collapse behavior. */
+@layer knowledge {
+  #starlight__sidebar {
+    border-inline-end: 1px solid var(--sl-color-hairline-shade);
+    background-color: var(--knowledge-paper) !important;
+  }
+
+  /* Give the documentation tree room to breathe while keeping the TOC compact. */
+  #starlight__sidebar .sidebar-content ul {
+    --sl-sidebar-item-padding-inline: 0.72rem;
+  }
+
+  #starlight__sidebar .sidebar-content .large {
+    font-size: 1.08rem;
+  }
+
+  #starlight__sidebar .sidebar-content a {
+    font-size: 0.98rem;
+    line-height: 1.55;
+    padding-block: 0.42rem;
+  }
+
+  #starlight__sidebar .sidebar-content summary {
+    padding-block: 0.38rem;
+    line-height: 1.55;
+  }
+
+  #starlight__sidebar .sidebar-content ul ul li {
+    margin-block: 0.12rem;
+  }
+
+  #starlight__sidebar .sidebar-content .top-level > li + li {
+    margin-top: 0.82rem;
+  }
+
+  .main-pane {
+    min-height: calc(100vh - var(--sl-nav-height));
+    background-color: var(--knowledge-paper);
+    background-image:
+      linear-gradient(90deg, var(--knowledge-grid-line) 3%, transparent 0),
+      linear-gradient(1turn, var(--knowledge-grid-line) 3%, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  /* A quiet editorial reading column: enough width for code, without stretching prose. */
+  main > .content-panel {
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  main > .content-panel + .content-panel {
+    padding-block-start: clamp(1.25rem, 2vw, 1.75rem);
+    border-top-color: var(--knowledge-soft-border);
+  }
+
+  main > .content-panel:first-child {
+    padding-block-end: clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  main > .content-panel > .sl-container {
+    width: min(100%, var(--sl-content-width));
+  }
+
+  main > .content-panel:first-child h1,
+  .sl-markdown-content :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
+    color: var(--knowledge-ink);
+    letter-spacing: -0.018em;
+  }
+
+  main > .content-panel:first-child h1 {
+    margin-block: 0.5rem 1.25rem;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 650;
+  }
+
+  .sl-markdown-content {
+    color: var(--knowledge-ink);
+    font-size: 1rem;
+    line-height: 1.85;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+  }
+
+  .sl-markdown-content p,
+  .sl-markdown-content li {
+    color: var(--knowledge-muted-ink);
+  }
+
+  .sl-markdown-content p {
+    margin-block: 0.9rem;
+  }
+
+  .sl-markdown-content .sl-heading-wrapper {
+    display: block;
+    margin-block: 2rem 0.85rem;
+    font-weight: 650;
+  }
+
+  .sl-markdown-content > .sl-heading-wrapper:first-child {
+    margin-block-start: 0.5rem;
+  }
+
+  .sl-markdown-content .sl-heading-wrapper.level-h2 {
+    padding-block-end: 0.55rem;
+    border-block-end: 1px solid var(--knowledge-soft-border);
+  }
+
+  .sl-markdown-content :is(h2, h3, h4, h5, h6) {
+    margin: 0;
+  }
+
+  .sl-markdown-content h2 {
+    font-size: clamp(1.45rem, 2.2vw, 1.8rem);
+  }
+
+  .sl-markdown-content h3 {
+    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
+  }
+
+  .sl-markdown-content h4 {
+    font-size: 1.08rem;
+  }
+
+  .sl-markdown-content :is(ul, ol) {
+    margin-block: 0.9rem 1.25rem;
+  }
+
+  .sl-markdown-content li {
+    line-height: 1.8;
+  }
+
+  .sl-markdown-content strong {
+    color: var(--knowledge-ink);
+    font-weight: 700;
+  }
+
+  .sl-markdown-content a:not(:where(.not-content *)) {
+    color: var(--sl-color-text-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  .sl-markdown-content code:not(:where(.not-content *)) {
+    border: 1px solid var(--knowledge-soft-border);
+    border-radius: 0.35rem;
+    background: var(--knowledge-code-surface);
+    color: var(--knowledge-ink);
+    padding: 0.14rem 0.38rem;
+    font-size: 0.88em;
+  }
+
+  .sl-markdown-content pre:not(:where(.not-content *)) {
+    margin-block: 1.25rem 1.5rem;
+    border: 1px solid var(--knowledge-soft-border);
+    border-radius: 0.65rem;
+    box-shadow: 0 0.5rem 1.5rem rgb(25 51 67 / 7%);
+    padding: 1.1rem 1.25rem;
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+
+  .sl-markdown-content blockquote:not(:where(.not-content *)) {
+    margin-block: 1.25rem;
+    border-inline-start: 3px solid var(--sl-color-accent);
+    border-radius: 0 0.5rem 0.5rem 0;
+    background: rgb(25 51 67 / 4%);
+    color: var(--knowledge-muted-ink);
+    padding: 0.7rem 1rem;
+  }
+
+  .knowledge-table-scroll {
+    max-width: 100%;
+    margin-block: 1.25rem 1.5rem;
+    border: 1px solid var(--knowledge-soft-border);
+    border-radius: 0.65rem;
+    background: rgb(255 255 255 / 78%);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-color: rgb(25 51 67 / 30%) transparent;
+    scrollbar-width: thin;
+  }
+
+  [data-theme="dark"] .knowledge-table-scroll {
+    background: rgb(16 24 28 / 82%);
+  }
+
+  [data-theme="dark"] .sl-markdown-content blockquote:not(:where(.not-content *)) {
+    background: rgb(205 224 232 / 6%);
+  }
+
+  .sl-markdown-content table:not(:where(.not-content *)) {
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .sl-markdown-content :is(th, td):not(:where(.not-content *)) {
+    border-color: var(--knowledge-soft-border);
+    padding: 0.7rem 0.9rem;
+    line-height: 1.65;
+  }
+
+  .sl-markdown-content th:not(:where(.not-content *)) {
+    background: rgb(25 51 67 / 6%);
+    color: var(--knowledge-ink);
+    font-weight: 650;
+  }
+
+  .sl-markdown-content :is(img, figure, video, iframe):not(:where(.not-content *)) {
+    margin-block: 1.5rem;
+  }
+
+  .sl-markdown-content img:not(:where(.not-content *)) {
+    border: 1px solid var(--knowledge-soft-border);
+    border-radius: 0.65rem;
+    box-shadow: 0 0.6rem 1.6rem rgb(25 51 67 / 8%);
+  }
+
+  .sl-markdown-content hr:not(:where(.not-content *)) {
+    margin-block: 2.5rem;
+    border-color: var(--knowledge-soft-border);
+  }
+
+  .right-sidebar-container,
+  .right-sidebar {
+    background-color: var(--knowledge-paper);
+  }
+
+  /* The left sidebar can collapse to 3rem; keep the right TOC's inner column compact. */
+  .right-sidebar-panel .sl-container {
+    width: calc(var(--knowledge-toc-width) - 2 * var(--sl-sidebar-pad-x));
+    max-width: none;
+  }
+
+  .right-sidebar-panel h2 {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  .right-sidebar-panel a {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 72rem) {
+    .right-sidebar-container {
+      width: var(--knowledge-toc-width) !important;
+      flex: 0 0 var(--knowledge-toc-width);
+    }
+
+    .right-sidebar {
+      width: var(--knowledge-toc-width) !important;
+    }
+  }
+
+  @media (max-width: 49.99rem) {
+    main > .content-panel {
+      padding-inline: 1rem;
+    }
+
+    .sl-markdown-content {
+      font-size: 0.98rem;
+    }
+
+    .sl-markdown-content pre:not(:where(.not-content *)) {
+      margin-inline: -0.25rem;
+      padding-inline: 0.85rem;
+      border-radius: 0.5rem;
+    }
+  }
+
+  @media (min-width: 50rem) {
+    .main-frame,
+    #starlight__sidebar,
+    .sidebar-collapse-toggle {
+      transition: padding-inline-start 180ms ease, width 180ms ease, left 180ms ease;
+    }
+
+    #starlight__sidebar .sidebar-content {
+      transition: opacity 120ms ease;
+    }
+
+    html[data-knowledge-sidebar-collapsed] #starlight__sidebar .sidebar-content {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}

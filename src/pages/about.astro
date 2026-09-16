@@ -1,0 +1,15 @@
+---
+import { getHomeData } from '../lib/site-data';
+import PersonalHome from '../components/home/PersonalHome.astro';
+
+const home = await getHomeData();
+---
+
+<head lang='zh-CN'>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width' />
+  <title>个人主页 | Seren Spark Blog</title>
+  <meta name='description' content='Seren Spark 的个人档案、学习记录与项目时间线。' />
+</head>
+
+<PersonalHome home={home} />

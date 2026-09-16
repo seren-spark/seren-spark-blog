@@ -1,0 +1,27 @@
+---
+import { getTagIndex } from '../../lib/site-data';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const tags = await getTagIndex();
+---
+
+<SiteLayout title="标签" active="tags" description="按标签探索 Seren Spark Blog 的内容。">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">索引 / 标签</p>
+      <h1 class="page-title">标签</h1>
+      <p class="page-lede">标签不是分类的终点，而是把不同年份、不同内容类型重新连在一起的线索。</p>
+    </div>
+  </div>
+  {tags.length > 0 ? (
+    <div class="tag-grid">
+      {tags.map((tag, index) => (
+        <a class="tag-card" href={`/tags/${encodeURIComponent(tag.slug)}/`}>
+          <span class="card-index">0{index + 1} / TAG</span>
+          <span class="card-title">{tag.label}</span>
+          <span class="card-meta">{tag.count} 篇内容 ↗</span>
+        </a>
+      ))}
+    </div>
+  ) : <p class="empty-message">还没有标签。</p>}
+</SiteLayout>
