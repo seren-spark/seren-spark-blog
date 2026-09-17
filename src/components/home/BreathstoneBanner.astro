@@ -1,9 +1,11 @@
 ---
-const baseImage = '/media/breathstone-base.jpg';
-const flowerImage = '/media/breathstone-flowers.jpg';
-// Both layers are 1448 × 1086 — keep in sync with IMG_W / IMG_H in the script.
-const imgW = 1448;
-const imgH = 1086;
+import LetterImageTitle from './LetterImageTitle.astro';
+
+const baseImage = '/media/breathstone-base-4k-stone-sharp.jpg';
+const flowerImage = '/media/breathstone-flowers-4k.jpg';
+// Both layers are 3840 × 2160 — keep in sync with IMG_W / IMG_H in the script.
+const imgW = 3840;
+const imgH = 2160;
 ---
 
 <section class="stone-banner" id="top" aria-labelledby="stone-title" data-stone-banner>
@@ -55,7 +57,7 @@ const imgH = 1086;
     </svg>
   </div>
 
-  <h1 id="stone-title">SEREN SPARK<span class="visually-hidden"> — seren-spark‘s blog</span></h1>
+  <LetterImageTitle title="SEREN SPARK" />
 
   <div class="stone-caption">
     <p>THOUGHTS TAKE ROOT.</p>
@@ -83,8 +85,8 @@ const imgH = 1086;
     inset: 0;
     width: 100%;
     height: 100%;
-    /* source aspect ratio (1448 / 1086) — matches IMG_W / IMG_H */
-    --scene-fit: 1.3333;
+    /* source aspect ratio (3840 / 2160) — matches IMG_W / IMG_H */
+    --scene-fit: 1.7778;
   }
   .stone-layer {
     position: absolute;
@@ -110,11 +112,11 @@ const imgH = 1086;
     width: 100%;
     margin: 0;
     color: #080a07;
-    font-family: 'Bodoni MT', Didot, 'Times New Roman', serif;
-    font-size: clamp(5rem, 12.7vw, 15rem);
-    font-weight: 400;
-    line-height: .92;
-    letter-spacing: -.065em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(5rem, 11.8vw, 14rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.075em;
     text-align: center;
     white-space: nowrap;
     /* title is purely visual: never block pointer flow through to the scene */
@@ -176,7 +178,7 @@ const imgH = 1086;
   .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (max-width: 700px) {
     .stone-banner { height: max(40rem, 100svh); }
-    h1 { top: 9rem; font-size: 12.8vw; letter-spacing: -.07em; }
+    h1 { top: 9rem; font-size: 10.9vw; letter-spacing: -.07em; }
     .stone-caption { left: 1.25rem; bottom: 6rem; padding: .7rem .85rem; }
     .stone-caption p { font-size: .58rem; }
     .stone-caption span { font-size: .72rem; }
@@ -245,8 +247,8 @@ const imgH = 1086;
     apexRadius: number;
   };
 
-  const IMG_W = 1448;
-  const IMG_H = 1086;
+  const IMG_W = 3840;
+  const IMG_H = 2160;
   const IMG_AR = IMG_W / IMG_H;
 
   // Animation knobs ----------------------------------------------------------------
@@ -600,5 +602,3 @@ const imgH = 1086;
     if (motionToggle) motionToggle.hidden = true;
   }
 </script>
-</content>
-</invoke>

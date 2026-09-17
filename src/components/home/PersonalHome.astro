@@ -2,6 +2,7 @@
 import type { HomeData } from '../../lib/content-queries';
 import type { TimelineEvent } from '../../lib/content-model';
 import { icons } from '@iconify-json/ri';
+import RemixIcon from '../knowledge/RemixIcon.astro';
 
 interface Props {
   home: HomeData;
@@ -51,12 +52,14 @@ function formatDate(date: Date): string {
 }
 
 function blogDescription(event: TimelineEvent): string {
+  if (event.description) return event.description;
   if (event.collection === 'journal') return '记录学习过程中的思考、实践和阶段性收获。';
   if (event.collection === 'projects') return '从想法到实现的项目记录与持续进展。';
   return '长期维护的知识笔记与内容索引。';
 }
 
 function blogTags(event: TimelineEvent): string[] {
+  if (event.tags.length > 0) return event.tags.slice(0, 2);
   if (event.collection === 'journal') return ['学习', '记录'];
   if (event.collection === 'projects') return ['Astro', '项目'];
   return ['知识库', '整理'];
@@ -84,11 +87,10 @@ const calendarCells = [
       </span>
     </a>
     <nav class="desktop-nav" aria-label="个人主页导航">
+      <a href="/">首页</a>
       <a class="active" href="/about/">个人主页</a>
       <a href="/getting-started/">知识库</a>
       <a href="/journal/">博客</a>
-      <a href="/projects/">项目档案</a>
-      <a href="/archive/">年度归档</a>
     </nav>
     <a class="nav-action" href="/archive/">浏览全部记录 <span>&gt;</span></a>
   </header>
@@ -194,22 +196,31 @@ const calendarCells = [
 
       <div class="blog-heading">
         <div><p class="side-kicker">最近的博客</p></div>
-        <a href="/archive/">查看全部 <span>↗</span></a>
+        <a href="/archive/">查看全部 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
       </div>
 
       <div class="blog-list">
         {blogs.length ? blogs.map((event, index) => (
           <a class:list={['blog-card', { 'blog-card-accent': index === 1 }]} href={eventHref(event)} data-blog-card data-page-index={index} hidden={index >= pageSize}>
+            <div class:list={['blog-cover', `blog-cover-${event.collection}`, { 'is-fallback': !event.coverImage }]}>
+              <span>{collectionLabel(event.collection)}</span>
+              {event.coverImage && (
+                <img src={event.coverImage} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+              )}
+            </div>
             <div class="blog-card-content">
-              <div class="blog-meta"><span>{collectionLabel(event.collection)}</span><time>{formatDate(event.date)}</time></div>
-              <h3>{event.title}</h3>
+              <div class="blog-title-row">
+                <h3>{event.title}</h3>
+                <span class="blog-arrow" aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span>
+              </div>
               <p>{blogDescription(event)}</p>
-              <div class="blog-bottom">
+              <div class="blog-meta">
+                <span class="blog-kind">{collectionLabel(event.collection)}</span>
+                <span>发布于</span>
+                <time>{formatDate(event.date)}</time>
                 <div class="blog-tags">{blogTags(event).map((tag) => <span>#{tag}</span>)}</div>
-                <span class="blog-open">打开文章 <b>↗</b></span>
               </div>
             </div>
-            <span class="blog-arrow">›</span>
           </a>
         )) : <p class="empty-message">还没有博客记录，新的文章会出现在这里。</p>}
       </div>
@@ -245,7 +256,7 @@ const calendarCells = [
       <section class="card side-card archive-tip">
         <p class="side-kicker">继续探索</p>
         <strong>沿着日期，<br />回看留下的内容。</strong>
-        <a href="/archive/">进入年度归档 <span>↗</span></a>
+        <a href="/archive/">进入年度归档 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
       </section>
     </aside>
   </div>
@@ -317,6 +328,15 @@ const calendarCells = [
     });
     renderPage();
   }
+
+  document.querySelectorAll<HTMLImageElement>('.blog-cover img').forEach((image) => {
+    const showFallback = () => {
+      image.hidden = true;
+      image.closest('.blog-cover')?.classList.add('is-fallback');
+    };
+    if (image.complete && image.naturalWidth === 0) showFallback();
+    else image.addEventListener('error', showFallback, { once: true });
+  });
 </script>
 <style>
   :global(:root) {
@@ -450,30 +470,39 @@ const calendarCells = [
   .blog-heading h2 { margin: .3rem 0 0; font-family: Georgia, "Songti SC", serif; font-size: 1.85rem; font-weight: 400; letter-spacing: -.05em; }
   .blog-heading a { color: var(--personal-muted); text-decoration: none; font-size: .62rem; }
   .blog-heading a:hover { color: var(--personal-orange); }
-  .blog-list { display: grid; gap: .85rem; }
+  .blog-list { display: grid; gap: .75rem; }
   .blog-card[hidden] { display: none; }
   .blog-pagination { display: flex; align-items: center; justify-content: flex-end; gap: .7rem; margin-top: 1.25rem; }
   .blog-pagination button { min-width: 4.5rem; padding: .55rem .75rem; border: 0; border-radius: .55rem; color: var(--personal-ink); background: var(--personal-paper); box-shadow: 0 .45rem 1rem rgba(9, 45, 64, .07); cursor: pointer; font: inherit; font-size: .72rem; transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease; }
   .blog-pagination button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 .65rem 1.15rem rgba(9, 45, 64, .1); }
   .blog-pagination button:disabled { cursor: not-allowed; opacity: .4; }
   .blog-pagination span { min-width: 5.2rem; color: var(--personal-muted); font-size: .7rem; text-align: center; }
-  .blog-card { position: relative; display: block; overflow: hidden; border-radius: .72rem; color: inherit; background: #fff; box-shadow: 0 8px 18px rgba(9, 45, 64, .06), 0 1px 4px rgba(9, 45, 64, .04); text-decoration: none; transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
-  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(9, 45, 64, .10), 0 3px 8px rgba(9, 45, 64, .05); }
+  .blog-card { position: relative; display: grid; grid-template-columns: clamp(9rem, 28%, 12.5rem) minmax(0, 1fr); gap: 1rem; min-height: 9.25rem; padding: .8rem; overflow: hidden; border-radius: .72rem; color: inherit; background: #fff; box-shadow: 0 5px 14px rgba(9, 45, 64, .055), 0 1px 3px rgba(9, 45, 64, .035); text-decoration: none; transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 9px 20px rgba(9, 45, 64, .09), 0 2px 6px rgba(9, 45, 64, .045); }
   .blog-card-accent { background: #fff; }
-  .blog-card-content { padding: 1.05rem 3.4rem 1rem 1.15rem; }
-  .blog-meta { color: var(--personal-muted); font-size: .58rem; }
-  .blog-meta span { color: var(--personal-orange); }
-  .blog-card h3 { margin: .62rem 0 .42rem; font-family: Georgia, "Songti SC", serif; font-size: 1.28rem; font-weight: 400; letter-spacing: -.04em; line-height: 1.3; }
-  .blog-card p { margin: 0; color: var(--personal-muted); font-size: .68rem; line-height: 1.75; }
-  .blog-bottom { align-items: end; margin-top: 1rem; }
-  .blog-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .blog-cover { position: relative; min-height: 7.65rem; overflow: hidden; border-radius: .55rem; background: #eef1f3; }
+  .blog-cover::after { content: ''; position: absolute; z-index: 3; inset: 0; box-shadow: inset 0 0 0 1px rgba(9, 45, 64, .045); pointer-events: none; }
+  .blog-cover img { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .35s ease; }
+  .blog-cover img[hidden] { display: none; }
+  .blog-card:hover .blog-cover img { transform: scale(1.035); }
+  .blog-cover.is-fallback { isolation: isolate; background: linear-gradient(145deg, #f2f4f5, #e5eaed); }
+  .blog-cover.is-fallback::before { content: ''; position: absolute; top: 50%; left: 50%; width: 7rem; height: 7rem; border: 1px solid rgba(9, 45, 64, .09); border-radius: 50%; box-shadow: 2.4rem -1.5rem 0 -1px rgba(9, 45, 64, .035), -2rem 2rem 0 -1px rgba(9, 45, 64, .025); transform: translate(-50%, -50%); }
+  .blog-cover > span { position: absolute; z-index: 1; top: 50%; left: 50%; padding: .35rem .55rem; border-radius: .35rem; color: var(--personal-ink); background: rgba(255, 255, 255, .78); font-size: .62rem; font-weight: 600; letter-spacing: .08em; transform: translate(-50%, -50%); }
+  .blog-cover-journal.is-fallback { background: linear-gradient(145deg, #f7e9df, #f1ddd2); }
+  .blog-cover-projects.is-fallback { background: linear-gradient(145deg, #e4edf4, #d8e4ec); }
+  .blog-card-content { display: flex; min-width: 0; flex-direction: column; padding: .15rem .35rem .15rem 0; }
+  .blog-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+  .blog-card h3 { min-width: 0; margin: .08rem 0 .45rem; font-family: Georgia, "Songti SC", serif; font-size: 1.2rem; font-weight: 400; letter-spacing: -.035em; line-height: 1.35; }
+  .blog-card p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--personal-muted); font-size: .68rem; line-height: 1.7; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .blog-meta { justify-content: flex-start; flex-wrap: wrap; gap: .38rem; margin-top: auto; padding-top: .8rem; color: var(--personal-muted); font-size: .58rem; }
+  .blog-kind { padding: .2rem .4rem; border-radius: .3rem; color: var(--personal-ink); background: #e8eef1; font-weight: 600; }
+  .blog-meta time { color: var(--personal-ink); font-variant-numeric: tabular-nums; }
+  .blog-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-left: .18rem; }
   .blog-tags span { padding: .18rem .35rem; border-radius: .28rem; color: var(--personal-ink); background: #e8eef1; font-size: .56rem; }
   .blog-tags span:nth-child(2n) { background: #f8e8cf; }
   .blog-tags span:nth-child(3n) { background: #e3efd9; }
-  .blog-open { color: var(--personal-ink); font-size: .6rem; }
-  .blog-open b { margin-left: .2rem; font-weight: 400; }
-  .blog-arrow { position: absolute; top: .85rem; right: .8rem; display: grid; width: 1.75rem; height: calc(100% - 1.7rem); place-items: center; border-radius: .5rem; color: var(--personal-orange); background: rgba(255, 255, 255, .7); font-size: 1.75rem; transition: color .2s, background .2s, transform .2s; }
-  .blog-card:hover .blog-arrow { color: #fff; background: var(--personal-orange); transform: translateX(2px); }
+  .blog-arrow { flex: 0 0 auto; display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border-radius: 50%; color: var(--personal-muted); background: var(--personal-paper-deep); font-size: .8rem; transition: color .2s, background .2s, transform .2s; }
+  .blog-card:hover .blog-arrow { color: #fff; background: var(--personal-orange); transform: translate(2px, -2px); }
   .empty-message { padding: 2rem; color: var(--personal-muted); text-align: center; }
 
   .site-stats { display: grid; gap: .15rem; }
@@ -528,8 +557,10 @@ const calendarCells = [
   }
   @media (max-width: 28rem) {
     .nav-action { display: none; }
-    .blog-card-content { padding-right: 3rem; }
-    .blog-card h3 { font-size: 1.12rem; }
-    .blog-bottom { align-items: start; flex-direction: column; gap: .55rem; }
+    .blog-card { grid-template-columns: 1fr; gap: .75rem; padding: .7rem; }
+    .blog-cover { min-height: 0; aspect-ratio: 16 / 8; }
+    .blog-card-content { padding: .1rem .15rem .2rem; }
+    .blog-card h3 { font-size: 1.08rem; }
+    .blog-tags { width: 100%; margin-left: 0; }
   }
 </style>

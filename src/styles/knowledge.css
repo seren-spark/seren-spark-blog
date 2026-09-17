@@ -10,6 +10,7 @@
   --knowledge-muted-ink: #526575;
   --knowledge-soft-border: rgb(25 51 67 / 14%);
   --knowledge-code-surface: rgb(25 51 67 / 6%);
+  --knowledge-code-block-surface: #f6f8fa;
   --sl-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
   --sl-content-width: 58rem;
   --sl-content-gap-y: 1.15rem;
@@ -18,12 +19,15 @@
 }
 
 :root[data-theme="dark"] {
-  --knowledge-paper: #11191d;
-  --knowledge-grid-line: rgb(187 208 217 / 5%);
+  --knowledge-paper: #000;
+  --knowledge-grid-line: transparent;
   --knowledge-ink: #e7eef1;
   --knowledge-muted-ink: #b8c5ca;
   --knowledge-soft-border: rgb(205 224 232 / 15%);
-  --knowledge-code-surface: rgb(205 224 232 / 8%);
+  --knowledge-code-surface: rgb(255 255 255 / 8%);
+  --knowledge-code-block-surface: #000;
+  --sl-color-black: #000;
+  --sl-color-bg-nav: #000;
 }
 
 @media (min-width: 50rem) {
@@ -190,6 +194,31 @@
     padding: 1.1rem 1.25rem;
     line-height: 1.65;
     overflow-x: auto;
+    background: var(--knowledge-code-block-surface) !important;
+    scrollbar-color: rgb(139 148 158 / 65%) var(--knowledge-code-block-surface);
+    scrollbar-width: thin;
+  }
+
+  .sl-markdown-content .astro-code,
+  .sl-markdown-content .astro-code span {
+    color: var(--shiki-light);
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+  }
+
+  :root[data-theme="dark"] .sl-markdown-content .astro-code,
+  :root[data-theme="dark"] .sl-markdown-content .astro-code span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+
+  :root[data-theme="dark"] .sl-markdown-content pre:not(:where(.not-content *)) {
+    border-color: rgb(139 148 158 / 35%);
+    background: #000 !important;
+    box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 38%);
   }
 
   .sl-markdown-content blockquote:not(:where(.not-content *)) {

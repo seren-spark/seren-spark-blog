@@ -17,6 +17,9 @@ export type TimelineEvent = {
   collection: ContentRecord['collection'];
   date: Date;
   source: ContentDateSource;
+  description?: string;
+  tags: string[];
+  coverImage?: string;
 };
 
 function asDate(value: unknown): Date | undefined {
@@ -51,6 +54,15 @@ export function buildTimeline(records: ContentRecord[]): TimelineEvent[] {
           : ['startedAt', 'publishedAt', 'updatedAt'];
     const resolved = getContentDate(record, configuredSources);
     if (!resolved) return [];
+    const description = typeof record.data.description === 'string'
+      ? record.data.description
+      : undefined;
+    const tags = Array.isArray(record.data.tags)
+      ? record.data.tags.filter((tag): tag is string => typeof tag === 'string')
+      : [];
+    const coverImage = typeof record.data.coverImage === 'string'
+      ? record.data.coverImage
+      : undefined;
     return [
       {
         id: record.id,
@@ -58,6 +70,9 @@ export function buildTimeline(records: ContentRecord[]): TimelineEvent[] {
         collection: record.collection,
         date: resolved.date,
         source: resolved.source,
+        description,
+        tags,
+        coverImage,
       },
     ];
   });

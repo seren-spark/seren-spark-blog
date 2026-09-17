@@ -1,6 +1,7 @@
 ---
 import { getTagIndex } from '../../lib/site-data';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import RemixIcon from '../../components/knowledge/RemixIcon.astro';
 
 const tags = await getTagIndex();
 ---
@@ -19,7 +20,7 @@ const tags = await getTagIndex();
         <a class="tag-card" href={`/tags/${encodeURIComponent(tag.slug)}/`}>
           <span class="card-index">0{index + 1} / TAG</span>
           <span class="card-title">{tag.label}</span>
-          <span class="card-meta">{tag.count} 篇内容 ↗</span>
+          <span class="card-meta">{tag.count} 篇内容 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span>
         </a>
       ))}
     </div>

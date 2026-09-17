@@ -1,6 +1,7 @@
 ---
 import { getProjectEntries } from '../../lib/site-data';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import RemixIcon from '../../components/knowledge/RemixIcon.astro';
 
 const projects = await getProjectEntries();
 ---
@@ -19,7 +20,7 @@ const projects = await getProjectEntries();
         <a class="project-card" href={`/projects/${project.id}/`}>
           <span class="card-index">0{index + 1} / PROJECT</span>
           <span class="card-title">{project.data.title}</span>
-          <span class="card-meta">状态：{project.data.status} ↗</span>
+          <span class="card-meta">状态：{project.data.status} <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span>
         </a>
       ))}
     </div>

@@ -1,15 +1,17 @@
 ---
 import HomeDashboard from '../components/home/HomeDashboard.astro';
 import BreathstoneBanner from '../components/home/BreathstoneBanner.astro';
+import SelfIntro from '../components/home/SelfIntro.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
 ---
 
 <SiteLayout title="seren-spark‘s blog" exactTitle active="home" description="Seren Spark 的个人知识档案与长期记录。">
   <BreathstoneBanner slot="banner" />
+  <SelfIntro />
   <HomeDashboard />
 </SiteLayout>
 <style is:global>
-  /* 首页按 Hero、个人档案、开源项目、页脚四屏吸附，内容区内部保持自然阅读。 */
+  /* 首页按 Hero、自我介绍、个人档案、开源项目、页脚五屏吸附，内容区内部保持自然阅读。 */
   body:has(.stone-banner) {
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;

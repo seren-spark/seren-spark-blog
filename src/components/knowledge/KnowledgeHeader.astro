@@ -2,6 +2,8 @@
 import Search from '@astrojs/starlight/components/Search.astro';
 import { Icon } from '@astrojs/starlight/components';
 import { knowledgeNavigation } from '../../lib/knowledge-navigation';
+import RemixIcon from './RemixIcon.astro';
+import ScrollToTop from './ScrollToTop.astro';
 
 const pathname = Astro.url.pathname;
 const { hasSidebar } = Astro.locals.starlightRoute;
@@ -9,6 +11,7 @@ const normalizePath = (href: string) => href.split('#')[0];
 const isItemActive = (item: (typeof knowledgeNavigation)[number]) => {
   if (item.match) return item.match.some((prefix) => pathname.startsWith(prefix));
   const target = normalizePath(item.href);
+  if (target === '/') return pathname === target;
   if (target === '/knowledge/') return pathname === target;
   return pathname === target || pathname.startsWith(target);
 };
@@ -55,8 +58,10 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
                   href={item.href}
                   class:list={{ active: isItemActive(item) }}
                   aria-current={isItemActive(item) ? 'page' : undefined}
+                  data-tech-icon={item.menuIcon || undefined}
+                  style={item.menuIconColor ? `--tech-icon-color: ${item.menuIconColor}` : undefined}
                 >
-                  <Icon name={item.icon} />
+                  {item.menuIcon ? <RemixIcon name={item.menuIcon} class="tech-menu-icon" /> : <Icon name={item.icon} />}
                   <span>{item.label}</span>
                 </a>
               ))}
@@ -105,6 +110,8 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
     <span data-sidebar-collapse-icon aria-hidden="true">‹</span>
   </button>
 )}
+
+<ScrollToTop />
 
 <script>
   const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-nav-menu]'));
@@ -367,6 +374,10 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
   .nav-dropdown-group a:hover :global(svg),
   .nav-dropdown-group a.active :global(svg) { color: #4f5d65; }
 
+  .nav-dropdown-group a[data-tech-icon] :global(.tech-menu-icon) {
+    color: var(--tech-icon-color);
+  }
+
   .knowledge-tools {
     display: flex;
     align-items: center;
@@ -445,6 +456,9 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
 
   :global([data-theme='dark']) .nav-dropdown-group a:hover :global(svg),
   :global([data-theme='dark']) .nav-dropdown-group a.active :global(svg) { color: #e1e7e9; }
+  :global([data-theme='dark']) .nav-dropdown-group a[data-tech-icon] :global(.tech-menu-icon) {
+    color: color-mix(in srgb, var(--tech-icon-color) 82%, white);
+  }
   :global([data-theme='dark']) .nav-link:hover,
   :global([data-theme='dark']) .nav-link.active,
   :global([data-theme='dark']) .nav-menu > summary:hover,

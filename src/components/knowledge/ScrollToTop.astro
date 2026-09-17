@@ -1,0 +1,139 @@
+<button
+  class="scroll-to-top"
+  type="button"
+  data-scroll-to-top
+  aria-label="返回文章顶部"
+  aria-hidden="true"
+  tabindex="-1"
+  title="返回顶部"
+>
+  <svg aria-hidden="true" viewBox="0 0 24 24">
+    <path d="m7 14 5-5 5 5" />
+  </svg>
+</button>
+
+<script>
+  type ScrollTopWindow = Window & {
+    __serenSparkScrollTopController?: AbortController;
+  };
+
+  const setupScrollToTop = () => {
+    const button = document.querySelector<HTMLButtonElement>('[data-scroll-to-top]');
+    if (!button) return;
+
+    // The Starlight header uses backdrop-filter, which creates a containing block
+    // for fixed descendants. Move the control to <body> so it stays viewport-fixed.
+    if (button.parentElement !== document.body) document.body.append(button);
+
+    const appWindow = window as ScrollTopWindow;
+    appWindow.__serenSparkScrollTopController?.abort();
+    const controller = new AbortController();
+    appWindow.__serenSparkScrollTopController = controller;
+
+    const updateVisibility = () => {
+      const visible = window.scrollY > Math.max(360, window.innerHeight * 0.5);
+      button.classList.toggle('is-visible', visible);
+      button.setAttribute('aria-hidden', String(!visible));
+      button.tabIndex = visible ? 0 : -1;
+    };
+
+    window.addEventListener('scroll', updateVisibility, {
+      passive: true,
+      signal: controller.signal,
+    });
+    button.addEventListener('click', () => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }, { signal: controller.signal });
+
+    updateVisibility();
+  };
+
+  setupScrollToTop();
+  document.addEventListener('astro:page-load', setupScrollToTop);
+</script>
+
+<style>
+  .scroll-to-top {
+    position: fixed;
+    z-index: calc(var(--sl-z-index-menu) - 1);
+    right: 1.35rem;
+    bottom: 1.35rem;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    place-items: center;
+    border: 1px solid #dfe5e7;
+    border-radius: 0.78rem;
+    background: rgb(255 255 255 / 94%);
+    box-shadow: 0 0.5rem 1.35rem rgb(29 53 65 / 14%);
+    color: #41545d;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.65rem);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease,
+      color 140ms ease,
+      border-color 140ms ease,
+      box-shadow 140ms ease;
+  }
+
+  .scroll-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .scroll-to-top:hover {
+    border-color: #b7c5ca;
+    box-shadow: 0 0.65rem 1.6rem rgb(29 53 65 / 19%);
+    color: var(--sl-color-orange-high);
+  }
+
+  .scroll-to-top:focus-visible {
+    outline: 2px solid var(--sl-color-orange-high);
+    outline-offset: 3px;
+  }
+
+  .scroll-to-top svg {
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  :global([data-theme='dark']) .scroll-to-top {
+    border-color: #3b484e;
+    background: rgb(28 37 41 / 94%);
+    box-shadow: 0 0.55rem 1.45rem rgb(0 0 0 / 32%);
+    color: #dce4e7;
+  }
+
+  :global([data-theme='dark']) .scroll-to-top:hover {
+    border-color: #596970;
+    color: var(--sl-color-orange-high);
+  }
+
+  @media (max-width: 50rem) {
+    .scroll-to-top {
+      right: 0.9rem;
+      bottom: 0.9rem;
+      width: 2.55rem;
+      height: 2.55rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-to-top { transition: none; }
+  }
+
+  @media print {
+    .scroll-to-top { display: none; }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import { getHomeData, getProjectEntries } from '../../lib/site-data';
 import { buildYearHeatmap } from '../../lib/home-visualization';
+import RemixIcon from '../knowledge/RemixIcon.astro';
 
 const home = await getHomeData();
 const projects = await getProjectEntries();
@@ -10,14 +11,12 @@ const currentYearCounts = home.timeline.reduce((counts, event) => {
   return counts;
 }, { docs: 0, journal: 0, projects: 0 });
 const latestJournal = home.timeline.find((event) => event.collection === 'journal');
-const activeProjectCount = projects.filter((project) => project.data.status === 'active').length;
 const formatMonthDay = (date?: Date) => date
   ? new Intl.DateTimeFormat('zh-CN', { month: '2-digit', day: '2-digit', timeZone: 'UTC' }).format(date)
   : '暂无记录';
 const summaryMetrics = [
   { label: '知识笔记', value: home.stats.notes, unit: '篇', detail: `今年新增 ${currentYearCounts.docs} 篇` },
   { label: '博客文章', value: home.stats.journal, unit: '篇', detail: `最近更新 ${formatMonthDay(latestJournal?.date)}` },
-  { label: '项目档案', value: home.stats.projects, unit: '个', detail: `${activeProjectCount} 个正在维护` },
 ];
 const compactNumber = new Intl.NumberFormat('zh-CN', { notation: 'compact', maximumFractionDigits: 1 });
 const regularNumber = new Intl.NumberFormat('zh-CN');
@@ -92,11 +91,10 @@ const statusLabels: Record<string, string> = {
 };
 
 const footerLinks = [
+  { label: '首页', href: '/' },
   { label: '个人主页', href: '/about/' },
   { label: '知识库', href: '/getting-started/' },
   { label: '博客', href: '/journal/' },
-  { label: '年度归档', href: '/archive/' },
-  { label: '项目档案', href: '/projects/' },
 ];
 
 const friendLinks = [
@@ -136,13 +134,14 @@ const projectTiles = [
 
 <div class="home-dashboard" id="archive-console">
   <section class="home-screen detail-screen" data-home-screen id="dashboard" aria-labelledby="dashboard-title">
-    <div class="screen-heading">
+    <img class="dashboard-star-person" src="/media/star-person.png" width="394" height="407" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+    <!-- <div class="screen-heading">
       <div>
-        <p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>02 / 个人档案 · 实时切片</p>
+        <p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>03 / 个人档案 · 实时切片</p>
         <h2 id="dashboard-title">让留下来的东西，<em>彼此看见。</em></h2>
       </div>
-      <span class="screen-index" aria-hidden="true">02</span>
-    </div>
+      <span class="screen-index" aria-hidden="true">03</span>
+    </div> -->
 
     <div class="detail-layout">
       <section class="message-panel" aria-label="滚动的思想短句">
@@ -244,7 +243,7 @@ const projectTiles = [
       <aside class="timeline-panel" aria-labelledby="timeline-title">
         <header class="timeline-heading">
           <div><p class="panel-kicker">内容轨迹 / TIMELINE</p><h3 id="timeline-title">文章时间线</h3></div>
-          <a href="/archive/" aria-label="查看完整年度归档">全部 ↗</a>
+          <a href="/archive/" aria-label="查看完整年度归档">全部 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></a>
         </header>
 
         {activityViews.map((view, index) => (
@@ -270,11 +269,9 @@ const projectTiles = [
 
   <section class="home-screen projects-screen" data-home-screen id="open-source" aria-labelledby="projects-title">
     <header class="projects-heading">
-      <div>
-        <p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span>03 / 开源项目 · OPEN SOURCE</p>
-        <h2 id="projects-title">项目板块</h2>
-      </div>
-      <a class="all-projects" href="/projects/">查看全部项目 <span aria-hidden="true">↗</span></a>
+        <h2 id="projects-title">开源项目</h2>
+
+      <a class="all-projects" href="/projects/">查看全部项目 <span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
     </header>
 
     <div class="home-project-grid">
@@ -286,7 +283,7 @@ const projectTiles = [
             <span class="project-status">{project.status}</span>
           </div>
           <div class="project-body">
-            <h3>{project.title}<span aria-hidden="true">↗</span></h3>
+            <h3>{project.title}<span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></h3>
             <p>{project.description}</p>
             <div class="project-tags" aria-label="项目标签">
               {project.tags.map((tag) => <span>{tag}</span>)}
@@ -312,14 +309,14 @@ const projectTiles = [
         <nav class="footer-link-group" aria-label="页脚站内导航">
           <p>站内导航 <span>/ MENU</span></p>
           <div>
-            {footerLinks.map((link) => <a href={link.href}>{link.label}<span aria-hidden="true">↗</span></a>)}
+            {footerLinks.map((link) => <a href={link.href}>{link.label}<span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>)}
           </div>
         </nav>
 
         <nav class="footer-link-group friend-link-group" aria-label="常用友链">
           <p>常用友链 <span>/ LINKS</span></p>
           <div>
-            {friendLinks.map((link) => <a href={link.href} target="_blank" rel="noreferrer">{link.label}<span aria-hidden="true">↗</span></a>)}
+            {friendLinks.map((link) => <a href={link.href} target="_blank" rel="noreferrer">{link.label}<span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>)}
           </div>
         </nav>
       </div>
@@ -344,8 +341,14 @@ const projectTiles = [
   :global(body:has(.home-dashboard) .site-main .page-frame) { width: 100%; max-width: none; padding: 0; }
   :global(body:has(.home-dashboard) .site-footer) { display: none; }
 
-  .home-dashboard { --ink: #263a32; --muted: #748078; --line: rgba(45, 70, 57, .15); --surface: #fbfaf6; --amber: #a96f3f; --blue: #718e8a; --teal: #397962; --coral: #a86c5b; width: min(calc(100% - 4rem), 76rem); margin: 0 auto; color: var(--ink); font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-  .home-screen { position: relative; min-height: 100svh; padding: clamp(2rem, 4.5vh, 3.25rem) 0; scroll-snap-align: start; }
+  .home-dashboard { display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;--ink: #263a32; --muted: #748078; --line: rgba(45, 70, 57, .15); --surface: #fbfaf6; --amber: #a96f3f; --blue: #718e8a; --teal: #397962; --coral: #a86c5b; width: min(calc(100% - 4rem), 76rem); margin: 0 auto; color: var(--ink); font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .home-screen {display: flex;
+    flex-direction: column;
+
+    justify-content: center;    position: relative; min-height: 100svh; padding: clamp(2rem, 4.5vh, 3.25rem) 0; scroll-snap-align: start; }
   .screen-heading, .projects-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-bottom: 1.35rem; border-bottom: 1px solid var(--line); }
   .eyebrow, .panel-kicker, .panel-code, .project-meta, .project-index, .project-tags, .all-projects, .activity-heading > p, .activity-footer { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .11em; text-transform: uppercase; }
   .eyebrow { display: flex; align-items: center; gap: .6rem; margin: 0; color: var(--muted); font-size: .66rem; }
@@ -356,9 +359,11 @@ const projectTiles = [
   .screen-intro { max-width: 40rem; margin: 1rem 0 0; color: var(--muted); font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: clamp(.95rem, .9rem + .2vw, 1.1rem); line-height: 1.75; }
   .screen-index { color: var(--ink); font-family: 'Iowan Old Style', 'Palatino Linotype', serif; font-size: clamp(4rem, 7vw, 6rem); font-weight: 400; letter-spacing: -.12em; line-height: .65; opacity: .08; }
   .detail-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(21rem, .92fr); gap: clamp(1.5rem, 3vw, 2.75rem); align-items: center; margin-top: clamp(1.35rem, 2.5vh, 2rem); }
+  .dashboard-star-person { position: absolute; z-index: 0; top: clamp(-1rem, 6.5vh, 1.5rem); right: clamp(.2rem, 1vw, .8rem); width: clamp(9rem, 13vw, 11rem); height: auto; pointer-events: none; filter: drop-shadow(0 .7rem 1rem rgba(45,70,57,.12)); }
+  .detail-screen > :not(.dashboard-star-person) { position: relative; z-index: 1; }
   .message-panel, .stats-panel { min-width: 0; }
   .stats-panel { display: flex; align-items: center; }
-  .stats-inner { width: 100%; }
+  .stats-inner { width: 100%; padding-right: clamp(8.5rem, 13vw, 10.75rem); }
   .message-panel { position: relative; display: flex; height: clamp(11.5rem, 24svh, 13.5rem); min-height: 0; overflow: hidden; flex-direction: column; padding: .65rem; border: 1px solid rgba(45,70,57,.16); border-radius: 1rem; background-image: linear-gradient(90deg, rgba(19,31,25,.22), rgba(19,31,25,.36)), url('/media/liuyan.jpg'); background-position: center 48%; background-size: cover; box-shadow: 0 .85rem 2.4rem rgba(45,70,57,.09); }
   .section-header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
   .panel-kicker { color: var(--muted); font-size: .55rem; }
@@ -371,19 +376,20 @@ const projectTiles = [
   :global(.thought-danmaku-pill) { display: inline-flex; align-items: center; padding: .36rem .78rem; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(12,16,18,.58); color: rgba(255,255,255,.96); font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: clamp(.8rem, .74rem + .18vw, .94rem); line-height: 1.25; white-space: nowrap; box-shadow: 0 .2rem .65rem rgba(0,0,0,.08); backdrop-filter: blur(3px); }
   .all-projects span { transition: transform .2s ease; } .all-projects:hover span { display: inline-block; transform: translate(3px, -3px); }
   .panel-code { padding: .35rem .5rem; border: 1px solid var(--line); color: var(--amber); font-size: .5rem; }
-  .metric-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2.3vw, 2.25rem); margin: 0; padding-inline: clamp(.25rem, 1vw, .8rem); align-items: start; }
+  .metric-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2.3vw, 2.25rem); margin: 0; padding-inline: clamp(.25rem, 1vw, .8rem); align-items: start; }
   .metric-item { display: flex; min-width: 0; flex-direction: column; gap: .42rem; align-items: flex-start; text-align: left; }
   .metric-item dd { display: flex; order: -1; align-items: baseline; gap: .45rem; margin: 0; color: #29434e; font-family: 'Iowan Old Style', Baskerville, 'Palatino Linotype', 'Times New Roman', serif; font-variant-numeric: tabular-nums; line-height: 1; }
   .metric-item dd strong { font-size: clamp(2.85rem, 3.9vw, 4.2rem); font-weight: 400; letter-spacing: -.045em; }
   .metric-item dd span { color: #8a949d; font-family: 'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: clamp(.65rem, .58rem + .18vw, .76rem); font-weight: 500; letter-spacing: .04em; }
   .metric-item dt { color: #697681; font-size: clamp(.72rem, .67rem + .12vw, .8rem); font-weight: 500; letter-spacing: .02em; white-space: nowrap; }
   .metric-item small { color: #8b958e; font-size: clamp(.62rem, .58rem + .1vw, .69rem); line-height: 1.45; white-space: nowrap; }
-  .insight-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(.75rem, 1.8vw, 1.5rem); margin: clamp(1.2rem, 2.4svh, 1.6rem) clamp(.25rem, 1vw, .8rem) 0; padding-top: .75rem; border-top: 1px solid var(--line); }
+  .insight-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem clamp(.75rem, 1.8vw, 1.5rem); margin: clamp(1.2rem, 2.4svh, 1.6rem) clamp(.25rem, 1vw, .8rem) 0; padding-top: .75rem; border-top: 1px solid var(--line); }
+  .insight-strip > div:last-child { grid-column: 1 / -1; padding-top: .18rem; }
   .insight-strip > div { display: grid; min-width: 0; gap: .24rem; }
   .insight-strip dt { color: #8b958e; font-size: .58rem; letter-spacing: .08em; }
   .insight-strip dd { overflow: hidden; margin: 0; color: #53655c; font-size: .72rem; font-weight: 500; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
   .activity-data-grid { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(18rem, .78fr); gap: clamp(1rem, 2vw, 1.5rem); align-items: stretch; margin-top: clamp(.8rem, 1.5vh, 1.15rem); }
-  .activity-panel, .timeline-panel { min-width: 0; padding: 1rem 1.1rem .85rem; border: 1px solid var(--line); border-radius: .75rem; background: rgba(251,250,246,.82); box-shadow: 0 .45rem 1.4rem rgba(45,70,57,.045); }
+  .activity-panel, .timeline-panel { min-width: 0; padding: 1rem 1.1rem .85rem; border: 1px solid var(--line); border-radius: .75rem;  box-shadow: 0 .45rem 1.4rem rgba(45,70,57,.045); }
   .activity-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: .8rem; }
   .activity-heading h3 { margin: .3rem 0 0; color: var(--ink); font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: 1.18rem; font-weight: 600; letter-spacing: -.035em; }
   .activity-heading > p { margin: 0; color: var(--muted); font-size: .58rem; white-space: nowrap; }
@@ -479,9 +485,9 @@ const projectTiles = [
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   @keyframes pulse { 50% { opacity: .45; transform: scale(.84); } }
   @media (prefers-reduced-motion: reduce) { .signal-dot { animation: none; } .thought-stage { display: none; } .thought-fallback { position: relative; z-index: 1; display: grid; gap: .55rem; padding: 1rem; } .thought-fallback span { width: fit-content; max-width: 100%; padding: .46rem .82rem; border-radius: 999px; background: rgba(0,0,0,.55); color: rgba(255,255,255,.96); font-size: .84rem; } }
-  @media (max-width: 60rem) { .detail-layout, .activity-data-grid { grid-template-columns: 1fr; } .message-panel { height: 16rem; } .stats-panel { display: grid; grid-template-columns: 1fr; } .timeline-year-view { max-height: 18rem; } }
+  @media (max-width: 60rem) { .detail-layout, .activity-data-grid { grid-template-columns: 1fr; } .message-panel { height: 16rem; } .stats-panel { display: grid; grid-template-columns: 1fr; } .stats-inner { padding-right: 0; } .timeline-year-view { max-height: 18rem; } }
   @media (max-width: 60rem) { .home-footer-main { grid-template-columns: 1fr 1fr; } .footer-brand-block { grid-column: 1 / -1; } }
-  @media (max-width: 42rem) { .home-dashboard { width: min(calc(100% - 1.5rem), 88rem); } .home-screen { min-height: auto; padding-block: 4.5rem; } .screen-heading, .projects-heading { align-items: start; flex-direction: column; gap: 1rem; } .screen-index { display: none; } .message-panel { height: 18rem; padding: .4rem; } .activity-heading { align-items: start; flex-direction: column; gap: .55rem; } .activity-layout { grid-template-columns: minmax(0, 1fr) 3.7rem; gap: .65rem; } .activity-year-picker { padding-left: .5rem; } .activity-year-picker button { padding-inline: .3rem; } .home-project-grid { grid-template-columns: 1fr; } .home-footer-screen { min-height: 100svh; padding-bottom: 1.25rem; } .footer-quote-card { min-height: 14rem; border-radius: .75rem; } .footer-quote-card::before { inset: .5rem; } .home-footer-main { grid-template-columns: 1fr; gap: 2rem; padding-block: 2.5rem; } .footer-brand-block { grid-column: auto; } .friend-link-group > div { grid-template-columns: 1fr; } .home-footer-bottom { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 42rem) { .home-dashboard { width: min(calc(100% - 1.5rem), 88rem); } .home-screen { min-height: auto; padding-block: 4.5rem; } .screen-heading, .projects-heading { align-items: start; flex-direction: column; gap: 1rem; } .screen-index { display: none; } .dashboard-star-person { top: .35rem; right: .2rem; width: 5.5rem; opacity: .74; } .message-panel { height: 18rem; padding: .4rem; } .activity-heading { align-items: start; flex-direction: column; gap: .55rem; } .activity-layout { grid-template-columns: minmax(0, 1fr) 3.7rem; gap: .65rem; } .activity-year-picker { padding-left: .5rem; } .activity-year-picker button { padding-inline: .3rem; } .home-project-grid { grid-template-columns: 1fr; } .home-footer-screen { min-height: 100svh; padding-bottom: 1.25rem; } .footer-quote-card { min-height: 14rem; border-radius: .75rem; } .footer-quote-card::before { inset: .5rem; } .home-footer-main { grid-template-columns: 1fr; gap: 2rem; padding-block: 2.5rem; } .footer-brand-block { grid-column: auto; } .friend-link-group > div { grid-template-columns: 1fr; } .home-footer-bottom { align-items: flex-start; flex-direction: column; } }
   @media (max-width: 30rem) { .metric-strip { gap: .75rem; padding-inline: 0; } .metric-item { gap: .34rem; } .metric-item dd { gap: .25rem; } .metric-item dd strong { font-size: 2.35rem; } .metric-item dd span { font-size: .56rem; } .metric-item dt { font-size: .66rem; } .metric-item small { font-size: .5rem; white-space: normal; } .insight-strip { gap: .6rem; margin-inline: 0; } .insight-strip dt { font-size: .46rem; } .insight-strip dd { font-size: .56rem; } }
 </style>
 

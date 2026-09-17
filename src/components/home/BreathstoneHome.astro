@@ -1,5 +1,6 @@
 ---
 import type { HomeData } from '../../lib/content-queries';
+import RemixIcon from '../knowledge/RemixIcon.astro';
 
 interface Props { home: HomeData }
 const { home } = Astro.props;
@@ -17,14 +18,14 @@ const recentHref = latest?.collection === 'journal' ? `/journal/${latest.id}/` :
     <nav class="glass-nav" aria-label="主导航">
       <a class="wordmark" href="#top"><span class="wordmark-mark">s</span><span>seren-spark<span class="wordmark-dot">.</span></span></a>
       <div class="desktop-nav"><a href="#practice">练习</a><a href="#stories">故事</a><a href="#access">进入</a></div>
-      <a class="nav-cta" href="/knowledge/">打开档案 <span>↗</span></a>
+      <a class="nav-cta" href="/knowledge/">打开档案 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
     </nav>
     <div class="hero-body">
       <div class="hero-copy">
         <p class="eyebrow">SEREN-SPARK 的博客 <span>·</span> 安静地创造</p>
         <h1>让第一屏<br /><em>只属于你</em><br />保持独特。</h1>
         <p class="hero-support">记录想法、实验和行动之间的过程，把有用的东西留下，也给它们一点呼吸的空间。</p>
-        <div class="hero-actions"><a class="button button-light" href="/knowledge/">进入知识档案 <span>↗</span></a><a class="text-link light-link" href="#practice">看看里面有什么 <span>↓</span></a></div>
+        <div class="hero-actions"><a class="button button-light" href="/knowledge/">进入知识档案 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a><a class="text-link light-link" href="#practice">看看里面有什么 <span>↓</span></a></div>
       </div>
       <div class="hero-aside"><span class="aside-line"></span><span>为长期思考<br />而设计</span></div>
     </div>
@@ -34,28 +35,28 @@ const recentHref = latest?.collection === 'journal' ? `/journal/${latest.id}/` :
   <section class="breathstone-section practice-section" id="practice">
     <div class="section-intro reveal"><p class="eyebrow olive">日常练习</p><h2>给好工作<br />留出<em>空间。</em></h2><p class="section-lede">这是一个持续生长的小型学习系统。界面保持柔和，让想法可以更清晰。</p></div>
     <div class="feature-list">
-      <a class="feature-row reveal" href="/knowledge/"><span class="feature-number">01</span><span class="feature-title">沉淀下来的笔记</span><span class="feature-description">把值得反复回看的内容，整理成知识库。</span><span class="feature-arrow">↗</span></a>
-      <a class="feature-row reveal" href="/journal/"><span class="feature-number">02</span><span class="feature-title">博客</span><span class="feature-description">保留真实日期与真实语境的个人记录。</span><span class="feature-arrow">↗</span></a>
-      <a class="feature-row reveal" href="/projects/"><span class="feature-number">03</span><span class="feature-title">正在进行的项目</span><span class="feature-description">记录想法、原型，以及从想法到交付之间有价值的过程。</span><span class="feature-arrow">↗</span></a>
+      <a class="feature-row reveal" href="/knowledge/"><span class="feature-number">01</span><span class="feature-title">沉淀下来的笔记</span><span class="feature-description">把值得反复回看的内容，整理成知识库。</span><span class="feature-arrow"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
+      <a class="feature-row reveal" href="/journal/"><span class="feature-number">02</span><span class="feature-title">博客</span><span class="feature-description">保留真实日期与真实语境的个人记录。</span><span class="feature-arrow"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
+      <a class="feature-row reveal" href="/projects/"><span class="feature-number">03</span><span class="feature-title">正在进行的项目</span><span class="feature-description">记录想法、原型，以及从想法到交付之间有价值的过程。</span><span class="feature-arrow"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
     </div>
   </section>
 
   <section class="breathstone-section story-section" id="stories">
     <div class="story-image reveal"><div class="story-image-glow"></div><span class="story-image-label">现场记录 / 01</span></div>
-    <div class="story-copy reveal"><p class="eyebrow olive">写给自己的话</p><blockquote>“好的界面，会为你真正想寻找的东西留出空间。”</blockquote><p class="story-detail">这个档案从细小的观察开始：发现一个规律，追问一个问题，完成一个比预期教会更多东西的项目。</p><a class="text-link dark-link" href={recentHref}>阅读最近记录 <span>↗</span></a></div>
+    <div class="story-copy reveal"><p class="eyebrow olive">写给自己的话</p><blockquote>“好的界面，会为你真正想寻找的东西留出空间。”</blockquote><p class="story-detail">这个档案从细小的观察开始：发现一个规律，追问一个问题，完成一个比预期教会更多东西的项目。</p><a class="text-link dark-link" href={recentHref}>阅读最近记录 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a></div>
   </section>
 
   <section class="breathstone-section access-section" id="access">
     <div class="access-heading reveal"><p class="eyebrow olive">进入方式</p><h2>从现在开始<br /><em>从你所在的地方。</em></h2></div>
     <div class="access-grid">
-      <a class="access-card reveal" href="/journal/"><span class="access-label">01 / 轻轻开始</span><strong>静下来</strong><p>阅读一条来自真实生活与学习过程的记录。</p><span class="access-link">打开博客 ↗</span></a>
-      <a class="access-card featured reveal" href="/knowledge/"><span class="access-label">02 / 继续深入</span><strong>练习</strong><p>沿着那些最终沉淀为知识的线索继续阅读。</p><span class="access-link">进入知识库 ↗</span></a>
-      <a class="access-card reveal" href="/projects/"><span class="access-label">03 / 让它落地</span><strong>行动</strong><p>看看一个想法离开笔记本后会发生什么。</p><span class="access-link">查看项目档案 ↗</span></a>
+      <a class="access-card reveal" href="/journal/"><span class="access-label">01 / 轻轻开始</span><strong>静下来</strong><p>阅读一条来自真实生活与学习过程的记录。</p><span class="access-link">打开博客 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
+      <a class="access-card featured reveal" href="/knowledge/"><span class="access-label">02 / 继续深入</span><strong>练习</strong><p>沿着那些最终沉淀为知识的线索继续阅读。</p><span class="access-link">进入知识库 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
+      <a class="access-card reveal" href="/projects/"><span class="access-label">03 / 让它落地</span><strong>行动</strong><p>看看一个想法离开笔记本后会发生什么。</p><span class="access-link">查看项目档案 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
     </div>
     <div class="access-stats reveal"><div><strong>{home.stats.notes}</strong><span>知识笔记</span></div><div><strong>{home.stats.journal}</strong><span>博客</span></div><div><strong>{home.stats.projects}</strong><span>进行中的项目</span></div><div><strong>{home.stats.total}</strong><span>内容节点</span></div></div>
   </section>
 
-  <footer class="breathstone-footer"><div class="footer-top"><a class="wordmark dark-wordmark" href="#top"><span class="wordmark-mark">s</span><span>seren-spark<span class="wordmark-dot">.</span></span></a><p>一个用来思考、创造，<br />也让有用之物慢慢沉淀的个人空间。</p><a class="button button-dark" href="/knowledge/">进入知识档案 <span>↗</span></a></div><div class="footer-bottom"><span>seren-spark 的博客 / 2026</span><span>认真制作 <i>✦</i></span><a href="#top">回到顶部 ↑</a></div></footer>
+  <footer class="breathstone-footer"><div class="footer-top"><a class="wordmark dark-wordmark" href="#top"><span class="wordmark-mark">s</span><span>seren-spark<span class="wordmark-dot">.</span></span></a><p>一个用来思考、创造，<br />也让有用之物慢慢沉淀的个人空间。</p><a class="button button-dark" href="/knowledge/">进入知识档案 <span><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a></div><div class="footer-bottom"><span>seren-spark 的博客 / 2026</span><span>认真制作 <i>✦</i></span><a href="#top">回到顶部 ↑</a></div></footer>
 </main>
 
 <style is:global>

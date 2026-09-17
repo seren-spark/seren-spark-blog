@@ -35,6 +35,26 @@ function wrapTables() {
   };
 }
 
+function useCodeThemes() {
+  return {
+    name: 'github-light-code-theme',
+    hooks: {
+      'astro:config:setup': ({ updateConfig }) => {
+        updateConfig({
+          markdown: {
+            shikiConfig: {
+              themes: {
+                light: 'github-light',
+                dark: 'one-dark-pro',
+              },
+            },
+          },
+        });
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: "https://seren-spark.site",
   markdown: {
@@ -52,9 +72,9 @@ export default defineConfig({
           stylingSystem: "css",
           nav: [
             { label: "首页", href: "/" },
+            { label: "个人主页", href: "/about/" },
+            { label: "知识库", href: "/getting-started/" },
             { label: "博客", href: "/journal/" },
-            { label: "年度归档", href: "/archive/" },
-            { label: "项目档案", href: "/projects/" },
           ],
         }),
       ],
@@ -221,5 +241,6 @@ export default defineConfig({
         },
       ],
     }),
+    useCodeThemes(),
   ],
 });

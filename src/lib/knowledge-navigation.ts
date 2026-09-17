@@ -4,6 +4,8 @@ export type KnowledgeNavItem = {
   label: string;
   href: string;
   icon: StarlightIcon;
+  menuIcon?: string;
+  menuIconColor?: string;
   match?: string[];
 };
 
@@ -17,7 +19,7 @@ export type KnowledgeNavEntry = KnowledgeNavItem & {
 };
 
 export const knowledgeNavigation: KnowledgeNavEntry[] = [
-  { label: '首页', href: '/knowledge/', icon: 'star' },
+  { label: '首页', href: '/', icon: 'star' },
   {
     label: '页面开发', href: '/page-development/', icon: 'mdx', groups: [
       { label: '文档站点', items: [
@@ -57,26 +59,26 @@ export const knowledgeNavigation: KnowledgeNavEntry[] = [
   {
     label: '前端', href: '/frontend/', icon: 'astro', groups: [
       { label: '基础', items: [
-        { label: '三剑客', href: '/frontend/html-css-js/', icon: 'mdx', match: ['/frontend/html-css-js/', '/frontend/html-css/', '/frontend/javascript/'] },
+        { label: '三剑客', href: '/frontend/html-css-js/', icon: 'mdx', menuIcon: 'code-s-slash-line', menuIconColor: '#e56532', match: ['/frontend/html-css-js/', '/frontend/html-css/', '/frontend/javascript/'] },
       ] },
       { label: 'CSS 提高', items: [
-        { label: 'Less / SCSS', href: '/frontend/css-advanced/', icon: 'seti:css', match: ['/frontend/css-advanced/', '/frontend/less/', '/frontend/scss/'] },
-        { label: 'Tailwind CSS', href: '/frontend/tailwind/01-tailwind-css-安装使用/', icon: 'seti:css', match: ['/frontend/tailwind/'] },
+        { label: 'Less / SCSS', href: '/frontend/css-advanced/', icon: 'seti:css', menuIcon: 'css3-line', menuIconColor: '#8a55b5', match: ['/frontend/css-advanced/', '/frontend/less/', '/frontend/scss/'] },
+        { label: 'Tailwind CSS', href: '/frontend/tailwind/01-tailwind-css-安装使用/', icon: 'seti:css', menuIcon: 'tailwind-css-line', menuIconColor: '#0c9db4', match: ['/frontend/tailwind/'] },
       ] },
       { label: 'JavaScript 提高', items: [
-        { label: 'ES6', href: '/frontend/javascript-advanced/es6/01-es6-介绍/', icon: 'seti:javascript', match: ['/frontend/javascript-advanced/es6/'] },
-        { label: 'AJAX', href: '/frontend/javascript-advanced/ajax/01-ajax概述和基本使用/', icon: 'seti:javascript', match: ['/frontend/javascript-advanced/ajax/'] },
-        { label: 'ECharts', href: '/frontend/javascript-advanced/echarts/1echarts-介绍/', icon: 'seti:javascript', match: ['/frontend/javascript-advanced/echarts/'] },
-        { label: 'Webpack', href: '/frontend/javascript-advanced/webpack/01-前言-基础使用-核心概念/', icon: 'seti:webpack', match: ['/frontend/javascript-advanced/webpack/'] },
-        { label: 'TypeScript', href: '/frontend/typescript/1简介/', icon: 'seti:typescript', match: ['/frontend/typescript/'] },
+        { label: 'ES6', href: '/frontend/javascript-advanced/es6/01-es6-介绍/', icon: 'seti:javascript', menuIcon: 'javascript-line', menuIconColor: '#c38c00', match: ['/frontend/javascript-advanced/es6/'] },
+        { label: 'AJAX', href: '/frontend/javascript-advanced/ajax/01-ajax概述和基本使用/', icon: 'seti:javascript', menuIcon: 'exchange-2-line', menuIconColor: '#267fba', match: ['/frontend/javascript-advanced/ajax/'] },
+        { label: 'ECharts', href: '/frontend/javascript-advanced/echarts/1echarts-介绍/', icon: 'seti:javascript', menuIcon: 'bar-chart-box-line', menuIconColor: '#6b5bc5', match: ['/frontend/javascript-advanced/echarts/'] },
+        { label: 'Webpack', href: '/frontend/javascript-advanced/webpack/01-前言-基础使用-核心概念/', icon: 'seti:webpack', menuIcon: 'box-3-line', menuIconColor: '#4d86ba', match: ['/frontend/javascript-advanced/webpack/'] },
+        { label: 'TypeScript', href: '/frontend/typescript/1简介/', icon: 'seti:typescript', menuIcon: 'braces-line', menuIconColor: '#3178c6', match: ['/frontend/typescript/'] },
       ] },
       { label: '框架', items: [
-        { label: 'Vue', href: '/frontend/vue/', icon: 'seti:vue', match: ['/frontend/vue/'] },
-        { label: 'UniApp', href: '/frontend/uniapp/01-微信小程序起步/', icon: 'seti:vue', match: ['/frontend/uniapp/'] },
-        { label: 'React', href: '/frontend/react/01-react入门/', icon: 'seti:react', match: ['/frontend/react/'] },
+        { label: 'Vue', href: '/frontend/vue/', icon: 'seti:vue', menuIcon: 'vuejs-line', menuIconColor: '#369b71', match: ['/frontend/vue/'] },
+        { label: 'UniApp', href: '/frontend/uniapp/01-微信小程序起步/', icon: 'seti:vue', menuIcon: 'smartphone-line', menuIconColor: '#2aa66d', match: ['/frontend/uniapp/'] },
+        { label: 'React', href: '/frontend/react/01-react入门/', icon: 'seti:react', menuIcon: 'reactjs-line', menuIconColor: '#159bc4', match: ['/frontend/react/'] },
       ] },
       { label: '其它', items: [
-        { label: 'Electron', href: '/applications/electron/01-创建一个electron应用/', icon: 'seti:javascript', match: ['/applications/electron/'] },
+        { label: 'Electron', href: '/applications/electron/01-创建一个electron应用/', icon: 'seti:javascript', menuIcon: 'cpu-line', menuIconColor: '#6b61b3', match: ['/applications/electron/'] },
       ] },
     ],
   },

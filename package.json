@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "assets:letters": "node tools/optimize-letter-assets.mjs \"SEREN SPARK\"",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -1,0 +1,22 @@
+---
+import iconSet from '@iconify-json/ri/icons.json';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const icon = iconSet.icons[name as keyof typeof iconSet.icons];
+const width = ('width' in icon && icon.width) || iconSet.width || 24;
+const height = ('height' in icon && icon.height) || iconSet.height || 24;
+---
+
+<svg
+  class:list={['remix-icon', className]}
+  aria-hidden="true"
+  viewBox={`0 0 ${width} ${height}`}
+  fill="currentColor"
+  set:html={icon.body}
+></svg>
+

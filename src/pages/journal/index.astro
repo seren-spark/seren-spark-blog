@@ -16,9 +16,15 @@ const entries = await getJournalEntries();
   {entries.length > 0 ? (
     <div class="journal-cards">
       {entries.map((entry) => (
-        <a class="journal-card" href={`/journal/${entry.id}/`}>
+        <a class:list={['journal-card', entry.data.coverImage && 'has-cover']} href={`/journal/${entry.id}/`}>
           {entry.data.coverImage && (
-            <img class="card-cover" src={entry.data.coverImage} alt={entry.data.title} />
+            <img
+              class="card-cover"
+              src={entry.data.coverImage}
+              alt={entry.data.title}
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer"
+            />
           )}
           <div class="card-body">
             <h2 class="card-title">{entry.data.title}</h2>

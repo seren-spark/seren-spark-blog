@@ -3,6 +3,7 @@ import type { ContentRecord } from '../../lib/content-model';
 import type { TagIndexItem } from '../../lib/content-queries';
 import { getTagIndex } from '../../lib/site-data';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import RemixIcon from '../../components/knowledge/RemixIcon.astro';
 
 export async function getStaticPaths() {
   const tags = await getTagIndex();
@@ -35,7 +36,7 @@ function contentHref(entry: ContentRecord): string {
       <li>
         <span class="list-meta">{entry.collection}</span>
         <a href={contentHref(entry)}>{String(entry.data.title ?? entry.id)}</a>
-        <span class="list-meta">查看 ↗</span>
+        <span class="list-meta">查看 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span>
       </li>
     ))}
   </ul>

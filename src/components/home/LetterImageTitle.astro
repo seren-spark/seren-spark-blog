@@ -1,0 +1,447 @@
+---
+interface Props {
+  title: string;
+}
+
+import { buildLetterImageFrames } from '../../lib/letter-image-frames';
+
+const { title } = Astro.props;
+const imageFrames = buildLetterImageFrames(title);
+
+const letterPoses = [
+  { rotate: -6, y: .02, scale: 1.02 },
+  { rotate: 4, y: -.06, scale: .98 },
+  { rotate: -3, y: .04, scale: 1.04 },
+  { rotate: 7, y: -.03, scale: 1.01 },
+  { rotate: -5, y: .07, scale: .97 },
+  { rotate: 3, y: -.05, scale: 1.03 },
+  { rotate: -7, y: .03, scale: 1 },
+  { rotate: 5, y: -.04, scale: .99 },
+  { rotate: -4, y: .06, scale: 1.02 },
+  { rotate: 6, y: -.02, scale: 1.01 },
+] as const;
+
+let letterIndex = 0;
+const words = title.trim().split(/\s+/).map((word) =>
+  Array.from(word).map((character) => {
+    const index = letterIndex++;
+    return {
+      character,
+      index,
+      assets: imageFrames.map((frame) => frame[index]),
+      pose: letterPoses[index % letterPoses.length],
+    };
+  }),
+);
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Idyllat:wght@200;300;400&display=swap" />
+
+<div class="letter-title-experience" data-letter-title>
+  <h1 id="stone-title" aria-label={`${title} — seren-spark‘s blog`}>
+    <span class="letter-words" data-letter-words aria-hidden="true">
+      {words.map((word) => (
+        <span class="letter-word">
+          {word.map(({ character, index, assets, pose }) => (
+            <span
+              class="letter-shell"
+              data-letter={index}
+              data-assets={JSON.stringify(assets)}
+              style={`--letter-index:${index};--letter-rotation:${pose.rotate}deg;--letter-y:${pose.y}em;--letter-scale:${pose.scale}`}
+            >
+              <span class="letter-char">{character}</span>
+            </span>
+          ))}
+        </span>
+      ))}
+
+      <span class="letter-hit-layer" data-letter-hit-layer>
+        {words.map((word) => (
+          <span class="letter-word">
+            {word.map(({ character, index, pose }) => (
+              <span
+                class="letter-hit"
+                data-letter-hit={index}
+                style={`--letter-index:${index};--letter-rotation:${pose.rotate}deg;--letter-y:${pose.y}em;--letter-scale:${pose.scale}`}
+              >{character}</span>
+            ))}
+          </span>
+        ))}
+      </span>
+    </span>
+  </h1>
+
+  <div class="letter-title-meta">
+    <p data-letter-status role="status">正在准备字母图片…</p>
+  </div>
+</div>
+
+<style>
+  .letter-title-experience {
+    position: absolute;
+    z-index: 3;
+    top: clamp(7.25rem, 15.5vh, 12.75rem);
+    left: 0;
+    width: 100%;
+    color: #10140d;
+  }
+
+  h1 {
+    width: 100%;
+    margin: 0;
+    font-family:  'Idyllat', 'Iowan Old Style', 'Palatino Linotype', serif;
+    font-size: clamp(4rem, 9.8vw, 11.75rem);
+    font-style: normal;
+    font-weight: 400;
+    line-height: .92;
+    letter-spacing: -.07em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .letter-words,
+  .letter-hit-layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .25em;
+  }
+
+  .letter-words {
+    position: relative;
+    min-height: 1.38em;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .letter-word {
+    display: inline-flex;
+    flex: 0 0 auto;
+  }
+
+  .letter-shell,
+  .letter-hit {
+    position: relative;
+    display: inline-grid;
+    height: 1.16em;
+    flex: 0 0 auto;
+    align-items: center;
+    transition: padding-inline .48s cubic-bezier(.22, 1, .36, 1);
+    transform: translateY(var(--letter-y, 0em)) rotate(var(--letter-rotation, 0deg)) scale(var(--letter-scale, 1));
+    transform-origin: center 58%;
+  }
+
+  .letter-shell { pointer-events: none; }
+  .letter-char { grid-area: 1 / 1; line-height: 1; justify-self: center; }
+  .letter-shell.is-active .letter-char,
+  .letter-shell.is-pending .letter-char { visibility: hidden; }
+
+  .letter-shell.is-returning .letter-char {
+    animation: letter-soft-return 620ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  :global(.letter-sticker) {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    width: 1.18em;
+    height: 1.18em;
+    pointer-events: none;
+    translate: -50% -50%;
+  }
+
+  :global(.letter-sticker img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 .08em .12em rgba(50, 48, 31, .18));
+    user-select: none;
+  }
+
+  .letter-hit-layer {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    color: transparent;
+    user-select: none;
+  }
+
+  .letter-hit {
+    align-items: center;
+    pointer-events: auto;
+    line-height: 1;
+    cursor: crosshair;
+  }
+
+  .letter-title-meta {
+    display: none;
+  }
+
+  .letter-title-meta p {
+    margin: 0;
+    color: rgba(26, 34, 20, .72);
+    text-transform: uppercase;
+  }
+
+  @keyframes letter-soft-return {
+    0%, 22% { opacity: 0; transform: scale(.82); }
+    68% { opacity: 1; transform: scale(1.035); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @media (max-width: 700px) {
+    .letter-title-experience { top: 8.8rem; }
+    h1 { font-size: 9.2vw; letter-spacing: -.06em; }
+    .letter-words, .letter-hit-layer { gap: .2em; }
+    :global(.letter-sticker) { width: 1.24em; height: 1.24em; }
+    .letter-title-meta {
+      justify-content: center;
+      margin-top: .8rem;
+      padding: 0 1rem;
+    }
+    .letter-title-meta p { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .letter-shell, .letter-hit { transition: none; }
+    :global(.letter-sticker) { display: none; }
+    .letter-shell.is-returning .letter-char { animation: none; }
+  }
+</style>
+
+<script>
+  type LetterState = {
+    shell: HTMLElement;
+    hit: HTMLElement;
+    sources: string[];
+    loaded: boolean[];
+    nextFrame: number;
+    active: boolean;
+    timer: number | undefined;
+  };
+
+  const root = document.querySelector<HTMLElement>('[data-letter-title]');
+  const words = root?.querySelector<HTMLElement>('[data-letter-words]');
+  const status = root?.querySelector<HTMLElement>('[data-letter-status]');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (root && words && status) {
+    const shells = Array.from(root.querySelectorAll<HTMLElement>('[data-letter]'));
+    const hits = Array.from(root.querySelectorAll<HTMLElement>('[data-letter-hit]'));
+    const states: LetterState[] = shells.map((shell, index) => ({
+      shell,
+      hit: hits[index],
+      sources: JSON.parse(shell.dataset.assets ?? '[]'),
+      loaded: [],
+      nextFrame: 0,
+      active: false,
+      timer: undefined,
+    }));
+
+    let introTimers: number[] = [];
+    let hovered: number | null = null;
+    let ready = false;
+    let inIntro = false;
+
+    const springFrames = (angle: number, y: number) => Array.from({ length: 41 }, (_, index) => {
+      const time = index / 40;
+      const value = index === 40
+        ? 1
+        : 1 - Math.exp(-7.2 * time) * (Math.cos(10.5 * time) + .24 * Math.sin(10.5 * time));
+      return {
+        offset: time,
+        transform: `translateY(${y + 8 * (1 - value)}px) rotate(${angle - 8 * (1 - value)}deg) scale(${.32 + .68 * value})`,
+      };
+    });
+
+    const hide = (state: LetterState) => {
+      if (state.timer) window.clearTimeout(state.timer);
+      const sticker = state.shell.querySelector<HTMLElement>('.letter-sticker');
+      const wasActive = state.active;
+      state.active = false;
+      state.shell.classList.remove('is-active', 'is-pending');
+
+      if (wasActive) {
+        state.shell.classList.remove('is-returning');
+        void state.shell.offsetWidth;
+        state.shell.classList.add('is-returning');
+        if (sticker && !reducedMotion.matches) {
+          const pose = getComputedStyle(sticker).transform;
+          sticker.getAnimations().forEach((animation) => animation.cancel());
+          const exit = sticker.animate(
+            [
+              { transform: pose, opacity: 1, offset: 0 },
+              { transform: `${pose} scale(1.06)`, opacity: 1, offset: .18 },
+              { transform: `${pose} scale(.68)`, opacity: .4, offset: .62 },
+              { transform: `${pose} scale(.25)`, opacity: 0, offset: 1 },
+            ],
+            { duration: 620, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'forwards' },
+          );
+          exit.onfinish = () => sticker.remove();
+        } else {
+          sticker?.remove();
+        }
+      }
+
+      state.shell.style.paddingInline = '0em';
+      state.hit.style.paddingInline = '0em';
+    };
+
+    const clearIntro = () => {
+      introTimers.forEach((timer) => window.clearTimeout(timer));
+      introTimers = [];
+      inIntro = false;
+      states.forEach((state) => {
+        state.shell.classList.remove('is-pending');
+        hide(state);
+      });
+    };
+
+    const returnLater = (state: LetterState, delay: number) => {
+      if (state.timer) window.clearTimeout(state.timer);
+      state.timer = window.setTimeout(() => {
+        if (hovered !== states.indexOf(state)) hide(state);
+      }, delay);
+    };
+
+    const show = (state: LetterState, sourceIndex: number, options: { intro?: boolean } = {}) => {
+      if (reducedMotion.matches || !state.loaded[sourceIndex]) return;
+      if (!options.intro && inIntro) clearIntro();
+      if (state.timer) window.clearTimeout(state.timer);
+
+      const source = state.sources[sourceIndex];
+      state.active = true;
+      state.shell.classList.remove('is-pending', 'is-returning');
+      state.shell.classList.add('is-active');
+      state.shell.querySelector('.letter-sticker')?.remove();
+
+      const sticker = document.createElement('span');
+      sticker.className = 'letter-sticker';
+      const image = document.createElement('img');
+      image.src = source;
+      image.alt = '';
+      image.draggable = false;
+      sticker.append(image);
+      state.shell.append(sticker);
+
+      const padding = options.intro ? '.07em' : '.14em';
+      state.shell.style.paddingInline = padding;
+      state.hit.style.paddingInline = padding;
+
+      const stateIndex = states.indexOf(state);
+      const angles = [-8, 6, -4, 8, -7, 5, -3, 7, -5, 4];
+      const offsets = [3, -2, 2, -3, 1, 3, -1, 2, -2, 1];
+      sticker.animate(
+        springFrames(angles[stateIndex % angles.length], offsets[stateIndex % offsets.length]),
+        { duration: 390, fill: 'both' },
+      );
+
+      if (!options.intro && hovered !== stateIndex) {
+        returnLater(state, 460);
+      }
+    };
+
+    const showNext = (state: LetterState) => {
+      if (state.sources.length === 0) return;
+
+      for (let offset = 0; offset < state.sources.length; offset += 1) {
+        const sourceIndex = (state.nextFrame + offset) % state.sources.length;
+        if (!state.loaded[sourceIndex]) continue;
+        state.nextFrame = (sourceIndex + 1) % state.sources.length;
+        show(state, sourceIndex);
+        return;
+      }
+    };
+
+    const startIntro = () => {
+      clearIntro();
+      if (reducedMotion.matches) {
+        status.textContent = '已遵循系统的减少动态效果设置';
+        return;
+      }
+
+      const frameCount = states[0]?.sources.length ?? 0;
+      const completeFrames = Array.from({ length: frameCount }, (_, index) => index)
+        .filter((frameIndex) => states.every((state) => state.loaded[frameIndex]));
+      if (completeFrames.length === 0) {
+        status.textContent = '移动鼠标，按顺序探索每个字母';
+        return;
+      }
+
+      const introFrame = completeFrames[Math.floor(Math.random() * completeFrames.length)];
+      inIntro = true;
+      states.forEach((state) => state.shell.classList.add('is-pending'));
+      states.forEach((state, index) => {
+        introTimers.push(window.setTimeout(() => show(state, introFrame, { intro: true }), index * 60));
+      });
+
+      const revealEnd = 60 * Math.max(0, states.length - 1) + 760;
+      states.forEach((state, index) => {
+        introTimers.push(window.setTimeout(() => hide(state), revealEnd + index * 48));
+      });
+      introTimers.push(window.setTimeout(() => {
+        inIntro = false;
+        introTimers = [];
+        status.textContent = '移动鼠标，按顺序探索每个字母';
+      }, revealEnd + 48 * Math.max(0, states.length - 1) + 620));
+    };
+
+    const point = (event: PointerEvent) => {
+      const hit = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>('[data-letter-hit]');
+      const next = hit && words.contains(hit) ? Number(hit.dataset.letterHit) : null;
+      if (next === hovered) return;
+      const previous = hovered;
+      hovered = next;
+      if (previous !== null && states[previous]?.active) hide(states[previous]);
+      if (next !== null && states[next]) showNext(states[next]);
+    };
+
+    const leave = () => {
+      const previous = hovered;
+      hovered = null;
+      if (previous !== null && states[previous]?.active) hide(states[previous]);
+    };
+
+    words.addEventListener('pointerenter', point);
+    words.addEventListener('pointermove', point);
+    words.addEventListener('pointerdown', point);
+    words.addEventListener('pointerleave', leave);
+    words.addEventListener('pointercancel', leave);
+    words.addEventListener('pointerup', (event) => {
+      if (event.pointerType !== 'mouse') leave();
+    });
+
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) {
+        clearIntro();
+        status.textContent = '已遵循系统的减少动态效果设置';
+      } else if (ready) {
+        status.textContent = '移动鼠标，按顺序探索每个字母';
+      }
+    });
+
+    const preload = async (state: LetterState, source: string, sourceIndex: number) => {
+      const image = new Image();
+      image.src = source;
+      try {
+        await image.decode();
+        state.loaded[sourceIndex] = true;
+      } catch {
+        // Keep the original glyph when a single decorative variant fails.
+      }
+    };
+
+    states.forEach((state) => {
+      state.loaded = Array.from({ length: state.sources.length }, () => false);
+    });
+
+    Promise.all(states.flatMap((state) => state.sources.map((source, index) => preload(state, source, index))))
+      .then(() => {
+        ready = true;
+        startIntro();
+      });
+  }
+</script>
