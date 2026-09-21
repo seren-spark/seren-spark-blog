@@ -24,17 +24,6 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
 
 <div class="knowledge-header">
   <a class="knowledge-brand" href="/knowledge/" aria-label="返回知识库首页">
-    <svg class="brand-mark" aria-hidden="true" viewBox="0 0 92 52">
-      <defs>
-        <linearGradient id="brand-arc" x1="5" y1="8" x2="86" y2="45" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#7456c8" />
-          <stop offset="1" stop-color="#10a69d" />
-        </linearGradient>
-      </defs>
-      <path d="M5 15C32 2 63 4 86 18" fill="none" stroke="url(#brand-arc)" stroke-width="2.6" stroke-linecap="round" />
-      <path d="M14 43 45 13 26 45M24 44l22-31-10 33M35 45l12-32-2 34M46 47l2-34 8 32M56 45l-7-32 17 28M66 41 50 13l26 21M76 34 50 13l34 11" fill="none" stroke="#4630aa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
-      <path d="M46 13c5 11 10 15 17 15 5 0 9-3 13-8 2 6 6 10 10 12" fill="none" stroke="#5937b8" stroke-width="3" stroke-linecap="round" />
-    </svg>
     <span>seren-spark</span>
     <i class="brand-status" aria-hidden="true"></i>
   </a>
@@ -228,12 +217,6 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
-  }
-
-  .brand-mark {
-    width: 4.55rem;
-    height: 2.7rem;
-    flex: 0 0 auto;
   }
 
   .brand-status {

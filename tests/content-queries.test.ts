@@ -77,6 +77,11 @@ describe('content queries', () => {
       { date: '2026-09-01', count: 1 },
       { date: '2026-09-09', count: 1 },
     ]);
+    expect(home.activityByCollection).toEqual({
+      docs: [{ date: '2023-01-01', count: 1 }],
+      journal: [{ date: '2026-09-09', count: 1 }],
+      projects: [{ date: '2026-09-01', count: 1 }],
+    });
     expect(home.insights.wordCount).toBe(8);
     expect(home.insights.recordSpanDays).toBeGreaterThan(1_300);
     expect(home.insights.focusTags).toEqual(['Astro', 'Vue']);

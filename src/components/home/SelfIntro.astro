@@ -24,24 +24,24 @@ import RemixIcon from '../knowledge/RemixIcon.astro';
 </section>
 
 <style>
-  .self-intro-screen { position: relative; isolation: isolate; display: flex; min-height: 100svh; overflow: hidden; flex-direction: column; justify-content: center; padding: clamp(5.75rem, 10vh, 7rem) max(2rem, 5vw) clamp(2.5rem, 6vh, 4rem); color: #263a32; background-color: white; scroll-snap-align: start; }
+  .self-intro-screen { --self-intro-accent: #171a18; position: relative; isolation: isolate; display: flex; min-height: 100svh; overflow: hidden; flex-direction: column; justify-content: center; padding: clamp(5.75rem, 10vh, 7rem) max(2rem, 5vw) clamp(2.5rem, 6vh, 4rem); color: #171a18; background-color: white; scroll-snap-align: start; }
   .self-intro-backdrop { position: absolute; z-index: -2; inset: 0; background-image: url('/media/self-intro-paws.jpg'); background-position: bottom; background-size: 100% 80%; background-repeat: no-repeat; }
   .self-intro-topline { position: absolute; top: clamp(1.5rem, 5vh, 3.25rem); right: max(2rem, 5vw); left: max(2rem, 5vw); display: flex; align-items: center; justify-content: space-between; }
   .self-intro-kicker, .self-intro-label, .self-intro-footnote { margin: 0; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .13em; text-transform: uppercase; }
-  .self-intro-kicker { display: inline-flex; align-items: center; gap: .6rem; color: #446153; font-size: .64rem; }
-  .self-intro-dot { width: .42rem; height: .42rem; border-radius: 50%; background: #d27e52; box-shadow: 0 0 0 .24rem rgba(210,126,82,.18); }
+  .self-intro-kicker { display: inline-flex; align-items: center; gap: .6rem; color: #6f7471; font-size: .64rem; }
+  .self-intro-dot { width: .42rem; height: .42rem; border-radius: 50%; background: var(--self-intro-accent); box-shadow: 0 0 0 .24rem rgba(88,121,108,.18); }
   .self-intro-index { color: rgba(38,58,50,.2); font: 400 clamp(4rem, 8vw, 6.5rem)/.65 'Iowan Old Style', 'Palatino Linotype', serif; letter-spacing: -.12em; }
   .self-intro-copy { width: min(100%, 57rem); margin: 0 auto; padding: clamp(1.75rem, 4vw, 3.4rem) clamp(1.25rem, 5vw, 4.5rem) clamp(1.8rem, 4vw, 3rem); border: 1px solid rgba(67,91,78,.25); border-radius: 1.25rem; background: rgba(250,250,250,.87); box-shadow: 0 .9rem 3rem rgba(39,57,48,.13), inset 0 0 0 1px rgba(255,255,255,.46); backdrop-filter: blur(5px); text-align: center; }
-  .self-intro-label { color: #788a7d; font-size: .5rem; }
-  .self-intro-copy h2 { margin: .85rem 0 .8rem; color: #263a32; font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: clamp(2.7rem, 5.2vw, 5rem); font-weight: 500; letter-spacing: -.075em; line-height: .95; }
-  .self-intro-copy h2 em { color: #ba7648; font-style: italic; }
-  .self-intro-rule { display: flex; align-items: center; justify-content: center; gap: .6rem; margin: 1.15rem auto 1.35rem; color: #ba7648; }
-  .self-intro-rule::before, .self-intro-rule::after { width: min(7rem, 18vw); height: 1px; background: rgba(186,118,72,.42); content: ''; }
-  .self-intro-rule span { width: .34rem; height: .34rem; border: 1px solid #ba7648; border-radius: 50%; }
-  .self-intro-text { display: grid; gap: .82rem; max-width: 49rem; margin-inline: auto; color: #43564c; font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: clamp(.88rem, .78rem + .25vw, 1.05rem); line-height: 1.9; text-align: left; }
+  .self-intro-label { color: #7a807d; font-size: .5rem; }
+  .self-intro-copy h2 { margin: .85rem 0 .8rem; color: #171a18; font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: clamp(2.7rem, 5.2vw, 5rem); font-weight: 500; letter-spacing: -.075em; line-height: .95; }
+  .self-intro-copy h2 em { color: var(--self-intro-accent); font-style: italic; }
+  .self-intro-rule { display: flex; align-items: center; justify-content: center; gap: .6rem; margin: 1.15rem auto 1.35rem; color: var(--self-intro-accent); }
+  .self-intro-rule::before, .self-intro-rule::after { width: min(7rem, 18vw); height: 1px; background: rgba(23,26,24,.28); content: ''; }
+  .self-intro-rule span { width: .34rem; height: .34rem; border: 1px solid var(--self-intro-accent); border-radius: 50%; }
+  .self-intro-text { display: grid; gap: .82rem; max-width: 49rem; margin-inline: auto; color: #6b716e; font-family: 'Iowan Old Style', 'Palatino Linotype', 'Songti SC', serif; font-size: clamp(.88rem, .78rem + .25vw, 1.05rem); line-height: 1.9; text-align: left; }
   .self-intro-text p { margin: 0; }
-  .self-intro-link { display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.45rem; color: #a9633d; font-size: .75rem; text-decoration: none; transition: gap .2s ease, color .2s ease; }
-  .self-intro-link:hover { gap: .7rem; color: #263a32; }
+  .self-intro-link { display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.45rem; color: var(--self-intro-accent); font-size: .75rem; text-decoration: none; transition: gap .2s ease, color .2s ease; }
+  .self-intro-link:hover { gap: .7rem; color: #171a18; }
   .self-intro-link span { font-size: .9rem; }
   .self-intro-footnote { margin-top: clamp(1.4rem, 3vh, 2rem); color: rgba(255,255,255,.86); font-size: .52rem; text-align: center; text-shadow: 0 1px 8px rgba(22,35,29,.25); }
   @media (max-width: 42rem) { .self-intro-screen { min-height: auto; padding-top: 6.5rem; padding-bottom: 2rem; } .self-intro-topline { top: 1.5rem; } .self-intro-index { display: none; } .self-intro-copy { padding: 1.55rem 1.15rem 1.65rem; border-radius: .9rem; } .self-intro-label { font-size: .43rem; letter-spacing: .08em; } .self-intro-text { font-size: .88rem; line-height: 1.78; } .self-intro-footnote { max-width: 18rem; margin-inline: auto; line-height: 1.6; } }

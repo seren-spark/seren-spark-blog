@@ -105,6 +105,7 @@ export type HomeData = {
   timeline: TimelineEvent[];
   recent: TimelineEvent[];
   activity: ActivityPoint[];
+  activityByCollection: Record<ContentRecord['collection'], ActivityPoint[]>;
   insights: {
     wordCount: number;
     recordSpanDays: number;
@@ -153,6 +154,11 @@ export function buildHomeData(
     timeline,
     recent: timeline.slice(0, safeLimit),
     activity: buildActivitySeries(records),
+    activityByCollection: {
+      docs: buildActivitySeries(records.filter((record) => record.collection === 'docs')),
+      journal: buildActivitySeries(records.filter((record) => record.collection === 'journal')),
+      projects: buildActivitySeries(records.filter((record) => record.collection === 'projects')),
+    },
     insights: { wordCount, recordSpanDays, focusTags },
   };
 }
