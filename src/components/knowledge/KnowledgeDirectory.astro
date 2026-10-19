@@ -1,0 +1,371 @@
+---
+import { knowledgeNavigation } from '../../lib/knowledge-navigation';
+
+const sections = knowledgeNavigation.filter((entry) => entry.label !== '首页');
+const topicCount = sections.reduce(
+  (total, section) => total + (section.groups?.reduce((count, group) => count + group.items.length, 0) ?? 1),
+  0,
+);
+---
+
+<div class="knowledge-directory not-content">
+  <header class="directory-intro">
+    <div>
+      <p class="directory-eyebrow">KNOWLEDGE INDEX / 知识索引</p>
+      <p class="directory-lead">按分类浏览知识库，从一个专题入口开始，再沿着章节目录继续阅读。</p>
+    </div>
+    <dl class="directory-stats" aria-label="知识库统计">
+      <div>
+        <dt>主题</dt>
+        <dd>{sections.length}</dd>
+      </div>
+      <div>
+        <dt>专题</dt>
+        <dd>{topicCount}</dd>
+      </div>
+    </dl>
+  </header>
+
+  <nav class="directory-jump" aria-label="目录分区快捷导航">
+    {sections.map((section, index) => (
+      <a href={`#directory-section-${index + 1}`}>
+        <span>{String(index + 1).padStart(2, '0')}</span>
+        {section.label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="directory-sections">
+    {sections.map((section, index) => {
+      const itemCount = section.groups?.reduce((count, group) => count + group.items.length, 0) ?? 1;
+
+      return (
+        <section class="directory-section" id={`directory-section-${index + 1}`}>
+          <header class="directory-section__header">
+            <span class="directory-section__number">{String(index + 1).padStart(2, '0')}</span>
+            <h2>{section.label}</h2>
+            <span class="directory-section__count">{itemCount} 个专题</span>
+          </header>
+          {section.groups ? (
+            <div class="directory-groups">
+              {section.groups.map((group) => (
+                <section class="directory-group">
+                  <h3>{group.label}</h3>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li>
+                        <a class="directory-link" href={item.href}>
+                          <span>{item.label}</span>
+                          <svg aria-hidden="true" viewBox="0 0 24 24">
+                            <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+                          </svg>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          ) : (
+            <a class="directory-direct-link" href={section.href}>
+              <span>浏览{section.label}</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+              </svg>
+            </a>
+          )}
+        </section>
+      );
+    })}
+  </div>
+</div>
+
+<style is:global>
+  .knowledge-directory {
+    --directory-ink: var(--knowledge-ink);
+    --directory-muted: var(--knowledge-muted-ink);
+    --directory-line: var(--knowledge-soft-border);
+    --directory-accent: #1f83ef;
+    width: min(100%, 72rem);
+    margin-inline: auto;
+    color: var(--directory-ink);
+  }
+
+  .directory-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.35rem 0 1.6rem;
+    border-bottom: 1px solid var(--directory-line);
+  }
+
+  .directory-eyebrow {
+    margin: 0 0 0.7rem;
+    color: var(--directory-accent);
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .directory-lead {
+    max-width: 37rem;
+    margin: 0;
+    color: var(--directory-muted);
+    font-size: clamp(1rem, 1.6vw, 1.12rem);
+    line-height: 1.8;
+  }
+
+  .directory-stats {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .directory-stats div {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: baseline;
+    gap: 0.45rem;
+  }
+
+  .directory-stats dt {
+    color: var(--directory-muted);
+    font-size: 0.78rem;
+  }
+
+  .directory-stats dd {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.65rem;
+    line-height: 1;
+  }
+
+  .directory-jump {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.25rem 0 2rem;
+    padding-bottom: 0.55rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .directory-jump a {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.5rem;
+    border: 1px solid var(--directory-line);
+    border-radius: 999px;
+    padding: 0.43rem 0.78rem;
+    color: var(--directory-muted);
+    font-size: 0.82rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+  }
+
+  .directory-jump a span {
+    color: var(--directory-accent);
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    font-size: 0.68rem;
+  }
+
+  .directory-jump a:hover,
+  .directory-jump a:focus-visible {
+    border-color: color-mix(in srgb, var(--directory-accent) 45%, transparent);
+    background: color-mix(in srgb, var(--directory-accent) 7%, transparent);
+    color: var(--directory-ink);
+  }
+
+  .directory-sections {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border: 1px solid var(--directory-line);
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--knowledge-paper) 97%, var(--directory-ink) 3%);
+    overflow: hidden;
+    box-shadow: 0 0.7rem 2rem rgb(25 51 67 / 4%);
+  }
+
+  .directory-section {
+    scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
+  }
+
+  .directory-section + .directory-section {
+    border-top: 1px solid var(--directory-line);
+  }
+
+  .directory-section__header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 4rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--directory-line);
+    background: color-mix(in srgb, var(--knowledge-paper) 92%, var(--directory-ink) 8%);
+  }
+
+  .directory-section__number {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--directory-ink);
+    color: var(--knowledge-paper);
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  [data-theme='dark'] .directory-section__number {
+    background: #e7eef1;
+    color: #101719;
+  }
+
+  .directory-section__header h2 {
+    margin: 0;
+    color: var(--directory-ink);
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .directory-section__count {
+    color: var(--directory-muted);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .directory-groups {
+    display: grid;
+    gap: 0;
+    margin: 0.8rem 1rem 1rem 2rem;
+    border-inline-start: 1px solid var(--directory-line);
+    padding: 0 0 0 1.15rem;
+  }
+
+  .directory-group {
+    padding-block: 0.5rem 0.15rem;
+  }
+
+  .directory-group + .directory-group {
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--directory-line);
+    padding-top: 0.85rem;
+  }
+
+  .directory-group h3 {
+    margin: 0 0 0.3rem;
+    color: var(--directory-ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .directory-group ul {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .directory-group li {
+    margin: 0;
+  }
+
+  .directory-link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.45rem;
+    border-bottom: 1px dashed color-mix(in srgb, var(--directory-line) 70%, transparent);
+    color: var(--directory-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    text-decoration: none;
+    transition: color 150ms ease, padding-inline 150ms ease;
+  }
+
+  .directory-group li:last-child > .directory-link {
+    border-bottom: 0;
+  }
+
+  .directory-link svg {
+    width: 1rem;
+    color: color-mix(in srgb, var(--directory-muted) 65%, transparent);
+    transition: color 150ms ease, transform 150ms ease;
+  }
+
+  .directory-link:hover,
+  .directory-link:focus-visible {
+    color: var(--directory-accent);
+    padding-inline-start: 0.25rem;
+  }
+
+  .directory-link:hover svg,
+  .directory-link:focus-visible svg {
+    color: var(--directory-accent);
+    transform: translateX(0.16rem);
+  }
+
+  .directory-direct-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.9rem 1rem 1rem;
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, var(--directory-accent) 8%, transparent);
+    padding: 0.75rem 0.85rem;
+    color: var(--directory-accent);
+    font-size: 0.88rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .directory-direct-link svg {
+    width: 1rem;
+    transition: transform 150ms ease;
+  }
+
+  .directory-direct-link:hover svg,
+  .directory-direct-link:focus-visible svg {
+    transform: translateX(0.18rem);
+  }
+
+  @media (max-width: 40rem) {
+    .directory-intro {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .directory-stats {
+      gap: 1.25rem;
+    }
+
+    .directory-section__header {
+      padding-inline: 0.85rem;
+    }
+
+    .directory-groups {
+      margin-inline: 1.15rem 0.85rem;
+      padding-inline-start: 0.9rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .knowledge-directory * {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

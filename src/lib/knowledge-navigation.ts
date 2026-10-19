@@ -91,6 +91,7 @@ export const knowledgeNavigation: KnowledgeNavEntry[] = [
       { label: '数据库', items: [
         { label: 'MySQL', href: '/backend/database/mysql/01-数据库概述/', icon: 'node', match: ['/backend/database/mysql/'] },
         { label: 'MongoDB', href: '/backend/database/mongodb/mongodb/', icon: 'node', match: ['/backend/database/mongodb/'] },
+        { label: 'Redis', href: '/backend/database/redis/', icon: 'node', match: ['/backend/database/redis/'] },
       ] },
       { label: '部署与运维', items: [
         { label: '静态部署', href: '/backend/deploy/static/静态部署/', icon: 'setting', match: ['/backend/deploy/static/'] },

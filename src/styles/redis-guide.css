@@ -1,0 +1,160 @@
+/* Redis 教材中的流程图、提示和自测。仅作用于带 redis-* 类名的内容。 */
+.sl-markdown-content .redis-goal {
+  margin-block: 1.25rem 1.75rem;
+  padding: 0.9rem 1.05rem;
+  border: 1px solid color-mix(in srgb, var(--sl-color-accent) 22%, var(--sl-color-gray-5));
+  border-inline-start: 0.22rem solid #c83d32;
+  border-radius: 0.45rem;
+  background: color-mix(in srgb, var(--sl-color-accent-low) 42%, var(--sl-color-bg-nav));
+}
+
+.sl-markdown-content .redis-diagram {
+  margin-block: 1.6rem;
+  padding: 1.2rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.65rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #c83d32 5%, transparent), transparent 42%),
+    var(--sl-color-bg-nav);
+}
+
+.sl-markdown-content .redis-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.sl-markdown-content .redis-flow + .redis-flow {
+  margin-top: 0.8rem;
+}
+
+.sl-markdown-content .redis-flow > div {
+  flex: 1 1 8.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.4rem;
+  background: var(--sl-color-bg);
+  text-align: center;
+}
+
+.sl-markdown-content .redis-flow > .redis-accent {
+  border-color: #b9352c;
+  background: #b9352c;
+  color: #fff;
+}
+
+.sl-markdown-content .redis-flow small {
+  display: block;
+  margin-top: 0.2rem;
+  opacity: 0.76;
+}
+
+.sl-markdown-content .redis-flow > b {
+  color: var(--sl-color-gray-2);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.sl-markdown-content .redis-flow-secondary > div {
+  background: color-mix(in srgb, var(--sl-color-accent-low) 52%, var(--sl-color-bg));
+}
+
+.sl-markdown-content .redis-diagram figcaption {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+  color: var(--sl-color-gray-2);
+  font-size: 0.8rem;
+}
+
+.sl-markdown-content .redis-race {
+  display: grid;
+  grid-template-columns: minmax(2.8rem, 0.35fr) repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.45rem;
+}
+
+.sl-markdown-content .redis-race > div {
+  padding: 0.65rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.sl-markdown-content .redis-race-head {
+  background: color-mix(in srgb, var(--sl-color-accent-low) 58%, var(--sl-color-bg));
+  font-weight: 700;
+}
+
+.sl-markdown-content .redis-danger {
+  background: color-mix(in srgb, #c83d32 11%, var(--sl-color-bg));
+  color: #b9352c;
+}
+
+.sl-markdown-content .redis-note {
+  margin-block: 1.5rem;
+  padding: 1rem 1.1rem;
+  border-inline-start: 0.22rem solid #c58d35;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, #c58d35 10%, var(--sl-color-bg));
+}
+
+.sl-markdown-content .redis-note p {
+  margin-bottom: 0;
+}
+
+.sl-markdown-content .redis-answer {
+  margin-block: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  background: var(--sl-color-bg-nav);
+}
+
+.sl-markdown-content .redis-answer summary {
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  color: var(--sl-color-white);
+  font-weight: 650;
+}
+
+.sl-markdown-content .redis-answer[open] summary {
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.sl-markdown-content .redis-answer > :not(summary) {
+  margin: 0;
+  padding: 0.9rem 1rem;
+}
+
+.sl-markdown-content .redis-sources {
+  color: var(--sl-color-gray-2);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 40rem) {
+  .sl-markdown-content .redis-flow {
+    align-items: stretch;
+  }
+
+  .sl-markdown-content .redis-flow > b {
+    flex: 0 0 100%;
+    text-align: center;
+  }
+
+  .sl-markdown-content .redis-race {
+    grid-template-columns: 2.2rem repeat(2, minmax(0, 1fr));
+    font-size: 0.78rem;
+  }
+
+  .sl-markdown-content .redis-race > div {
+    padding: 0.5rem 0.35rem;
+  }
+}
+
+@media print {
+  .sl-markdown-content .redis-answer:not([open]) > :not(summary) {
+    display: block;
+  }
+}

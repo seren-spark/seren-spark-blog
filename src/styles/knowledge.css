@@ -198,6 +198,10 @@
     text-underline-offset: 0.22em;
   }
 
+  .sl-markdown-content [data-celestia-code-container] {
+    margin-block: 1.25rem;
+  }
+
   .sl-markdown-content code:not(:where(.not-content *)) {
     border: 1px solid var(--knowledge-soft-border);
     border-radius: 0.35rem;

@@ -66,7 +66,7 @@ export default defineConfig({
       locales: {
         root: { label: "简体中文", lang: "zh-CN" },
       },
-      customCss: ["./src/styles/knowledge.css"],
+      customCss: ["./src/styles/knowledge.css", "./src/styles/redis-guide.css"],
       plugins: [
         starlightCelestiaTheme({
           stylingSystem: "css",
@@ -208,6 +208,7 @@ export default defineConfig({
             { label: "Linux", autogenerate: { directory: "backend/linux" } },
             { label: "MySQL", autogenerate: { directory: "backend/database/mysql" } },
             { label: "MongoDB", autogenerate: { directory: "backend/database/mongodb" } },
+            { label: "Redis", autogenerate: { directory: "backend/database/redis" } },
             {
               label: "部署与运维",
               items: [

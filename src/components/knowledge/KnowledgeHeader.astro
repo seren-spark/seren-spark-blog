@@ -3,6 +3,7 @@ import Search from '@astrojs/starlight/components/Search.astro';
 import { Icon } from '@astrojs/starlight/components';
 import { knowledgeNavigation } from '../../lib/knowledge-navigation';
 import RemixIcon from './RemixIcon.astro';
+import ReadingProgress from './ReadingProgress.astro';
 import ScrollToTop from './ScrollToTop.astro';
 
 const pathname = Astro.url.pathname;
@@ -101,6 +102,7 @@ const isEntryActive = (entry: (typeof knowledgeNavigation)[number]) => {
 )}
 
 <ScrollToTop />
+<ReadingProgress />
 
 <script>
   const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-nav-menu]'));
