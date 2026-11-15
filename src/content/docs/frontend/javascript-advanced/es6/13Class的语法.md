@@ -3,6 +3,9 @@ title: "13【Class的语法】"
 description: "13【Class的语法】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-07
+updatedAt: 2024-05-07
+learningDates: [2024-05-07]
 ---
 
 ## 1.类的由来

@@ -3,6 +3,9 @@ title: "06 【CSS字体属性 CSS文本属性】"
 description: "06 【CSS字体属性 CSS文本属性】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-10-17
+updatedAt: 2023-10-20
+learningDates: [2023-10-17, 2023-10-18, 2023-10-19, 2023-10-20]
 ---
 
 ## 1.CSS字体属性

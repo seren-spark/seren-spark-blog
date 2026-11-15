@@ -3,6 +3,9 @@ title: "23 【grid布局】"
 description: "23 【grid布局】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-11-16
+updatedAt: 2023-11-19
+learningDates: [2023-11-16, 2023-11-19]
 ---
 
 ## 1.概述

@@ -3,6 +3,9 @@ title: "33 History对象和Location对象"
 description: "33 History对象和Location对象：前端知识库章节。"
 sidebar:
   order: 33
+firstLearnedAt: 2024-02-18
+updatedAt: 2024-02-18
+learningDates: [2024-02-18]
 ---
 
 ## 1.History 对象概述

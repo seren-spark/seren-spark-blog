@@ -3,6 +3,9 @@ title: "05 【electron的一些渲染进程Api】"
 description: "05 【electron的一些渲染进程Api】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-14
+updatedAt: 2026-03-14
+learningDates: [2026-03-14]
 ---
 
 ## 1.clipboard

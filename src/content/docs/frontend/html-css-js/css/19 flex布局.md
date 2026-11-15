@@ -3,6 +3,9 @@ title: "19 flex布局"
 description: "19 flex布局：前端知识库章节。"
 sidebar:
   order: 19
+firstLearnedAt: 2023-12-17
+updatedAt: 2023-12-23
+learningDates: [2023-12-17, 2023-12-18, 2023-12-19, 2023-12-23]
 ---
 
 ## 1.flex布局体验

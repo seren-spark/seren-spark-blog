@@ -73,7 +73,7 @@ export default defineConfig({
           nav: [
             { label: "首页", href: "/" },
             { label: "个人主页", href: "/about/" },
-            { label: "知识库", href: "/getting-started/" },
+            { label: "笔记", href: "/getting-started/" },
             { label: "博客", href: "/journal/" },
           ],
         }),

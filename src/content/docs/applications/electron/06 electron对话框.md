@@ -3,6 +3,9 @@ title: "06 【electron对话框】"
 description: "06 【electron对话框】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-15
+updatedAt: 2026-03-15
+learningDates: [2026-03-15]
 ---
 
 > 显示用于打开和保存文件、警报等的本机系统对话框

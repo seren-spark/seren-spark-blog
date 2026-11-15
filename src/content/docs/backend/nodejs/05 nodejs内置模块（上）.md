@@ -3,6 +3,9 @@ title: "05 【nodejs内置模块（上）】"
 description: "05 【nodejs内置模块（上）】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-06-18
+updatedAt: 2024-07-02
+learningDates: [2024-06-18, 2024-06-20, 2024-06-21, 2024-06-22, 2024-06-23, 2024-06-24, 2024-06-27, 2024-06-28, 2024-07-02]
 ---
 
 ## 1.nodejs 的官方API文档

@@ -3,6 +3,9 @@ title: "01 【创建一个electron应用】"
 description: "01 【创建一个electron应用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-01
+updatedAt: 2026-03-01
+learningDates: [2026-03-01]
 ---
 
 ## 1.Electron 初探

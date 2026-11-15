@@ -3,6 +3,9 @@ title: "05 【uni-app的API】"
 description: "05 【uni-app的API】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-14
+updatedAt: 2026-05-18
+learningDates: [2026-05-14, 2026-05-15, 2026-05-17, 2026-05-18]
 ---
 
 ## 1.概述

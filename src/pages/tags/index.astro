@@ -1,4 +1,5 @@
 ---
+import { tagStyle } from '../../lib/tags';
 import { getTagIndex } from '../../lib/site-data';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import RemixIcon from '../../components/knowledge/RemixIcon.astro';
@@ -17,7 +18,7 @@ const tags = await getTagIndex();
   {tags.length > 0 ? (
     <div class="tag-grid">
       {tags.map((tag, index) => (
-        <a class="tag-card" href={`/tags/${encodeURIComponent(tag.slug)}/`}>
+        <a class="tag-card" style={tagStyle(tag.label)} href={`/tags/${encodeURIComponent(tag.slug)}/`}>
           <span class="card-index">0{index + 1} / TAG</span>
           <span class="card-title">{tag.label}</span>
           <span class="card-meta">{tag.count} 篇内容 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span>
@@ -26,3 +27,8 @@ const tags = await getTagIndex();
     </div>
   ) : <p class="empty-message">还没有标签。</p>}
 </SiteLayout>
+
+<style>
+  .tag-card { border-top: 3px solid var(--tag-color); background: color-mix(in srgb, var(--tag-background) 35%, white); }
+  .tag-card .card-title { color: var(--tag-color); }
+</style>

@@ -3,6 +3,9 @@ title: 前端
 description: HTML、CSS、JavaScript、TypeScript 与前端框架笔记目录。
 sidebar:
   order: 1
+firstLearnedAt: 2026-06-03
+updatedAt: 2026-07-01
+learningDates: [2026-06-03, 2026-06-06, 2026-06-11, 2026-06-16, 2026-07-01]
 ---
 
 从浏览器基础到框架和工程化，按专题进入具体笔记目录。

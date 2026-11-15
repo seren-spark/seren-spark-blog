@@ -3,6 +3,9 @@ title: TypeScript
 description: TypeScript 类型系统与工程实践笔记。
 sidebar:
   order: 1
+firstLearnedAt: 2026-04-30
+updatedAt: 2026-04-30
+learningDates: [2026-04-30]
 ---
 
 ## 学习目录

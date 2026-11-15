@@ -3,6 +3,9 @@ title: "02 【Axios的概述和基本使用】"
 description: "02 【Axios的概述和基本使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-04-03
+updatedAt: 2024-04-07
+learningDates: [2024-04-03, 2024-04-07]
 ---
 
 ## 1.Axios 是什么?

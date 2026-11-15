@@ -7,11 +7,12 @@ tags:
   - Redis
   - Java
   - Spring Boot
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 4
+firstLearnedAt: 2026-09-30
+updatedAt: 2026-10-02
+learningDates: [2026-09-30, 2026-10-01, 2026-10-02]
 ---
 ## 在 Spring Boot 里读写 Redis
 

@@ -3,6 +3,9 @@ title: "15 【登录鉴权-Cookie】"
 description: "15 【登录鉴权-Cookie】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-07-30
+updatedAt: 2024-08-11
+learningDates: [2024-07-30, 2024-07-31, 2024-08-01, 2024-08-02, 2024-08-03, 2024-08-06, 2024-08-07, 2024-08-11]
 ---
 
 ## 1.什么是认证（Authentication）

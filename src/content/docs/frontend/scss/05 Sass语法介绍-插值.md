@@ -3,6 +3,9 @@ title: "05 【Sass语法介绍-插值】"
 description: "05 【Sass语法介绍-插值】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-22
+updatedAt: 2024-05-27
+learningDates: [2024-05-22, 2024-05-23, 2024-05-24, 2024-05-27]
 ---
 
 ## 1.前言

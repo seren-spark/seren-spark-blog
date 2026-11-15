@@ -3,6 +3,9 @@ title: "16 DOM概述"
 description: "16 DOM概述：前端知识库章节。"
 sidebar:
   order: 16
+firstLearnedAt: 2024-01-25
+updatedAt: 2024-01-27
+learningDates: [2024-01-25, 2024-01-27]
 ---
 
 ## 1.DOM基本概念

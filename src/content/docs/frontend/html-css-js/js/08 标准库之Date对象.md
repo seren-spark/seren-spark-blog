@@ -3,6 +3,9 @@ title: "08 标准库之Date对象"
 description: "08 标准库之Date对象：前端知识库章节。"
 sidebar:
   order: 8
+firstLearnedAt: 2024-01-15
+updatedAt: 2024-01-18
+learningDates: [2024-01-15, 2024-01-16, 2024-01-17, 2024-01-18]
 ---
 
 掌握 Date 日期对象的使用，动态获取当前计算机的时间。

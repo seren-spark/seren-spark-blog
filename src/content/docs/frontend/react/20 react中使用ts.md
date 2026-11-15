@@ -3,6 +3,9 @@ title: "20 【react中使用ts】"
 description: "20 【react中使用ts】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-01-23
+updatedAt: 2026-02-09
+learningDates: [2026-01-23, 2026-01-24, 2026-01-25, 2026-01-26, 2026-01-27, 2026-01-28, 2026-01-29, 2026-01-30, 2026-01-31, 2026-02-01, 2026-02-06, 2026-02-09]
 ---
 
 官方文档：[React TypeScript Cheatsheets | React TypeScript Cheatsheets (react-typescript-cheatsheet.netlify.app)](https://react-typescript-cheatsheet.netlify.app/)

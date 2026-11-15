@@ -3,6 +3,9 @@ title: 异步编程
 description: Promise、任务队列与异步流程控制。
 sidebar:
   order: 4
+firstLearnedAt: 2024-01-10
+updatedAt: 2024-01-12
+learningDates: [2024-01-10, 2024-01-12]
 ---
 
 ## 内容范围

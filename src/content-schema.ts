@@ -36,6 +36,7 @@ export const docsSchemaExtension = z.object({
   category: z.string().optional(),
   tags: z.array(z.string()).default([]),
   firstLearnedAt: date.optional(),
+  learningDates: z.array(date).optional(),
   publishedAt: date.optional(),
   updatedAt: date.optional(),
   status: z.enum(['draft', 'active', 'stable', 'archived']).default('active'),

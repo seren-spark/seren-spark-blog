@@ -3,6 +3,9 @@ title: "04 【CSS选择器 】"
 description: "04 【CSS选择器 】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-10-14
+updatedAt: 2023-10-19
+learningDates: [2023-10-14, 2023-10-15, 2023-10-16, 2023-10-19]
 ---
 
 ## 1.CSS选择器的作用

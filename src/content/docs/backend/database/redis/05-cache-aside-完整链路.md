@@ -7,11 +7,12 @@ tags:
   - Redis
   - 缓存
   - 一致性
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 5
+firstLearnedAt: 2026-10-03
+updatedAt: 2026-10-08
+learningDates: [2026-10-03, 2026-10-08]
 ---
 ## 把“先查缓存”做成一条完整链路
 

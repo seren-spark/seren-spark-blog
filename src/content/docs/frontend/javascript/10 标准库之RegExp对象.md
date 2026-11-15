@@ -3,6 +3,9 @@ title: "10 【标准库之RegExp对象】"
 description: "10 【标准库之RegExp对象】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-02-29
+updatedAt: 2024-03-02
+learningDates: [2024-02-29, 2024-03-02]
 ---
 
 ## 1.什么是正则表达式

@@ -3,6 +3,9 @@ title: "04 【布局之Overscroll Behavior  定位偏移量】"
 description: "04 【布局之Overscroll Behavior  定位偏移量】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-04-12
+updatedAt: 2026-04-12
+learningDates: [2026-04-12]
 ---
 
 ## 1.布局-Overscroll Behavior

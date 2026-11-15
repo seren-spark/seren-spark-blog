@@ -3,6 +3,9 @@ title: "11 标准库之JSON对象 JSON5"
 description: "11 标准库之JSON对象 JSON5：前端知识库章节。"
 sidebar:
   order: 11
+firstLearnedAt: 2024-01-22
+updatedAt: 2024-01-22
+learningDates: [2024-01-22]
 ---
 
 ## 1.JSON 格式

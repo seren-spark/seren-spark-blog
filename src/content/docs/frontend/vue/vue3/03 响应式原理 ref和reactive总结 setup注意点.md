@@ -3,6 +3,9 @@ title: "03 【响应式原理 ref和reactive总结 setup注意点】"
 description: "03 【响应式原理 ref和reactive总结 setup注意点】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2025-01-21
+updatedAt: 2025-02-16
+learningDates: [2025-01-21, 2025-01-22, 2025-01-23, 2025-01-24, 2025-01-25, 2025-01-26, 2025-01-27, 2025-02-06, 2025-02-07, 2025-02-16]
 ---
 
 ## 1.Vue3.0中的响应式原理

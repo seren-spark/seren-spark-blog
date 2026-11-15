@@ -7,11 +7,12 @@ tags:
   - Redis
   - Docker
   - redis-cli
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 2
+firstLearnedAt: 2026-09-28
+updatedAt: 2026-09-29
+learningDates: [2026-09-28, 2026-09-29]
 ---
 ## 第一次把数据写进去
 

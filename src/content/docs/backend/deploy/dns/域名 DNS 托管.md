@@ -3,6 +3,9 @@ title: "域名 DNS 托管"
 description: "域名 DNS 托管：前端知识库章节。"
 sidebar:
   order: 5
+firstLearnedAt: 2026-06-05
+updatedAt: 2026-06-05
+learningDates: [2026-06-05]
 ---
 
 国内访问为主的话，域名建议备案后托管在国内厂商。之前试过 Cloudflare，光域名解析就用了 500 ms，换回阿里云后速度稳定许多。

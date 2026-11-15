@@ -3,6 +3,9 @@ title: 应用
 description: Web、桌面与跨端应用开发笔记。
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-03
+updatedAt: 2026-03-03
+learningDates: [2026-03-03]
 ---
 
 这里按应用形态整理完整项目与实践经验。

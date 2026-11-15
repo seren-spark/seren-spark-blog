@@ -3,6 +3,9 @@ title: "02 【基础篇-vim编辑器 网络配置 远程登录】"
 description: "02 【基础篇-vim编辑器 网络配置 远程登录】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-06-26
+updatedAt: 2026-06-26
+learningDates: [2026-06-26]
 ---
 
 ## 1.vi和vim编辑器

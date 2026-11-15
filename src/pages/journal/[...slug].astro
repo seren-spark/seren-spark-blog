@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import Tag from '../../components/Tag.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('journal');
@@ -27,6 +28,7 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
               {entry.data.occurredAt.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
             </time>
             <span>原始发布日期</span>
+            {entry.data.tags.map((tag: string) => <Tag label={tag} />)}
             {entry.data.sourceUrl && <a href={entry.data.sourceUrl} target="_blank" rel="noreferrer">来源：{entry.data.sourceName ?? 'CSDN'}</a>}
           </div>
         </div>

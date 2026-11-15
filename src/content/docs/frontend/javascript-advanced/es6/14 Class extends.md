@@ -3,6 +3,9 @@ title: "14 【Class extends】"
 description: "14 【Class extends】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-07
+updatedAt: 2024-05-08
+learningDates: [2024-05-07, 2024-05-08]
 ---
 
 ## 1.简介

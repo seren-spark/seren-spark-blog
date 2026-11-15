@@ -3,6 +3,9 @@ title: "14 语法之console 对象与控制台"
 description: "14 语法之console 对象与控制台：前端知识库章节。"
 sidebar:
   order: 14
+firstLearnedAt: 2024-01-22
+updatedAt: 2024-01-24
+learningDates: [2024-01-22, 2024-01-23, 2024-01-24]
 ---
 
 ## 1.console 对象

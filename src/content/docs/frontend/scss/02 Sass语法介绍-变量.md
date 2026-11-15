@@ -3,6 +3,9 @@ title: "02 【Sass语法介绍-变量】"
 description: "02 【Sass语法介绍-变量】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-18
+updatedAt: 2024-05-22
+learningDates: [2024-05-18, 2024-05-19, 2024-05-22]
 ---
 
 sass有两种语法格式Sass(早期的缩进格式：Indented Sass)和SCSS(Sassy CSS)

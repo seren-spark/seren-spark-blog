@@ -46,6 +46,18 @@ describe('timeline aggregation', () => {
 });
 
 describe('activity aggregation', () => {
+  it('counts learning sessions without counting their date boundaries again', () => {
+    const result = buildActivityMap([
+      record('docs', 'css', {
+        firstLearnedAt: '2023-10-01', updatedAt: '2023-10-03',
+        learningDates: ['2023-10-01', '2023-10-02', '2023-10-03'],
+      }),
+      record('docs', 'html', { learningDates: ['2023-10-02'] }),
+    ]);
+    expect([...result.entries()]).toEqual([
+      ['2023-10-01', 1], ['2023-10-02', 2], ['2023-10-03', 1],
+    ]);
+  });
   it('counts historical and journal activity on their source dates', () => {
     const result = buildActivityMap([
       record('docs', 'old', { firstLearnedAt: '2023-01-01', updatedAt: '2026-09-09' }),

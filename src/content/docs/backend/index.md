@@ -3,6 +3,9 @@ title: 服务端
 description: 服务、数据与部署运维笔记。
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-18
+updatedAt: 2026-05-18
+learningDates: [2026-05-18]
 ---
 
 这里整理后端开发和服务运行相关内容。

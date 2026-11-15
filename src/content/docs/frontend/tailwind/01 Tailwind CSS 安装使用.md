@@ -3,6 +3,9 @@ title: "01 【Tailwind CSS 安装使用】"
 description: "01 【Tailwind CSS 安装使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-04-04
+updatedAt: 2026-04-04
+learningDates: [2026-04-04]
 ---
 
 > **简介：** Tailwind CSS 是一个功能类优先的 CSS 框架，它集成了诸如 flex, pt-4, text-center 和 rotate-90 这样的的类，它们能直接在脚本标记语言中组合起来，构建出任何设计。

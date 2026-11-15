@@ -7,11 +7,12 @@ tags:
   - Redis
   - 原理
   - 内存
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 9
+firstLearnedAt: 2026-10-12
+updatedAt: 2026-10-17
+learningDates: [2026-10-12, 2026-10-13, 2026-10-14, 2026-10-17]
 ---
 ## 原理学到能解释现象，就够用了
 

@@ -3,6 +3,9 @@ title: "32 【Navigator 对象和Screen 对象】"
 description: "32 【Navigator 对象和Screen 对象】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-03-25
+updatedAt: 2024-03-27
+learningDates: [2024-03-25, 2024-03-26, 2024-03-27]
 ---
 
 ## 1.Navigator 对象的属性

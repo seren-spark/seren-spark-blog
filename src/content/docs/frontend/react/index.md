@@ -3,6 +3,9 @@ title: React
 description: React 组件、状态管理与工程实践笔记。
 sidebar:
   order: 1
+firstLearnedAt: 2026-02-22
+updatedAt: 2026-02-28
+learningDates: [2026-02-22, 2026-02-25, 2026-02-26, 2026-02-28]
 ---
 
 ## 学习目录

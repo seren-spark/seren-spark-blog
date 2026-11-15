@@ -3,6 +3,9 @@ title: "09 【Sass语法介绍-函数指令】"
 description: "09 【Sass语法介绍-函数指令】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-28
+updatedAt: 2024-05-29
+learningDates: [2024-05-28, 2024-05-29]
 ---
 
 ## 1.前言

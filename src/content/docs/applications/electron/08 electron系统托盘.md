@@ -3,6 +3,9 @@ title: "08 【electron系统托盘 】"
 description: "08 【electron系统托盘 】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-20
+updatedAt: 2026-03-21
+learningDates: [2026-03-20, 2026-03-21]
 ---
 
 当我们关闭一个应用程序的时候，它其实关闭了，但是没有完全关闭，只是隐藏了，有的就存在系统托盘中，那么如何在`electron` 设置系统托盘呢

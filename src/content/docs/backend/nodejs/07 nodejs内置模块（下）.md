@@ -3,6 +3,9 @@ title: "07 【nodejs内置模块（下）】"
 description: "07 【nodejs内置模块（下）】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-06-27
+updatedAt: 2024-07-08
+learningDates: [2024-06-27, 2024-06-28, 2024-06-29, 2024-06-30, 2024-07-02, 2024-07-03, 2024-07-04, 2024-07-07, 2024-07-08]
 ---
 
 ## 1.stream 模块

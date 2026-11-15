@@ -3,6 +3,9 @@ title: "02 【el和data的两种写法 MVVM模型】"
 description: "02 【el和data的两种写法 MVVM模型】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-09-18
+updatedAt: 2024-09-29
+learningDates: [2024-09-18, 2024-09-20, 2024-09-21, 2024-09-22, 2024-09-23, 2024-09-24, 2024-09-27, 2024-09-28, 2024-09-29]
 ---
 
 ## 1.el和data的两种写法

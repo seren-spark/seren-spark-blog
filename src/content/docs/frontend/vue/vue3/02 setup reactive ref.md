@@ -3,6 +3,9 @@ title: "02 【setup reactive ref】"
 description: "02 【setup reactive ref】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2025-01-15
+updatedAt: 2025-02-06
+learningDates: [2025-01-15, 2025-01-16, 2025-01-17, 2025-01-18, 2025-01-20, 2025-01-22, 2025-01-23, 2025-01-24, 2025-01-27, 2025-02-06]
 ---
 
 ## 1.拉开序幕的setup

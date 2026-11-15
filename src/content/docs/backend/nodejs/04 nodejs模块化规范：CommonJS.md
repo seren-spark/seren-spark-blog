@@ -3,6 +3,9 @@ title: "04 【nodejs模块化规范：CommonJS】"
 description: "04 【nodejs模块化规范：CommonJS】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-06-14
+updatedAt: 2024-06-27
+learningDates: [2024-06-14, 2024-06-15, 2024-06-16, 2024-06-17, 2024-06-18, 2024-06-22, 2024-06-23, 2024-06-27]
 ---
 
 ## 1.前言

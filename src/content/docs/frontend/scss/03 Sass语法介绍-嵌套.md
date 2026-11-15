@@ -3,6 +3,9 @@ title: "03 【Sass语法介绍-嵌套】"
 description: "03 【Sass语法介绍-嵌套】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-19
+updatedAt: 2024-05-23
+learningDates: [2024-05-19, 2024-05-20, 2024-05-22, 2024-05-23]
 ---
 
 ## 1.前言

@@ -3,6 +3,9 @@ title: "23 【UmiJS入门】"
 description: "23 【UmiJS入门】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-02-24
+updatedAt: 2026-02-24
+learningDates: [2026-02-24]
 ---
 
 ## 1.Umi 介绍

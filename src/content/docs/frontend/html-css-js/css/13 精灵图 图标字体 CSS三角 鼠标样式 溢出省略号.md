@@ -3,6 +3,9 @@ title: "13 精灵图 图标字体 CSS三角 鼠标样式 溢出省略号"
 description: "13 精灵图 图标字体 CSS三角 鼠标样式 溢出省略号：前端知识库章节。"
 sidebar:
   order: 13
+firstLearnedAt: 2023-12-06
+updatedAt: 2023-12-09
+learningDates: [2023-12-06, 2023-12-07, 2023-12-08, 2023-12-09]
 ---
 
 ## 1.精灵图

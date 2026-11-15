@@ -3,6 +3,9 @@ title: "22 【在react中使用Emotion】"
 description: "22 【在react中使用Emotion】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-02-07
+updatedAt: 2026-02-08
+learningDates: [2026-02-07, 2026-02-08]
 ---
 
 ## 1.CSS in JS 的优点

@@ -3,6 +3,9 @@ title: "03 【基本的SELECT语句】"
 description: "03 【基本的SELECT语句】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-08-25
+updatedAt: 2026-09-02
+learningDates: [2026-08-25, 2026-08-26, 2026-08-27, 2026-08-28, 2026-08-29, 2026-09-01, 2026-09-02]
 ---
 
 ## 1.SQL分类

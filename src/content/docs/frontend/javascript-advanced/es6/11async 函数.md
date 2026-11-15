@@ -3,6 +3,9 @@ title: "11【async 函数】"
 description: "11【async 函数】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-04-30
+updatedAt: 2024-04-30
+learningDates: [2024-04-30]
 ---
 
 ## 1.基本用法

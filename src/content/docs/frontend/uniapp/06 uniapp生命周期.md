@@ -3,6 +3,9 @@ title: "06 【uniapp生命周期】"
 description: "06 【uniapp生命周期】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-17
+updatedAt: 2026-05-17
+learningDates: [2026-05-17]
 ---
 
 生命周期的概念：一个对象从创建、运行、销毁的整个过程被成为生命周期。

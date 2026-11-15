@@ -1,5 +1,5 @@
 ---
-type SectionKey = 'home' | 'about' | 'knowledge' | 'journal' | 'archive' | 'tags' | 'projects';
+type SectionKey = 'home' | 'about' | 'knowledge' | 'journal' | 'tags' | 'projects';
 
 interface Props {
   title: string;
@@ -12,7 +12,7 @@ const { title, description, active, exactTitle = false } = Astro.props;
 const navItems: Array<{ key: SectionKey; label: string; href: string }> = [
   { key: 'home', label: '首页', href: '/' },
   { key: 'about', label: '个人主页', href: '/about/' },
-  { key: 'knowledge', label: '知识库', href: '/getting-started/' },
+  { key: 'knowledge', label: '笔记', href: '/getting-started/' },
   { key: 'journal', label: '博客', href: '/journal/' },
 ];
 ---
@@ -300,6 +300,7 @@ const navItems: Array<{ key: SectionKey; label: string; href: string }> = [
   }
 
   .journal-card {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -370,18 +371,16 @@ const navItems: Array<{ key: SectionKey; label: string; href: string }> = [
   }
 
   .journal-card .card-tags {
+    --tag-height: 1.35rem;
+    --tag-font-size: .66rem;
+    flex-wrap: wrap;
     display: flex;
     gap: 0.4rem;
   }
 
-  .journal-card .tag {
-    display: inline-block;
-    padding: 0.15rem 0.55rem;
-    background: color-mix(in srgb, var(--site-accent) 13%, var(--site-surface));
-    border-radius: 0.25rem;
-    font-size: 0.72rem;
-    color: var(--site-accent);
-  }
+  .journal-card .article-link { color: inherit; text-decoration: none; }
+  .journal-card .article-link::after { content: ''; position: absolute; inset: 0; }
+  .journal-card:focus-within { outline: 2px solid var(--site-accent); outline-offset: 3px; }
 
   .journal-card .card-source {
     flex-shrink: 0;

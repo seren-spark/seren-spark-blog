@@ -3,6 +3,9 @@ title: "04 【Sass语法介绍-运算】"
 description: "04 【Sass语法介绍-运算】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-21
+updatedAt: 2024-05-23
+learningDates: [2024-05-21, 2024-05-22, 2024-05-23]
 ---
 
 ## 1.前言

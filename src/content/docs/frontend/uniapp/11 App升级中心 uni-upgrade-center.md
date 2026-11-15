@@ -3,6 +3,9 @@ title: "11 【App升级中心 uni-upgrade-center】"
 description: "11 【App升级中心 uni-upgrade-center】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-30
+updatedAt: 2026-05-30
+learningDates: [2026-05-30]
 ---
 
 ## 1.概述

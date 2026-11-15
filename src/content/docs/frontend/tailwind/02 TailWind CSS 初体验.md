@@ -3,6 +3,9 @@ title: "02 【TailWind CSS 初体验】"
 description: "02 【TailWind CSS 初体验】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-04-06
+updatedAt: 2026-04-07
+learningDates: [2026-04-06, 2026-04-07]
 ---
 
 经过上一篇 `Tailwind CSS` 的学习，现在已经安装好了，万事俱备，只欠东风。这篇文章不往后学习，先来找找**成就感!** ，体验一把 `Tailwind CSS` 的案例。

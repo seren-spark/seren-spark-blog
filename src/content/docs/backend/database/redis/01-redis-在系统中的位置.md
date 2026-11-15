@@ -7,11 +7,12 @@ tags:
   - Redis
   - 缓存
   - 后端基础
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 1
+firstLearnedAt: 2026-09-24
+updatedAt: 2026-09-28
+learningDates: [2026-09-24, 2026-09-28]
 ---
 ## 先理解它的位置，再学习命令
 

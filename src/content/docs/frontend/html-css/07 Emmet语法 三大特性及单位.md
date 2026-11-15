@@ -3,6 +3,9 @@ title: "07 【Emmet语法 三大特性及单位】"
 description: "07 【Emmet语法 三大特性及单位】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-10-19
+updatedAt: 2023-10-24
+learningDates: [2023-10-19, 2023-10-20, 2023-10-21, 2023-10-24]
 ---
 
 ## 1.Emmet语法

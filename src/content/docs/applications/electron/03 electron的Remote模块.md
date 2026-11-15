@@ -3,6 +3,9 @@ title: "03 【electron的Remote模块】"
 description: "03 【electron的Remote模块】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-13
+updatedAt: 2026-03-13
+learningDates: [2026-03-13]
 ---
 
 在渲染进程里（比如`index.html`里面加载了一些**js文件** ，那里面的**js** 如果要使用到 **BrowserWindow** 这些属性的话就必须使用 `remote`）

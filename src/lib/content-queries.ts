@@ -4,6 +4,7 @@ import {
   type ContentRecord,
   type TimelineEvent,
 } from './content-model';
+import { normalizeTag, tagSlug } from './tags';
 
 export type JournalEntryLike = {
   id: string;
@@ -169,14 +170,6 @@ export type TagIndexItem = {
   count: number;
   entries: ContentRecord[];
 };
-
-function normalizeTag(tag: string): string {
-  return tag.trim().toLocaleLowerCase();
-}
-
-function tagSlug(tag: string): string {
-  return normalizeTag(tag).replace(/\s+/g, '-').replace(/[\\/]+/g, '-');
-}
 
 export function buildTagIndex(input: ContentCollectionsInput): TagIndexItem[] {
   const groups = new Map<string, TagIndexItem>();

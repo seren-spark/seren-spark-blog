@@ -3,6 +3,9 @@ title: "08 【Sass语法介绍-混合指令】"
 description: "08 【Sass语法介绍-混合指令】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-27
+updatedAt: 2024-05-29
+learningDates: [2024-05-27, 2024-05-28, 2024-05-29]
 ---
 
 ## 1.前言

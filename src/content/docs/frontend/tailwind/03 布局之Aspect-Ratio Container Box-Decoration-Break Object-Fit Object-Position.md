@@ -3,6 +3,9 @@ title: "03 【布局之Aspect-Ratio Container Box-Decoration-Break Object-Fit Ob
 description: "03 【布局之Aspect-Ratio Container Box-Decoration-Break Object-Fit Object-Position】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-04-10
+updatedAt: 2026-04-10
+learningDates: [2026-04-10]
 ---
 
 ## 1.布局-纵横比（Aspect Ratio）

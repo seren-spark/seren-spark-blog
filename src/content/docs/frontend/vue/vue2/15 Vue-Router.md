@@ -3,6 +3,9 @@ title: "15 【Vue-Router】"
 description: "15 【Vue-Router】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-12-18
+updatedAt: 2024-12-31
+learningDates: [2024-12-18, 2024-12-19, 2024-12-21, 2024-12-22, 2024-12-23, 2024-12-24, 2024-12-26, 2024-12-27, 2024-12-28, 2024-12-31]
 ---
 
 ## 1.相关理解

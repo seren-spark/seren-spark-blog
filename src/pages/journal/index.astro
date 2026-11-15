@@ -1,6 +1,7 @@
 ---
 import { getJournalEntries } from '../../lib/site-data';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import Tag from '../../components/Tag.astro';
 
 const entries = await getJournalEntries();
 ---
@@ -11,12 +12,11 @@ const entries = await getJournalEntries();
       <h3 class="page-title">博客</h3>
       <p class="page-lede">把技术实践、学习过程和阶段性的想法整理在一起</p>
     </div>
-    <a class="back-link" href="/archive/">按年份查看 &gt;</a>
   </div>
   {entries.length > 0 ? (
     <div class="journal-cards">
       {entries.map((entry) => (
-        <a class:list={['journal-card', entry.data.coverImage && 'has-cover']} href={`/journal/${entry.id}/`}>
+        <article class:list={['journal-card', entry.data.coverImage && 'has-cover']}>
           {entry.data.coverImage && (
             <img
               class="card-cover"
@@ -27,7 +27,7 @@ const entries = await getJournalEntries();
             />
           )}
           <div class="card-body">
-            <h2 class="card-title">{entry.data.title}</h2>
+            <h2 class="card-title"><a class="article-link" href={`/journal/${entry.id}/`}>{entry.data.title}</a></h2>
             {entry.data.description && <p class="card-desc">{entry.data.description}</p>}
             <div class="card-meta">
               <time datetime={entry.data.occurredAt.toISOString()}>
@@ -36,14 +36,14 @@ const entries = await getJournalEntries();
               {entry.data.tags && entry.data.tags.length > 0 && (
                 <span class="card-tags">
                   {entry.data.tags.map((tag: string) => (
-                    <span class="tag">{tag}</span>
+                    <Tag label={tag} />
                   ))}
                 </span>
               )}
             </div>
           </div>
           <span class="card-source">{entry.data.sourceName ?? '博客'}</span>
-        </a>
+        </article>
       ))}
     </div>
   ) : <p class="empty-message">还没有博客文章。</p>}

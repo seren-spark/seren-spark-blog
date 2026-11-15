@@ -3,6 +3,9 @@ title: "03 【Fetch的概述和基本使用】"
 description: "03 【Fetch的概述和基本使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-04-05
+updatedAt: 2024-04-08
+learningDates: [2024-04-05, 2024-04-07, 2024-04-08]
 ---
 
 ## 1.XMLHttpRequest缺点

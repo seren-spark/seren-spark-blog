@@ -3,6 +3,9 @@ title: "Chrome 扩展"
 description: "Chrome 扩展：前端知识库章节。"
 sidebar:
   order: 5
+firstLearnedAt: 2026-04-26
+updatedAt: 2026-04-26
+learningDates: [2026-04-26]
 ---
 
 常用 Chrome 扩展工具，链接多为 Chrome Web Store 项目页面。

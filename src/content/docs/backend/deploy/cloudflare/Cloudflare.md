@@ -3,6 +3,9 @@ title: "Cloudflare"
 description: "Cloudflare：前端知识库章节。"
 sidebar:
   order: 4
+firstLearnedAt: 2026-06-02
+updatedAt: 2026-06-12
+learningDates: [2026-06-02, 2026-06-03, 2026-06-04, 2026-06-12]
 ---
 
 官方文档：[Cloudflare Docs](https://developers.cloudflare.com/)

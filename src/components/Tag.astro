@@ -1,0 +1,12 @@
+---
+import { tagHref, tagStyle } from '../lib/tags';
+interface Props { label: string; count?: number; }
+const { label, count } = Astro.props;
+---
+<a class="content-tag" href={tagHref(label)} style={tagStyle(label)}>{label}{count !== undefined && <small>{count}</small>}</a>
+<style>
+  .content-tag { position: relative; z-index: 1; display: inline-flex; box-sizing: border-box; align-items: center; justify-content: center; gap: .4em; height: var(--tag-height, 1.5rem); padding: 0 .65em; border: 1px solid color-mix(in srgb, var(--tag-color) 10%, transparent); border-radius: .4em; color: var(--tag-color); background: var(--tag-background); font-size: var(--tag-font-size, .75rem); line-height: 1.2; text-decoration: none; white-space: nowrap; transition: filter .2s, transform .2s; }
+  .content-tag:hover { filter: saturate(1.25); transform: translateY(-1px); }
+  .content-tag:focus-visible { outline: 2px solid var(--tag-color); outline-offset: 3px; }
+  small { font-size: .8em; opacity: .7; }
+</style>

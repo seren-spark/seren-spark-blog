@@ -3,6 +3,9 @@ title: "10 【消息推送 uni-push】"
 description: "10 【消息推送 uni-push】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-29
+updatedAt: 2026-05-29
+learningDates: [2026-05-29]
 ---
 
 ## 1.概述

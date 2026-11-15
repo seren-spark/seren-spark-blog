@@ -3,6 +3,9 @@ title: "09 【Attributes继承 provide与inject】"
 description: "09 【Attributes继承 provide与inject】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2025-02-24
+updatedAt: 2025-03-18
+learningDates: [2025-02-24, 2025-02-25, 2025-02-26, 2025-02-27, 2025-02-28, 2025-03-01, 2025-03-03, 2025-03-04, 2025-03-05, 2025-03-08, 2025-03-09, 2025-03-13, 2025-03-14, 2025-03-18]
 ---
 
 ## 1.继承 Attributes

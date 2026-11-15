@@ -3,6 +3,9 @@ title: "10 【Sass语法介绍-继承】"
 description: "10 【Sass语法介绍-继承】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-30
+updatedAt: 2024-05-30
+learningDates: [2024-05-30]
 ---
 
 ## 1.前言

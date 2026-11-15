@@ -3,6 +3,9 @@ title: "17 【Document 节点】"
 description: "17 【Document 节点】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-03-08
+updatedAt: 2024-03-12
+learningDates: [2024-03-08, 2024-03-09, 2024-03-12]
 ---
 
 ## 1.Document 节点的概述

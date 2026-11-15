@@ -3,6 +3,9 @@ title: "MongoDB"
 description: "MongoDB：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-08-16
+updatedAt: 2026-08-27
+learningDates: [2026-08-16, 2026-08-17, 2026-08-18, 2026-08-19, 2026-08-22, 2026-08-23, 2026-08-27]
 ---
 
 ## 1.下载安装

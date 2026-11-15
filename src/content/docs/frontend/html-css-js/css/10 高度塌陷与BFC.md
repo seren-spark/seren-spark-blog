@@ -3,6 +3,9 @@ title: "10 高度塌陷与BFC"
 description: "10 高度塌陷与BFC：前端知识库章节。"
 sidebar:
   order: 10
+firstLearnedAt: 2023-12-01
+updatedAt: 2023-12-04
+learningDates: [2023-12-01, 2023-12-02, 2023-12-03, 2023-12-04]
 ---
 
 ## 1.高度塌陷

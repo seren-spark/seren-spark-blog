@@ -3,6 +3,9 @@ title: "03 【npm的使用】"
 description: "03 【npm的使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-06-11
+updatedAt: 2024-06-22
+learningDates: [2024-06-11, 2024-06-12, 2024-06-13, 2024-06-14, 2024-06-17, 2024-06-18, 2024-06-22]
 ---
 
 ## 1.包和npm

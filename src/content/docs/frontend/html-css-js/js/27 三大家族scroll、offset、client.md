@@ -3,6 +3,9 @@ title: "27 三大家族scroll、offset、client"
 description: "27 三大家族scroll、offset、client：前端知识库章节。"
 sidebar:
   order: 27
+firstLearnedAt: 2024-02-07
+updatedAt: 2024-02-08
+learningDates: [2024-02-07, 2024-02-08]
 ---
 
 JS的三大家族主要是Offset、Scroll、Client，通过对三大家族不同属性的灵活使用，我们可以模拟出很多炫酷的JS动画，增强界面的视觉感染力！让静态页面活起来！

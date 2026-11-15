@@ -3,6 +3,9 @@ title: "07【electron菜单】"
 description: "07【electron菜单】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-17
+updatedAt: 2026-03-17
+learningDates: [2026-03-17]
 ---
 
 ## 1.创建系统菜单

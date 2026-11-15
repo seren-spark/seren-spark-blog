@@ -3,6 +3,9 @@ title: "服务器 VPS"
 description: "服务器 VPS：前端知识库章节。"
 sidebar:
   order: 2
+firstLearnedAt: 2026-06-23
+updatedAt: 2026-06-23
+learningDates: [2026-06-23]
 ---
 
 部署应用前，为服务器配置好包管理工具，以便节省部署时间。主流的前端包管理工具有 npm、yarn、pnpm、以及国内的镜像 cnpm、tyarn 等，这些包管理器都是基于 nodejs。

@@ -3,6 +3,9 @@ title: "02 【MySQL基本使用】"
 description: "02 【MySQL基本使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-08-22
+updatedAt: 2026-09-01
+learningDates: [2026-08-22, 2026-08-23, 2026-08-24, 2026-08-27, 2026-08-28, 2026-09-01]
 ---
 
 ## 1.自带客户端的登录与退出

@@ -3,6 +3,9 @@ title: "31【window 对象】"
 description: "31【window 对象】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-03-24
+updatedAt: 2024-03-27
+learningDates: [2024-03-24, 2024-03-27]
 ---
 
 ## 1.概述

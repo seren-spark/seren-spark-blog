@@ -3,6 +3,9 @@ title: Tailwind CSS
 description: Tailwind CSS 实用优先框架章节。
 sidebar:
   order: 0
+firstLearnedAt: 2026-03-31
+updatedAt: 2026-03-31
+learningDates: [2026-03-31]
 ---
 
 ## 学习目录

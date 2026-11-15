@@ -7,11 +7,12 @@ tags:
   - Redis
   - Spring Boot
   - 业务实战
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 6
+firstLearnedAt: 2026-10-08
+updatedAt: 2026-10-12
+learningDates: [2026-10-08, 2026-10-12]
 ---
 ## 六个常用功能，学会迁移思路
 

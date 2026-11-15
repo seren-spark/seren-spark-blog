@@ -3,6 +3,9 @@ title: "20 【rem适配布局】"
 description: "20 【rem适配布局】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-11-10
+updatedAt: 2023-11-14
+learningDates: [2023-11-10, 2023-11-11, 2023-11-13, 2023-11-14]
 ---
 
 【思考】

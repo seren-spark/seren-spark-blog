@@ -3,6 +3,9 @@ title: "10 【Vite + Vue3 + Electron 创建打包桌面程序】"
 description: "10 【Vite + Vue3 + Electron 创建打包桌面程序】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-26
+updatedAt: 2026-03-26
+learningDates: [2026-03-26]
 ---
 
 ## 1.使用 Vite 构建 Electron 项目

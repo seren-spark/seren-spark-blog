@@ -4,6 +4,9 @@ description: Less CSS 预处理器章节。
 sidebar:
   order: 0
   hidden: true
+firstLearnedAt: 2024-05-13
+updatedAt: 2024-05-17
+learningDates: [2024-05-13, 2024-05-14, 2024-05-17]
 ---
 
 ## 学习目录

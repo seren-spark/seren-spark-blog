@@ -3,6 +3,9 @@ title: "34 表单和FormData 对象"
 description: "34 表单和FormData 对象：前端知识库章节。"
 sidebar:
   order: 34
+firstLearnedAt: 2024-02-18
+updatedAt: 2024-02-18
+learningDates: [2024-02-18]
 ---
 
 ## 1.FormData 对象

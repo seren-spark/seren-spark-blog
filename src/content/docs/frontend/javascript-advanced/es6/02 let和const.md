@@ -3,6 +3,9 @@ title: "02 【let和const】"
 description: "02 【let和const】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-04-16
+updatedAt: 2024-04-18
+learningDates: [2024-04-16, 2024-04-17, 2024-04-18]
 ---
 
 ## 1.let 命令

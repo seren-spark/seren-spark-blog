@@ -1,10 +1,9 @@
 ---
-import { getHomeData, getProjectEntries } from '../../lib/site-data';
+import { getHomeData } from '../../lib/site-data';
 import { buildYearHeatmap } from '../../lib/home-visualization';
 import RemixIcon from '../knowledge/RemixIcon.astro';
 
 const home = await getHomeData();
-const projects = await getProjectEntries();
 const currentYear = new Date().getUTCFullYear();
 const currentYearCounts = home.timeline.reduce((counts, event) => {
   if (event.date.getUTCFullYear() === currentYear) counts[event.collection] += 1;
@@ -33,7 +32,7 @@ const collectionLabels = { docs: '知识', journal: '博客', projects: '项目'
 const activityCategories = [
   { key: 'all', label: '全部内容', shortLabel: '全部', points: home.activity },
   { key: 'journal', label: '博客', shortLabel: '博客', points: home.activityByCollection.journal },
-  { key: 'docs', label: '知识库', shortLabel: '知识库', points: home.activityByCollection.docs },
+  { key: 'docs', label: '笔记', shortLabel: '笔记', points: home.activityByCollection.docs },
   { key: 'projects', label: '项目', shortLabel: '项目', points: home.activityByCollection.projects },
 ] as const;
 
@@ -97,17 +96,10 @@ const thoughts = [
   '所有值得抵达的地方，都需要耐心。',
 ];
 
-const statusLabels: Record<string, string> = {
-  planned: '计划中',
-  active: '持续构建',
-  paused: '暂存',
-  completed: '已完成',
-};
-
 const footerLinks = [
   { label: '首页', href: '/' },
   { label: '个人主页', href: '/about/' },
-  { label: '知识库', href: '/getting-started/' },
+  { label: '笔记', href: '/getting-started/' },
   { label: '博客', href: '/journal/' },
 ];
 
@@ -120,14 +112,6 @@ const friendLinks = [
   { label: 'Node.js', href: 'https://nodejs.org/' },
 ];
 
-const fallbackProjectTiles = [
-  { title: '弹幕', description: '一个支持实时人像分割的弹幕，运用了虚拟轨道算法。' },
-  { title: '数据大屏', description: '用图表整理实时数据与业务指标。' },
-  { title: '文件上传', description: '大文件分片、Hash 与断点续传。' },
-  { title: '权限后台', description: '菜单、按钮与路由权限控制。' },
-  { title: '效率工具', description: '把重复开发流程沉淀成小工具。' },
-];
-
 const projectNoteImages = [
   '/media/便签/便签2.png',
   '/media/便签/猫.png',
@@ -135,26 +119,31 @@ const projectNoteImages = [
   '/media/便签/星星人.png',
 ];
 
-const projectPreviewImages: Array<string | null> = [null, '/media/projects/vue-barrage.png', null, null];
-
 const projectTiles = [
-  ...projects.map((project, index) => ({
-    title: project.data.title,
-    description: project.data.description ?? '持续打磨中的项目。',
-    href: '/projects/' + project.id + '/',
-    status: statusLabels[project.data.status] ?? project.data.status,
-    accent: index,
-  })),
-  ...fallbackProjectTiles.map((project, index) => ({
-    ...project,
-    href: '/projects/',
-    status: '项目板块',
-    accent: projects.length + index,
-  })),
-].slice(0, 4).map((project, index) => ({
+  {
+    title: 'LiveDoc',
+    description: '支持富文本编辑、知识库检索与 AI 助手的在线文档。',
+    previewImage: '/media/projects/livedoc.png',
+  },
+  {
+    title: '弹幕',
+    description: '一个支持实时人像分割的弹幕，运用了虚拟轨道算法。',
+    previewImage: '/media/projects/vue-barrage.png',
+  },
+  {
+    title: 'md-stream-plus',
+    description: '面向 AI 对话与流式输出的 Vue 3 Markdown 渲染器。',
+    previewImage: '/media/projects/md-stream-plus.png',
+  },
+  {
+    title: '文件上传',
+    description: '大文件分片、Hash 与断点续传。',
+    previewImage: null,
+  },
+].map((project, index) => ({
   ...project,
+  href: '/projects/',
   noteImage: projectNoteImages[index],
-  previewImage: projectPreviewImages[index],
 }));
 ---
 
@@ -286,7 +275,6 @@ const projectTiles = [
       <aside class="timeline-panel" aria-labelledby="timeline-title">
         <header class="timeline-heading">
           <div><p class="panel-kicker">内容轨迹 / TIMELINE</p><h3 id="timeline-title">文章时间线</h3></div>
-          <a href="/archive/" aria-label="查看完整年度归档">全部 <RemixIcon name="arrow-right-s-line" class="arrow-icon" /></a>
         </header>
 
         {activityViews.map((view, index) => (
@@ -516,6 +504,7 @@ const projectTiles = [
   .project-card-media { position: relative; flex: 0 0 auto; aspect-ratio: 16 / 7.2; overflow: hidden; border: 1px solid rgba(45,70,57,.12); border-radius: .28rem; background: #18203d; box-shadow: 0 .18rem .45rem rgba(30,38,58,.1); }
   .project-card-media::after { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.12); border-radius: inherit; content: ''; pointer-events: none; }
   .project-card-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+  .project-note-1 .project-card-media img, .project-note-3 .project-card-media img { object-position: center top; }
   .home-project-card:hover .project-card-media img { transform: scale(1.035); }
   .project-image-placeholder { display: flex; height: 100%; flex-direction: column; justify-content: space-between; padding: clamp(.45rem, .75vw, .7rem); color: rgba(255,255,255,.88); background: linear-gradient(135deg, #151b3b, #262d53); }
   .project-image-placeholder::after { position: absolute; right: -14%; bottom: -65%; width: 75%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; content: ''; }

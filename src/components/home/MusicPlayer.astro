@@ -1,0 +1,180 @@
+---
+import RemixIcon from '../knowledge/RemixIcon.astro';
+import { musicPlaylist } from '../../lib/music-playlist';
+const firstTrack = musicPlaylist[0];
+---
+<section class="music-player" aria-label="音乐播放器">
+  <header><span>听一会儿</span><span class="music-state" role="status" aria-live="polite">准备播放</span></header>
+  <div class="music-track">
+    <div class="record" aria-hidden="true"><i></i></div>
+    <div class="track-info"><strong data-track-title>{firstTrack.title}</strong><p><span data-track-artist>{firstTrack.artist}</span><span>· 给日常一点旋律</span></p></div>
+  </div>
+  <div class="sound-wave" aria-hidden="true">
+    {Array.from({ length: 28 }, (_, index) => (
+      <span style={`--peak:${[.35, .65, .45, .9, .55, 1, .7][index % 7]};--delay:${index * -.13}s;--speed:${.8 + (index % 5) * .16}s`}></span>
+    ))}
+  </div>
+  <audio preload="metadata" autoplay src={`https://music.163.com/song/media/outer/url?id=${firstTrack.id}.mp3`}></audio>
+  <input class="music-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="播放进度" disabled />
+  <div class="music-time"><span data-elapsed>00:00</span><span data-duration>--:--</span></div>
+  <div class="music-controls">
+    <button type="button" data-previous aria-label="上一首"><RemixIcon name="skip-back-fill" /></button>
+    <button type="button" class="music-toggle" aria-label="播放" data-toggle><span data-play><RemixIcon name="play-fill" /></span><span data-pause hidden><RemixIcon name="pause-fill" /></span></button>
+    <button type="button" data-next aria-label="下一首"><RemixIcon name="skip-forward-fill" /></button>
+  </div>
+  <a class="music-source" href={`https://music.163.com/#/song?id=${firstTrack.id}`} target="_blank" rel="noreferrer">在网易云音乐收听 ↗</a>
+  <details class="playlist">
+    <summary>歌单 <span>{musicPlaylist.length} 首</span><RemixIcon name="list-unordered" /></summary>
+    <ul>
+      {musicPlaylist.map((track) => (
+        <li>
+          <button type="button" data-track-id={track.id} aria-pressed={track.id === firstTrack.id}>
+            <span class="playlist-info"><strong>{track.title}</strong><small>{track.artist}</small></span><span class="playlist-action">播放</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </details>
+</section>
+<script>
+  import { musicPlaylist as tracks } from '../../lib/music-playlist';
+  function initMusic() {
+    const player = document.querySelector<HTMLElement>('.music-player');
+    if (!player || player.dataset.ready) return;
+    player.dataset.ready = 'true';
+    const audio = player.querySelector('audio')!;
+    const state = player.querySelector<HTMLElement>('.music-state')!;
+    const toggle = player.querySelector<HTMLButtonElement>('[data-toggle]')!;
+    const seek = player.querySelector<HTMLInputElement>('.music-seek')!;
+    const source = player.querySelector<HTMLAnchorElement>('.music-source')!;
+    const elapsed = player.querySelector<HTMLElement>('[data-elapsed]')!;
+    const duration = player.querySelector<HTMLElement>('[data-duration]')!;
+    let index = 0;
+    const formatTime = (seconds: number) => Number.isFinite(seconds)
+      ? `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${Math.floor(seconds % 60).toString().padStart(2, '0')}` : '--:--';
+    const sync = () => {
+      const playing = !audio.paused && !audio.ended && audio.readyState >= 3;
+      player.classList.toggle('is-playing', playing);
+      player.querySelector<HTMLElement>('[data-play]')!.hidden = playing;
+      player.querySelector<HTMLElement>('[data-pause]')!.hidden = !playing;
+      toggle.setAttribute('aria-label', playing ? '暂停' : '播放');
+    };
+    const play = async () => {
+      state.textContent = '正在加载';
+      try { await audio.play(); }
+      catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        state.textContent = error instanceof DOMException && error.name === 'NotAllowedError'
+          ? '点一下，开始听' : '暂时无法播放';
+        sync();
+      }
+    };
+    const changeTrack = (offset: number) => {
+      index = (index + offset + tracks.length) % tracks.length;
+      const track = tracks[index];
+      audio.src = `https://music.163.com/song/media/outer/url?id=${track.id}.mp3`;
+      player.querySelector<HTMLElement>('[data-track-title]')!.textContent = track.title;
+      player.querySelector<HTMLElement>('[data-track-artist]')!.textContent = track.artist;
+      player.querySelectorAll<HTMLButtonElement>('[data-track-id]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.trackId === track.id));
+      });
+      source.href = `https://music.163.com/#/song?id=${track.id}`;
+      seek.value = '0'; seek.disabled = true;
+      seek.style.setProperty('--seek-progress', '0%');
+      elapsed.textContent = '00:00'; duration.textContent = '--:--';
+      void play();
+    };
+    toggle.addEventListener('click', () => audio.paused ? void play() : audio.pause());
+    player.querySelector('[data-previous]')!.addEventListener('click', () => changeTrack(-1));
+    player.querySelector('[data-next]')!.addEventListener('click', () => changeTrack(1));
+    player.querySelectorAll<HTMLButtonElement>('[data-track-id]').forEach((button) => {
+      button.addEventListener('click', () => changeTrack(tracks.findIndex((track) => track.id === button.dataset.trackId) - index));
+    });
+    audio.addEventListener('playing', () => { sync(); state.textContent = '播放中'; });
+    audio.addEventListener('pause', () => { sync(); state.textContent = '已暂停'; });
+    audio.addEventListener('waiting', () => { sync(); state.textContent = '正在缓冲'; });
+    audio.addEventListener('error', () => { sync(); state.textContent = '暂时无法播放'; });
+    audio.addEventListener('loadedmetadata', () => {
+      duration.textContent = formatTime(audio.duration);
+      seek.disabled = !Number.isFinite(audio.duration) || audio.duration <= 0;
+    });
+    audio.addEventListener('timeupdate', () => {
+      elapsed.textContent = formatTime(audio.currentTime);
+      seek.value = String(audio.duration > 0 ? audio.currentTime / audio.duration * 100 : 0);
+      seek.style.setProperty('--seek-progress', `${seek.value}%`);
+    });
+    seek.addEventListener('input', () => {
+      seek.style.setProperty('--seek-progress', `${seek.value}%`);
+      if (Number.isFinite(audio.duration)) audio.currentTime = Number(seek.value) / 100 * audio.duration;
+    });
+    audio.addEventListener('ended', () => changeTrack(1));
+    audio.volume = .35;
+    void play();
+    document.addEventListener('astro:before-swap', () => audio.pause(), { once: true });
+  }
+  initMusic();
+  document.addEventListener('astro:page-load', initMusic);
+</script>
+<style>
+  .music-player { position: relative; isolation: isolate; overflow: hidden; padding: 1.1rem; border: 1px solid #e8e8e2; border-radius: .8rem; color: #624330; background: #fff; box-shadow: 0 8px 20px #092d400a; }
+  .music-player::before { position: absolute; z-index: -1; inset: -20%; content: ''; pointer-events: none; background: repeating-radial-gradient(ellipse at 10% 100%, transparent 0 22px, #b893721c 23px 24px, transparent 25px 44px); mask-image: linear-gradient(transparent 25%, #000); animation: background-wave 14s ease-in-out infinite alternate paused; }
+  .music-player.is-playing::before { animation-play-state: running; }
+  header { display: flex; justify-content: space-between; gap: .5rem; margin-bottom: 1.1rem; color: #976b4f; font-size: .65rem; }
+  .music-state { font-size: .58rem; }
+  .music-track { display: flex; align-items: center; gap: .75rem; }
+  .record { display: grid; place-items: center; flex: 0 0 auto; width: 3.1rem; height: 3.1rem; border: 3px solid #b77b55; border-radius: 50%; background: repeating-radial-gradient(circle, #654735 0 2px, #76513a 3px 4px); animation: spin 14s linear infinite; animation-play-state: paused; }
+  .record i { width: 1rem; height: 1rem; border: .3rem solid #e8ba80; border-radius: 50%; background: #fff5df; }
+  .record { position: relative; }
+  .record::after { position: absolute; inset: -.35rem; border: 1px solid #cf9a6c; border-radius: 50%; content: ''; opacity: 0; }
+  .record i::after { display: block; width: .18rem; height: .18rem; margin: .1rem; border-radius: 50%; background: #b77b55; content: ''; }
+  .is-playing .record { animation-play-state: running; }
+  .is-playing .record::after { animation: ripple 2.6s ease-out infinite; }
+  .sound-wave { display: flex; align-items: center; justify-content: space-between; gap: .2rem; height: 1.5rem; margin-top: 1rem; }
+  .sound-wave span { flex: 1; max-width: .25rem; height: calc(var(--peak) * 100%); border-radius: 999px; background: linear-gradient(#dbaa79, #b5754e); opacity: .45; transform: scaleY(.15); }
+  .is-playing .sound-wave span { opacity: .85; animation: equalize var(--speed) ease-in-out var(--delay) infinite alternate; }
+  strong { font-size: .85rem; font-weight: 600; }
+  p { margin: .3rem 0 0; color: #9a7359; font-size: .6rem; line-height: 1.6; }
+  p span { display: block; }
+  .music-seek { display: block; box-sizing: border-box; appearance: none; width: 100%; height: 1rem; margin: .3rem 0 .25rem; background: transparent; cursor: pointer; }
+  .music-seek::-webkit-slider-runnable-track { height: 2px; border-radius: 999px; background: linear-gradient(to right, #bb754b var(--seek-progress, 0%), #e3ddd6 var(--seek-progress, 0%)); }
+  .music-seek::-webkit-slider-thumb { appearance: none; width: 8px; height: 8px; margin-top: -3px; border: 0; border-radius: 50%; background: #bb754b; }
+  .music-seek::-moz-range-track { height: 2px; border-radius: 999px; background: #e3ddd6; }
+  .music-seek::-moz-range-progress { height: 2px; border-radius: 999px; background: #bb754b; }
+  .music-seek::-moz-range-thumb { width: 8px; height: 8px; border: 0; border-radius: 50%; background: #bb754b; }
+  .music-time { display: flex; justify-content: space-between; color: #9a7359; font-size: .55rem; font-variant-numeric: tabular-nums; }
+  .music-controls { display: flex; justify-content: center; align-items: center; gap: 1rem; margin: .8rem 0; }
+  .music-controls :global(.remix-icon) { display: block; width: 1.2rem; height: 1.2rem; }
+  button { display: grid; place-items: center; width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 50%; color: #a47755; background: transparent; cursor: pointer; }
+  button:hover { background: #efdbc6; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #985b36; outline-offset: 3px; }
+  button.music-toggle { width: 2.5rem; height: 2.5rem; color: #fff8ed; background: #ba754c; box-shadow: 0 4px 12px #ac693834; }
+  button.music-toggle:hover { background: #a4613c; }
+  button span { display: flex; }
+  button span[hidden] { display: none; }
+  .music-source { display: block; color: #9a7359; text-align: center; text-decoration: none; font-size: .55rem; }
+  .music-source:hover { color: #624330; }
+  .track-info { min-width: 0; }
+  [data-track-title] { display: block; line-height: 1.5; overflow-wrap: anywhere; }
+  .playlist { margin-top: .9rem; border-top: 1px solid #eee9e2; }
+  .playlist summary { display: flex; align-items: center; gap: .4rem; padding-top: .75rem; color: #8e7563; font-size: .62rem; cursor: pointer; list-style: none; }
+  .playlist summary::-webkit-details-marker { display: none; }
+  .playlist summary span { margin-left: auto; color: #a68d79; font-size: .55rem; }
+  .playlist summary :global(.remix-icon) { width: .9rem; height: .9rem; }
+  .playlist ul { display: grid; gap: .2rem; max-height: 14rem; margin: .65rem -.35rem 0; padding: 0 .2rem 0 0; overflow-y: auto; list-style: none; scrollbar-width: thin; scrollbar-color: #d8c7b7 transparent; }
+  .playlist li { min-width: 0; }
+  .playlist button { display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; gap: .5rem; width: 100%; height: auto; padding: .55rem .4rem; border-radius: .4rem; color: #624330; text-align: left; text-decoration: none; }
+  .playlist button:hover, .playlist button[aria-pressed='true'] { background: #f8f3ec; }
+  .playlist-info { display: block; min-width: 0; }
+  .playlist-info strong { display: block; overflow: hidden; font-size: .65rem; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+  .playlist-info small { display: block; margin-top: .15rem; color: #a68d79; font-size: .53rem; }
+  .playlist-action { display: block; flex-shrink: 0; color: #a47755; font-size: .5rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes equalize { 0% { transform: scaleY(.18); } 50% { transform: scaleY(1); } 100% { transform: scaleY(.4); } }
+  @keyframes ripple { from { transform: scale(.95); opacity: .45; } to { transform: scale(1.35); opacity: 0; } }
+  @keyframes background-wave { from { transform: translate(-2%, -1%) rotate(-4deg); } to { transform: translate(3%, 2%) rotate(3deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .music-player::before { animation: none; }
+    .record, .is-playing .record::after, .is-playing .sound-wave span { animation: none; }
+    .is-playing .sound-wave span { transform: scaleY(.6); }
+  }
+</style>

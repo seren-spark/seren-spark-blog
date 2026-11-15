@@ -3,6 +3,9 @@ title: "01 【AJAX概述和基本使用】"
 description: "01 【AJAX概述和基本使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-04-01
+updatedAt: 2024-04-03
+learningDates: [2024-04-01, 2024-04-02, 2024-04-03]
 ---
 
 ## 1.AJAX简介

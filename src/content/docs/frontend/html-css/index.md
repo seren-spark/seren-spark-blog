@@ -4,6 +4,9 @@ description: 语义化 HTML、CSS 布局与视觉实现笔记。
 sidebar:
   order: 1
   hidden: true
+firstLearnedAt: 2023-11-17
+updatedAt: 2023-11-23
+learningDates: [2023-11-17, 2023-11-19, 2023-11-20, 2023-11-23]
 ---
 
 ## 学习目录

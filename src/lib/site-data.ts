@@ -2,7 +2,6 @@ import { getCollection } from 'astro:content';
 import {
   buildTagIndex,
   buildHomeData,
-  groupEntriesByYear,
   sortJournalEntries,
   validateContentRelations,
 } from './content-queries';
@@ -33,10 +32,6 @@ async function getSiteCollections() {
 export async function getJournalEntries() {
   const { journal } = await getSiteCollections();
   return sortJournalEntries(journal);
-}
-
-export async function getJournalArchive() {
-  return groupEntriesByYear(await getJournalEntries());
 }
 
 export async function getHomeData() {

@@ -3,6 +3,9 @@ title: "04 【electron的一些主进程Api】"
 description: "04 【electron的一些主进程Api】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-03-10
+updatedAt: 2026-03-11
+learningDates: [2026-03-10, 2026-03-11]
 ---
 
 ## 1.App

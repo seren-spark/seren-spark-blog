@@ -3,6 +3,9 @@ title: "21 【styled-components的使用】"
 description: "21 【styled-components的使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-01-30
+updatedAt: 2026-02-03
+learningDates: [2026-01-30, 2026-01-31, 2026-02-03]
 ---
 
 ## 1.为什么要用这个

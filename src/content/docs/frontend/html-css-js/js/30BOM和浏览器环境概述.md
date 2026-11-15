@@ -3,6 +3,9 @@ title: "30BOM和浏览器环境概述"
 description: "30BOM和浏览器环境概述：前端知识库章节。"
 sidebar:
   order: 30
+firstLearnedAt: 2024-02-12
+updatedAt: 2024-02-12
+learningDates: [2024-02-12]
 ---
 
 BOM（Browser Object Model，浏览器对象模型）是 JS 与 浏览器窗口交互的接口。

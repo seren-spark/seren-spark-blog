@@ -8,11 +8,12 @@ tags:
   - Java
   - Spring Boot
   - 学习路线
-firstLearnedAt: 2026-09-21
-updatedAt: 2026-09-21
 status: active
 sidebar:
   order: 0
+firstLearnedAt: 2026-09-21
+updatedAt: 2026-09-24
+learningDates: [2026-09-21, 2026-09-22, 2026-09-23, 2026-09-24]
 ---
 
 这套笔记面向已经能看懂 Spring Boot、正在从前端走向全栈的开发者。目标是理解 Redis、能在项目里正确使用，并能解释常见的缓存、并发和性能问题。

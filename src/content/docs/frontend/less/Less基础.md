@@ -3,6 +3,9 @@ title: "Less基础"
 description: "Less基础：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-13
+updatedAt: 2024-05-17
+learningDates: [2024-05-13, 2024-05-14, 2024-05-17]
 ---
 
 ## 1.维护CSS的弊端

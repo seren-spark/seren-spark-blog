@@ -3,6 +3,9 @@ title: "02 【uni-app起步】"
 description: "02 【uni-app起步】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-06
+updatedAt: 2026-05-06
+learningDates: [2026-05-06]
 ---
 
 ## 1.什么是uni-app

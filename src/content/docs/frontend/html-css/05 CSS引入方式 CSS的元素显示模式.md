@@ -3,6 +3,9 @@ title: "05 【CSS引入方式 CSS的元素显示模式】"
 description: "05 【CSS引入方式 CSS的元素显示模式】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-10-15
+updatedAt: 2023-10-20
+learningDates: [2023-10-15, 2023-10-16, 2023-10-19, 2023-10-20]
 ---
 
 ## 1.CSS的引入方式

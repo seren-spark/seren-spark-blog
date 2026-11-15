@@ -3,6 +3,9 @@ title: "18 【Redux Toolkit】"
 description: "18 【Redux Toolkit】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-01-08
+updatedAt: 2026-01-30
+learningDates: [2026-01-08, 2026-01-09, 2026-01-10, 2026-01-11, 2026-01-13, 2026-01-14, 2026-01-15, 2026-01-16, 2026-01-17, 2026-01-20, 2026-01-21, 2026-01-22, 2026-01-25, 2026-01-26, 2026-01-30]
 ---
 
 上边的案例我们一直在使用Redux核心库来使用Redux，除了Redux核心库外Redux还为我们提供了一种使用Redux的方式——Redux Toolkit。它的名字起的非常直白，Redux工具包，简称RTK。RTK可以帮助我们处理使用Redux过程中的重复性工作，简化Redux中的各种操作。

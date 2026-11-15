@@ -3,6 +3,9 @@ title: "18 【移动Web开发之流式布局】"
 description: "18 【移动Web开发之流式布局】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-11-07
+updatedAt: 2023-11-13
+learningDates: [2023-11-07, 2023-11-08, 2023-11-09, 2023-11-13]
 ---
 
 ## 1.移动端基础

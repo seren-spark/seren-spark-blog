@@ -3,6 +3,9 @@ title: "10 【Express基本使用】"
 description: "10 【Express基本使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-07-09
+updatedAt: 2024-07-22
+learningDates: [2024-07-09, 2024-07-10, 2024-07-11, 2024-07-13, 2024-07-14, 2024-07-17, 2024-07-18, 2024-07-22]
 ---
 
 > https://www.expressjs.com.cn/

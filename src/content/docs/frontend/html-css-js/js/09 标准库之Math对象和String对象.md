@@ -3,6 +3,9 @@ title: "09 标准库之Math对象和String对象"
 description: "09 标准库之Math对象和String对象：前端知识库章节。"
 sidebar:
   order: 9
+firstLearnedAt: 2024-01-17
+updatedAt: 2024-01-18
+learningDates: [2024-01-17, 2024-01-18]
 ---
 
 ## 1.Math对象

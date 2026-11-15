@@ -3,6 +3,9 @@ title: HTML / CSS / JS
 description: 前端基础三件套的系统知识库。
 sidebar:
   order: 1
+firstLearnedAt: 2026-06-14
+updatedAt: 2026-07-16
+learningDates: [2026-06-14, 2026-07-16]
 ---
 
 ## 学习目录

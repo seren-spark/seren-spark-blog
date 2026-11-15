@@ -3,6 +3,9 @@ title: "06 【Sass语法介绍-函数】"
 description: "06 【Sass语法介绍-函数】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-24
+updatedAt: 2024-05-27
+learningDates: [2024-05-24, 2024-05-27]
 ---
 
 > 这篇文章只更新了颜色函数，由于Sass使用时间过短，其它函数暂时不太会用

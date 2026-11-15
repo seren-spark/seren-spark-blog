@@ -3,6 +3,9 @@ title: "GitHub"
 description: "GitHub：前端知识库章节。"
 sidebar:
   order: 3
+firstLearnedAt: 2026-06-10
+updatedAt: 2026-06-10
+learningDates: [2026-06-10]
 ---
 
 GitHub Actions 是一个持续集成和持续交付 (CI/CD) 平台，可用于自动执行构建、测试和部署管道。您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境。将 GitHub Actions 命令保存为 `main.yml`，放于 `.github\workflows` 目录下，repo 发生指定调节的改变时，Actions 会自动运行。^[[了解 GitHub Actions](https://docs.github.com/cn/actions/learn-github-actions/understanding-github-actions)]

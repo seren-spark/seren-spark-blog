@@ -3,6 +3,9 @@ title: "01 【Sass的安装使用】"
 description: "01 【Sass的安装使用】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-05-16
+updatedAt: 2024-05-18
+learningDates: [2024-05-16, 2024-05-17, 2024-05-18]
 ---
 
 ## 1.介绍

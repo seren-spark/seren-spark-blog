@@ -3,6 +3,9 @@ title: "02 【nodejs开发环境安装】"
 description: "02 【nodejs开发环境安装】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2024-06-06
+updatedAt: 2024-06-17
+learningDates: [2024-06-06, 2024-06-07, 2024-06-08, 2024-06-12, 2024-06-13, 2024-06-17]
 ---
 
 ## 1.版本介绍

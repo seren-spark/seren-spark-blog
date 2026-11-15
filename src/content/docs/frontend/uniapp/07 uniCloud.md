@@ -3,6 +3,9 @@ title: "07 【uniCloud】"
 description: "07 【uniCloud】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2026-05-20
+updatedAt: 2026-05-20
+learningDates: [2026-05-20]
 ---
 
 ## 1.开发自己的第一个uniCloud项目

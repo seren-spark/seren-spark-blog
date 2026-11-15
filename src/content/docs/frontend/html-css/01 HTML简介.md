@@ -3,6 +3,9 @@ title: "01 【HTML简介】"
 description: "01 【HTML简介】：前端知识库章节。"
 sidebar:
   order: 1
+firstLearnedAt: 2023-10-08
+updatedAt: 2023-10-14
+learningDates: [2023-10-08, 2023-10-09, 2023-10-10, 2023-10-11, 2023-10-14]
 ---
 
 ## 1.网页

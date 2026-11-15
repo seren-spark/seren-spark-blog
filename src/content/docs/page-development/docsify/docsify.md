@@ -3,6 +3,9 @@ title: "docsify"
 description: "docsify：前端知识库章节。"
 sidebar:
   order: 2
+firstLearnedAt: 2026-08-09
+updatedAt: 2026-08-13
+learningDates: [2026-08-09, 2026-08-10, 2026-08-11, 2026-08-12, 2026-08-13]
 ---
 
 [docsify](https://docsify.js.org/#/zh-cn/) 是一个神奇的文档网站生成器，可以快速帮你将 .md 文档生成为网站。docsify 入门简单且无需服务器，非常适合个人笔记的简单整理分享。

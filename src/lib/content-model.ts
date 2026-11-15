@@ -84,6 +84,15 @@ export function buildActivityMap(records: ContentRecord[]): Map<string, number> 
   const activity = new Map<string, number>();
 
   for (const record of records) {
+    if (record.collection === 'docs' && Array.isArray(record.data.learningDates)) {
+      for (const value of record.data.learningDates) {
+        const date = asDate(value);
+        if (!date) continue;
+        const key = date.toISOString().slice(0, 10);
+        activity.set(key, (activity.get(key) ?? 0) + 1);
+      }
+      continue;
+    }
     const sources: ContentDateSource[] =
       record.collection === 'docs'
         ? ['firstLearnedAt', 'updatedAt']
