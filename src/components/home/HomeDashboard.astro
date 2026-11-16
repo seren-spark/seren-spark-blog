@@ -472,7 +472,7 @@ const projectTiles = [
   .timeline-month h4 span { display: block; margin-top: .2rem; color: var(--muted); font: 400 .54rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
   .timeline-month ol { position: relative; display: grid; gap: .55rem; margin: 0; padding: 0 0 .25rem .75rem; border-left: 1px solid rgba(9,45,64,.15); list-style: none; }
   .timeline-month li { position: relative; min-width: 0; }
-  .timeline-month li > i { position: absolute; top: .32rem; left: calc(-.75rem - 3px); width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(79,111,143,.14); }
+  .timeline-month li > i { --timeline-dot-color: #a8cbbd; position: absolute; top: .32rem; left: calc(-.75rem - 3px); width: 5px; height: 5px; border-radius: 50%; background: var(--timeline-dot-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--timeline-dot-color) 25%, transparent); }
   .timeline-month li a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .2rem .6rem; color: var(--ink); text-decoration: none; }
   .timeline-month li strong { min-width: 0; overflow: hidden; font-size: .75rem; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
   .timeline-month li span { align-self: center; color: var(--muted); font-size: .54rem; white-space: nowrap; }
@@ -484,12 +484,12 @@ const projectTiles = [
   .projects-heading .eyebrow { letter-spacing: 0; }
   .all-projects { display: inline-flex; align-items: center; gap: .5rem; flex: 0 0 auto; color: var(--muted); font-family: inherit; font-size: .8rem; letter-spacing: 0; text-decoration: none; }
   .home-project-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; gap: clamp(.55rem, 1vw, 1rem); margin-top: 1rem; padding: .9rem .2rem 1.35rem; }
-  .home-project-card { --note-shift: 0rem; --note-tilt: 0deg; position: relative; display: block; min-width: 0; color: var(--ink); filter: drop-shadow(0 .8rem .9rem rgba(77,64,39,.1)); isolation: isolate; text-decoration: none; transform: translateY(var(--note-shift)) rotate(var(--note-tilt)); transform-origin: center; transition: filter .24s ease, transform .24s ease; }
+  .home-project-card { --note-shift: 0rem; --note-tilt: 0deg; position: relative; display: block; min-width: 0; color: var(--ink); isolation: isolate; text-decoration: none; transform: translateY(var(--note-shift)) rotate(var(--note-tilt)); transform-origin: center; transition: transform .24s ease; }
   .home-project-card:nth-child(1) { --note-shift: -.8rem; --note-tilt: -.65deg; }
   .home-project-card:nth-child(2) { --note-shift: 1.35rem; --note-tilt: .75deg; }
   .home-project-card:nth-child(3) { --note-shift: .15rem; --note-tilt: -.45deg; }
   .home-project-card:nth-child(4) { --note-shift: 1.8rem; --note-tilt: .55deg; }
-  .home-project-card:hover { filter: drop-shadow(0 1.15rem 1.15rem rgba(77,64,39,.16)); transform: translateY(calc(var(--note-shift) - .45rem)) rotate(0deg) scale(1.012); }
+  .home-project-card:hover { transform: translateY(calc(var(--note-shift) - .45rem)) rotate(0deg) scale(1.012); }
   .home-project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .project-note-1 { aspect-ratio: 313 / 253; }
   .project-note-2 { aspect-ratio: 505 / 562; }
@@ -501,8 +501,7 @@ const projectTiles = [
   .project-note-2 .project-note-content { inset: 29% 10% 9%; }
   .project-note-3 .project-note-content { inset: 18% 12% 10%; }
   .project-note-4 .project-note-content { inset: 29% 10% 8%; }
-  .project-card-media { position: relative; flex: 0 0 auto; aspect-ratio: 16 / 7.2; overflow: hidden; border: 1px solid rgba(45,70,57,.12); border-radius: .28rem; background: #18203d; box-shadow: 0 .18rem .45rem rgba(30,38,58,.1); }
-  .project-card-media::after { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.12); border-radius: inherit; content: ''; pointer-events: none; }
+  .project-card-media { position: relative; flex: 0 0 auto; aspect-ratio: 16 / 7.2; overflow: hidden; border-radius: .28rem; }
   .project-card-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.22,1,.36,1); }
   .project-note-1 .project-card-media img, .project-note-3 .project-card-media img { object-position: center top; }
   .home-project-card:hover .project-card-media img { transform: scale(1.035); }
@@ -551,6 +550,12 @@ const projectTiles = [
 
 <script>
   import Danmaku from 'danmaku';
+
+  const setupTimelineColors = () => {
+    document.querySelectorAll<HTMLElement>('.timeline-month li > i').forEach((dot) => {
+      dot.style.setProperty('--timeline-dot-color', `hsl(${Math.floor(Math.random() * 360)} 58% 76%)`);
+    });
+  };
 
   const setupThoughtStreams = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -677,8 +682,10 @@ const projectTiles = [
 
   setupThoughtStreams();
   setupActivityFilters();
+  setupTimelineColors();
   document.addEventListener('astro:page-load', () => {
     setupThoughtStreams();
     setupActivityFilters();
+    setupTimelineColors();
   });
 </script>

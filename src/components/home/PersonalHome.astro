@@ -26,10 +26,10 @@ const allTags = await getTagIndex();
 const tags = [...allTags].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'zh-CN')).slice(0, 12);
 
 const profileLinks = [
-  { label: 'GitHub', icon: 'github-fill', href: 'https://github.com/seren-spark' },
-  { label: '邮箱', icon: 'mail-line', href: 'mailto:serendipity_r@163.com' },
-  { label: '微信', icon: 'wechat-fill', href: '' },
-  { label: 'QQ', icon: 'qq-fill', href: 'https://wpa.qq.com/msgrd?v=3&uin=2843306836&site=qq&menu=yes' },
+  { label: 'GitHub', icon: 'github-fill', color: '#4b5563', href: 'https://github.com/seren-spark' },
+  { label: '邮箱', icon: 'mail-line', color: '#df1830', href: 'mailto:serendipity_r@163.com' },
+  { label: '微信', icon: 'wechat-fill', color: '#29c45a', href: '' },
+  { label: 'QQ', icon: 'qq-fill', color: '#f66b91', href: 'https://wpa.qq.com/msgrd?v=3&uin=2843306836&site=qq&menu=yes' },
 ];
 
 function eventHref(event: TimelineEvent): string {
@@ -85,10 +85,10 @@ const calendarCells = [
       </span>
     </a>
     <nav class="desktop-nav" aria-label="个人主页导航">
-      <a href="/">首页</a>
-      <a class="active" href="/about/">个人主页</a>
-      <a href="/getting-started/">笔记</a>
-      <a href="/journal/">博客</a>
+      <a href="/"><span class="nav-icon" aria-hidden="true">🏠</span>首页</a>
+      <a class="active" href="/about/"><span class="nav-icon" aria-hidden="true">🪐</span>个人主页</a>
+      <a href="/getting-started/"><span class="nav-icon" aria-hidden="true">📚</span>笔记</a>
+      <a href="/journal/"><span class="nav-icon" aria-hidden="true">✍️</span>博客</a>
     </nav>
     <a class="nav-action" href="/about/">浏览全部记录 <span>&gt;</span></a>
   </header>
@@ -121,12 +121,14 @@ const calendarCells = [
         <h2 class="typewriter-name">Seren Spark</h2>
         <p class="profile-bio">独立开发者 · 长期记录者</p>
         <div class="profile-links" aria-label="个人链接">
-          {profileLinks.map(({ label, icon, href }) => {
+          {profileLinks.map(({ label, icon, color, href }) => {
             const Tag = href ? 'a' : 'button';
             const tooltip = label === 'QQ' ? 'QQ：2843306836' : label;
             return (
               <Tag
                 class="profile-social"
+                data-social={icon}
+                style={`--social-color: ${color}`}
                 href={href || undefined}
                 type={href ? undefined : 'button'}
                 target={href.startsWith('https://') ? '_blank' : undefined}
@@ -135,7 +137,7 @@ const calendarCells = [
                 popovertarget={href ? undefined : 'profile-wechat'}
                 aria-describedby={'profile-social-' + icon}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.icons[icon].body} />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" set:html={icons.icons[icon].body} />
                 <span class="social-tooltip" role="tooltip" id={'profile-social-' + icon}>{tooltip}</span>
               </Tag>
             );
@@ -177,7 +179,7 @@ const calendarCells = [
 
     <section class="main-column" aria-label="最近博客">
       <div class="blog-toolbar">
-        <a class="toolbar-home" href="/about/" aria-label="个人主页">⌂</a>
+        <a class="toolbar-home" href="/about/" aria-label="个人主页"><span aria-hidden="true">🏠</span></a>
         <a class="toolbar-chip is-active" href="/about/">全部 {home.stats.total}</a>
         <a class="toolbar-chip" href="/getting-started/">知识 {home.stats.notes}</a>
         <a class="toolbar-chip" href="/journal/">博客 {home.stats.journal}</a>
@@ -225,10 +227,10 @@ const calendarCells = [
       <section class="card side-card stats-card">
         <div class="side-heading"><span>站点统计</span><span class="side-mark">概览</span></div>
         <div class="site-stats">
-          <div><span class="stat-icon">▤</span><span>文章</span><b>{home.stats.total}</b></div>
-          <div><span class="stat-icon">□</span><span>分类</span><b>4</b></div>
-          <div><span class="stat-icon">◇</span><span>标签</span><b>{allTags.length}</b></div>
-          <div><span class="stat-icon">≋</span><span>最近活动</span><b>{blogs.length}<small> 条</small></b></div>
+          <div><span class="stat-icon" aria-hidden="true">📑</span><span>文章</span><b>{home.stats.total}</b></div>
+          <div><span class="stat-icon" aria-hidden="true">🗂️</span><span>分类</span><b>4</b></div>
+          <div><span class="stat-icon" aria-hidden="true">🏷️</span><span>标签</span><b>{allTags.length}</b></div>
+          <div><span class="stat-icon" aria-hidden="true">🕰️</span><span>最近活动</span><b>{blogs.length}<small> 条</small></b></div>
         </div>
       </section>
 
@@ -356,6 +358,9 @@ const calendarCells = [
   .brand-dot { color: var(--personal-orange); }
   .personal-brand small { margin-top: .12rem; color: var(--personal-muted); font-family: var(--font-sans, sans-serif); font-size: .54rem; letter-spacing: .1em; }
   .desktop-nav { display: flex; align-items: center; gap: 1.7rem; }
+  .desktop-nav a { display: inline-flex; align-items: center; gap: .4rem; }
+  .nav-icon, .stat-icon, .toolbar-home { font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
+  .nav-icon { font-size: 1.3rem; line-height: 1; }
   .desktop-nav a, .nav-action { color: var(--personal-muted); text-decoration: none; font-size: .72rem; transition: color .2s ease; }
   .desktop-nav a:hover, .desktop-nav a.active, .nav-action:hover { color: var(--personal-orange); }
   .personal-nav:not(.is-over-content) .desktop-nav a, .personal-nav:not(.is-over-content) .nav-action { color: rgba(255, 255, 255, .88); }
@@ -404,10 +409,13 @@ const calendarCells = [
   @keyframes name-typing { from { width: 0; } to { width: 7.2em; } }
   @keyframes cursor-blink { 50% { border-color: transparent; } }
   .profile-bio { margin: 0; color: var(--personal-muted); font-size: .68rem; line-height: 1.7; }
-  .profile-links { display: flex; justify-content: center; gap: .5rem; margin-top: 1rem; }
-  .profile-social { position: relative; display: grid; flex: 0 0 36px; width: 36px; height: 36px; place-items: center; padding: 0; border: 0; border-radius: 50%; color: var(--personal-muted); background: var(--personal-paper); box-shadow: 0 2px 8px rgba(9, 45, 64, .05); text-decoration: none; cursor: pointer; transition: color .2s, background .2s, box-shadow .2s; }
-  .profile-social:hover, .profile-social:focus-visible { color: var(--personal-ink); background: var(--personal-orange-soft); box-shadow: 0 4px 10px rgba(11, 31, 42, .12); }
-  .profile-social:focus-visible { outline: 2px solid var(--personal-muted); outline-offset: 3px; }
+  .profile-links { display: flex; justify-content: center; gap: .8rem; margin-top: 1rem; }
+  .profile-social { position: relative; display: grid; flex: 0 1 38px; width: 38px; aspect-ratio: 1; place-items: center; padding: 0; border: 0; border-radius: 50%; color: #fff; background: var(--social-color); text-decoration: none; cursor: pointer; transition: transform .2s ease; }
+  .profile-social[data-social='github-fill'] { color: var(--social-color); background: transparent; }
+  .profile-social[data-social='github-fill'] svg { width: 100%; height: 100%; }
+  .profile-social[data-social='qq-fill'] { border-radius: .55rem; }
+  .profile-social:hover, .profile-social:focus-visible { transform: translateY(-3px); }
+  .profile-social:focus-visible { outline: 2px solid var(--social-color); outline-offset: 4px; }
   .wechat-contact { width: min(17rem, calc(100vw - 2rem)); margin: auto; padding: 1.5rem; border: 1px solid var(--personal-line); border-radius: 8px; color: var(--personal-ink); background: var(--personal-paper); box-shadow: var(--personal-shadow); font-family: var(--personal-body); text-align: center; }
   .wechat-contact::backdrop { background: rgba(0, 0, 0, .16); }
   .wechat-contact p { margin: 0 0 .5rem; color: var(--personal-muted); font-size: .8rem; }
@@ -438,7 +446,7 @@ const calendarCells = [
 
   .blog-toolbar { display: flex; align-items: center; gap: .4rem; min-height: 2.55rem; padding: .32rem .45rem; overflow-x: auto; border-radius: .55rem; background: #fff; box-shadow: 0 4px 12px rgba(9, 45, 64, .05); }
   .toolbar-home, .toolbar-chip { flex: 0 0 auto; color: var(--personal-muted); text-decoration: none; font-size: .6rem; }
-  .toolbar-home { display: grid; width: 1.85rem; height: 1.85rem; place-items: center; border-radius: .48rem; color: #fff; background: var(--personal-orange); font-size: .9rem; }
+  .toolbar-home { display: grid; width: 1.85rem; height: 1.85rem; place-items: center; border-radius: .48rem; background: transparent; font-size: 1.2rem; }
   .toolbar-chip { padding: .4rem .58rem; border-radius: .4rem; background: #fff; transition: color .2s, background .2s, box-shadow .2s, transform .2s; }
   .toolbar-chip:hover, .toolbar-chip.is-active { color: var(--personal-orange); background: var(--personal-orange-soft); box-shadow: 0 3px 8px rgba(11, 31, 42, .10); transform: translateY(-1px); }
   .blog-heading { align-items: end; margin: 1.75rem 0 .85rem; }
@@ -481,7 +489,7 @@ const calendarCells = [
   .site-stats div { display: grid; grid-template-columns: 1.4rem 1fr auto; gap: .35rem; align-items: center; padding: .48rem .35rem; color: var(--personal-muted); font-size: .64rem; }
   .site-stats b { color: var(--personal-ink); font-size: .72rem; font-weight: 600; }
   .site-stats b small { color: var(--personal-muted); font-size: .55rem; font-weight: 400; }
-  .stat-icon { color: var(--personal-orange); font-size: .85rem; }
+  .stat-icon { display: inline-grid; place-items: center; font-size: 1.1rem; line-height: 1; }
   .calendar-card { position: relative; width: 100%; aspect-ratio: 1187 / 1325; overflow: hidden; border-radius: 0; background: transparent; box-shadow: none; }
   .calendar-frame { position: absolute; isolation: isolate; inset: 0; }
   .calendar-frame::before,
