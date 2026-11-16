@@ -60,8 +60,8 @@ const imgH = 2160;
   <LetterImageTitle title="SEREN SPARK" />
 
   <div class="stone-caption">
-    <p>THOUGHTS TAKE ROOT.</p>
-    <span>让知识沉淀，让灵感生长。</span>
+    <p class="caption-shimmer">THOUGHTS TAKE ROOT.</p>
+    <span class="caption-shimmer">让知识沉淀，让灵感生长。</span>
   </div>
   <a class="stone-explore" href="#main-content">探索博客 <span aria-hidden="true">↓</span></a>
   <button class="stone-motion" type="button" data-stone-motion hidden aria-label="播放背景动画">播放背景</button>
@@ -141,6 +141,40 @@ const imgH = 2160;
   }
   .stone-caption p { margin: 0 0 .5rem; font-size: .7rem; letter-spacing: .16em; }
   .stone-caption span { font-size: .78rem; }
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    .stone-caption .caption-shimmer {
+      background-image: linear-gradient(
+        110deg,
+        #14150f 0%,
+        #14150f 40%,
+        #617248 46%,
+        #b9a66b 49%,
+        #fff8d7 50%,
+        #8a9b66 53%,
+        #14150f 60%,
+        #14150f 100%
+      );
+      background-size: 300% 100%;
+      background-position: 100% 50%;
+      background-repeat: no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: caption-light-sweep 8s ease-in-out infinite;
+    }
+    .stone-caption span.caption-shimmer { animation-delay: .65s; }
+  }
+  @keyframes caption-light-sweep {
+    0%, 15% { background-position: 100% 50%; }
+    65%, 100% { background-position: 0% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stone-caption .caption-shimmer {
+      animation: none;
+      background: none;
+      color: inherit;
+    }
+  }
   .stone-explore {
     bottom: 3rem;
     left: 50%;

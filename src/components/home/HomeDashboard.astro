@@ -122,27 +122,30 @@ const projectNoteImages = [
 const projectTiles = [
   {
     title: 'LiveDoc',
+    href: 'https://github.com/seren-spark/livedoc',
     description: '支持富文本编辑、知识库检索与 AI 助手的在线文档。',
     previewImage: '/media/projects/livedoc.png',
   },
   {
     title: '弹幕',
+    href: 'https://github.com/seren-spark/vue-barrage',
     description: '一个支持实时人像分割的弹幕，运用了虚拟轨道算法。',
     previewImage: '/media/projects/vue-barrage.png',
   },
   {
     title: 'md-stream-plus',
+    href: 'https://github.com/seren-spark/md-stream',
     description: '面向 AI 对话与流式输出的 Vue 3 Markdown 渲染器。',
     previewImage: '/media/projects/md-stream-plus.png',
   },
   {
     title: '文件上传',
+    href: '/projects/',
     description: '大文件分片、Hash 与断点续传。',
     previewImage: null,
   },
 ].map((project, index) => ({
   ...project,
-  href: '/projects/',
   noteImage: projectNoteImages[index],
 }));
 ---
@@ -302,7 +305,7 @@ const projectTiles = [
     <header class="projects-heading">
         <h2 id="projects-title">开源项目</h2>
 
-      <a class="all-projects" href="/projects/">查看全部项目 <span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
+      <a class="all-projects" href="https://github.com/seren-spark">查看全部项目 <span aria-hidden="true"><RemixIcon name="arrow-right-s-line" class="arrow-icon" /></span></a>
     </header>
 
     <div class="home-project-grid">

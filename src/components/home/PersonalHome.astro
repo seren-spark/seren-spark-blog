@@ -491,17 +491,13 @@ const calendarCells = [
   .site-stats b small { color: var(--personal-muted); font-size: .55rem; font-weight: 400; }
   .stat-icon { display: inline-grid; place-items: center; font-size: 1.1rem; line-height: 1; }
   .calendar-card { position: relative; width: 100%; aspect-ratio: 1187 / 1325; overflow: hidden; border-radius: 0; background: transparent; box-shadow: none; }
-  .calendar-frame { position: absolute; isolation: isolate; inset: 0; }
-  .calendar-frame::before,
-  .calendar-frame::after { position: absolute; z-index: 0; inset: 0; background-image: url('/media/calendar-frame.png'); background-position: center; background-repeat: no-repeat; content: ''; pointer-events: none; }
-  .calendar-frame::before { background-size: 122% 100%; clip-path: polygon(0 0, 100% 0, 100% 74%, 64% 74%, 64% 100%, 0 100%); }
-  .calendar-frame::after { background-size: 100% 100%; clip-path: polygon(60% 73%, 100% 73%, 100% 100%, 60% 100%); }
+  .calendar-frame { position: absolute; isolation: isolate; inset: 0; background: url('/media/calendar-frame.png') center / contain no-repeat; }
   .calendar-a11y-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .calendar-topline { position: absolute; z-index: 1; top: 31.5%; left: 8%; right: 8%; display: flex; align-items: center; justify-content: center; gap: .45rem; color: #896b3c; font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .08em; line-height: 1; text-align: center; }
+  .calendar-topline { position: absolute; z-index: 1; top: 31.5%; left: 8%; right: 15%; display: flex; align-items: center; justify-content: center; gap: .45rem; color: #896b3c; font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .08em; line-height: 1; text-align: center; }
   .calendar-year { letter-spacing: .17em; }
   .calendar-month-number { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 50%; color: #fff7dc; background: #8d713e; font-size: 1.15rem; letter-spacing: 0; }
   .calendar-month-name { letter-spacing: .08em; }
-  .calendar-grid { position: absolute; z-index: 1; top: 43%; right: 12%; bottom: 16%; left: 12%; display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 1fr; align-items: center; color: #896b3c; font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-size: .73rem; font-weight: 800; line-height: 1; text-align: center; }
+  .calendar-grid { position: absolute; z-index: 1; top: 43%; right: 19%; bottom: 16%; left: 12%; display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 1fr; align-items: center; color: #896b3c; font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif; font-size: .73rem; font-weight: 800; line-height: 1; text-align: center; }
   .calendar-weekday { color: #f1c500; font-size: .86rem; letter-spacing: .04em; }
   .calendar-day, .calendar-empty { display: grid; min-height: 1.2rem; place-items: center; }
   .calendar-day { border-radius: 50%; }
